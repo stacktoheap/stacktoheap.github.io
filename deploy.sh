@@ -5,3 +5,4 @@ cd _deploy
 git add .
 git add -u
 git commit -am "Site generated at $(date)"
+git push origin master
