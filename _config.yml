@@ -24,6 +24,9 @@ markdown: kramdown
 disqus_short_name: stacktoheap
 disqus_show_comment_count: true
 
+# Google Analytics
+google_analytics_tracking_id: UA-35693303-1
+
 gems:
   - jekyll-archives
 
