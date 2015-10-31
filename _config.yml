@@ -19,3 +19,22 @@ github_username:  manojlds
 
 # Build settings
 markdown: kramdown
+
+gems:
+  - jekyll-archives
+
+jekyll-archives:
+  enabled:
+  - categories
+  - tags
+  - year
+  layouts:
+    tag: 'category'
+    category: 'category'
+    year: 'archive'
+  permalinks:
+    year: '/archives/:year/'
+    month: '/archives/:year/:month/'
+    day: '/archives/:year/:month/:day/'
+    tag: '/tags/:name/'
+    category: '/categories/:name/'
