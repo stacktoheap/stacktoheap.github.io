@@ -14,8 +14,8 @@ baseurl: "" # the subpath of your site, e.g. /blog
 url: "http://stacktoheap.com" # the base hostname & protocol for your site
 twitter_username: manojlds
 github_username:  manojlds
+permalink: /blog/:year/:month/:day/:title/
+
 
 # Build settings
 markdown: kramdown
-
-permalink: /blog/:year/:month/:day/:title/
