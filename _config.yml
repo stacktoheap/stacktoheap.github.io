@@ -20,6 +20,10 @@ github_username:  manojlds
 # Build settings
 markdown: kramdown
 
+# Disqus Comments
+disqus_short_name: stacktoheap
+disqus_show_comment_count: true
+
 gems:
   - jekyll-archives
 
