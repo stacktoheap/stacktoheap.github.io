@@ -12,10 +12,10 @@ description: >
   StackToHeap: No Overflow
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "http://stacktoheap.com" # the base hostname & protocol for your site
-twitter_username: manojlds
-github_username:  manojlds
 permalink: /blog/:year/:month/:day/:title/
 
+twitter_username: manojlds
+github_username:  manojlds
 
 # Build settings
 markdown: kramdown
