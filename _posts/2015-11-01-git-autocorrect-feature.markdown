@@ -41,4 +41,4 @@ Continuing under the assumption that you meant 'push'
 in 1.0 seconds automatically...
 {% endhighlight %}
 
-Related: While the above is only for git, you might want to look at [thefuck](https://github.com/nvbn/thefuck) if you want similar autocorrect for any command you type. The appropriately named utility goes beyond correcting typos, however. It can also do suggested commands (like `git push` when no upstream is set.)
+Related: While the above is only for git, you might want to look at [thefuck](https://github.com/nvbn/thefuck) if you want similar autocorrect for any command you type. The appropriately named utility goes beyond just correcting typos, however. It can also do suggested commands (like `git push` when no upstream is set.)
