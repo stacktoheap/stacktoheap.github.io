@@ -3,7 +3,7 @@ layout: post
 title: "Sharing docker images without a registry"
 date: 2015-11-22 23:30
 comments: true
-categories: [docker, registry]
+categories: [docker, registry, docker-machine]
 ---
 
 One of the well-known ways of sharing docker images is via a registry - be it the hosted ones like [DockerHub](https://hub.docker.com/) or [Quay.io](https://quay.io/), or private registries setup within your organization.
@@ -29,8 +29,8 @@ First, some basics about `docker save` and `docker load`:
 Once we had the workstation in our LAN (let's say its IP is 192.168.0.42), syncing an image to it is as simple as:
 
 ```bash
-docker save internal-registry/image:1.0.0 | bzip2 | \
- pv | ssh 192.168.0.42 "cat > ~/docker_images/image-1.0.0"
+docker save internal-registry/image | bzip2 | \
+ pv | ssh 192.168.0.42 "cat > ~/docker_images/image"
 ```
 (this push can be done from a one workstation where the image was built, or pulled in from a registry)
 
@@ -39,8 +39,26 @@ We used bzip2 to compress the data, and the amazing pv tool to visualize the tra
 Pulling in an image is not much different:
 
 ```bash
-ssh 192.168.0.42 "cat ~/docker_images/image:1.0.0" | pv | \
+ssh 192.168.0.42 "cat ~/docker_images/image" | pv | \
  bunzip2 | docker load
 ```
 
-This simple setup makes pulling in images much faster, and also saves bandwidth. Hope this is useful in your work environment too.
+### Sync between multiple docker machines
+
+We use docker machine on OS X. This strategy can also be used to share or backup images between different docker-machines. If there are two machines, say `dev1` and `dev2` running, we can sync an image between the two like below:
+
+```bash
+docker $(docker-machine config dev1) save image | docker $(docker-machine config dev2) load
+```
+
+If a machine (say `dev`) is going to be recreated, we can save the image(s) and reload:
+
+```bash
+docker $(docker-machine config dev) save -o image.tar image
+docker-machine rm dev
+docker-machine create --provider virtualbox dev
+docker $(docker-machine config dev) load -i image.tar
+```
+This should make using multiple docker-machines or recreating existing ones a much faster task.
+
+This simple setup makes pulling in images much faster, and also saves bandwidth. Hope it is useful in your work environment too.
