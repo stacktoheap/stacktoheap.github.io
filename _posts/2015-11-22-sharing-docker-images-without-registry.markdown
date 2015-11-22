@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Sharing docker images on LAN without a registry"
+title: "Sharing docker images without a registry"
 date: 2015-11-22 23:30
 comments: true
 categories: [docker, registry]
