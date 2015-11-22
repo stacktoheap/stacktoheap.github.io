@@ -10,11 +10,13 @@ One of the well-known ways of sharing docker images is via a registry - be it th
 
 Also, once a workstation has a set of images, pulling in new versions or similar images becomes a breeze.
 
+But we wanted to share images between developer workstations, without having to push and pull from a registry.
+
 ### Why no registry?
 
-Recently, when we were switching to a docker based workflow, we found that pulling in the base set of images from our internal registry on AWS + S3 was taking a lot of time. Not to mention that it was also eating up our bandwidth. In order to make it easy and fast for new developers to get started with our project, we wanted to setup a local "store" of images that we can pull our images from. This store will also help us share new images much faster as well.
+Recently, when we were switching to a docker based workflow, we found that pulling in the base set of images from our internal registry on AWS + S3 was taking a lot of time. Not to mention that it was also eating up our bandwidth. In order to make it easy and fast for new developers to get started with our project, we wanted to setup a local "store" of images that we can pull our images from. This store will also help us share new images quicker as well.
 
-Instead of setting up a local registry in our office LAN, we decided to keep things simple and setup a simple workstation to pull in images as files. The `docker save` and `docker load` commands helped us beautifully here. We also piped from/to these command directly to/from the workstation, and avoided local files altogether.
+Instead of setting up a local registry in our office LAN, we decided to keep things simple and setup a simple workstation to pull in images via SSH. The `docker save` and `docker load` commands helped us beautifully here. We also piped from/to these command directly to/from the workstation, and avoided local files altogether.
 
 ### docker save and docker load
 
@@ -28,37 +30,40 @@ First, some basics about `docker save` and `docker load`:
 
 Once we had the workstation in our LAN (let's say its IP is 192.168.0.42), syncing an image to it is as simple as:
 
-```bash
+{% highlight bash %}
 docker save internal-registry/image | bzip2 | \
- pv | ssh 192.168.0.42 "cat > ~/docker_images/image"
-```
+  pv | ssh 192.168.0.42 "cat > ~/docker_images/image"
+{% endhighlight %}
+
 (this push can be done from a one workstation where the image was built, or pulled in from a registry)
 
-We used bzip2 to compress the data, and the amazing pv tool to visualize the transfer.
+We used `bzip2` to compress the data, and the amazing `pv` tool to visualize the transfer.
 
 Pulling in an image is not much different:
 
-```bash
+{% highlight bash %}
 ssh 192.168.0.42 "cat ~/docker_images/image" | pv | \
- bunzip2 | docker load
-```
+  bunzip2 | docker load
+{% endhighlight %}
 
 ### Sync between multiple docker machines
 
-We use docker machine on OS X. This strategy can also be used to share or backup images between different docker-machines. If there are two machines, say `dev1` and `dev2` running, we can sync an image between the two like below:
+We use [docker-machine](https://docs.docker.com/machine/) on OS X for development. This strategy can also be used to share or backup images between different docker-machines. If there are two machines, say `dev1` and `dev2` running, we can sync an image between the two like below:
 
-```bash
-docker $(docker-machine config dev1) save image | docker $(docker-machine config dev2) load
-```
+{% highlight bash %}
+docker $(docker-machine config dev1) save image | \
+  docker $(docker-machine config dev2) load
+{% endhighlight %}
 
 If a machine (say `dev`) is going to be recreated, we can save the image(s) and reload:
 
-```bash
+{% highlight bash %}
 docker $(docker-machine config dev) save -o image.tar image
 docker-machine rm dev
 docker-machine create --provider virtualbox dev
 docker $(docker-machine config dev) load -i image.tar
-```
-This should make using multiple docker-machines or recreating existing ones a much faster task.
+{% endhighlight %}
+
+This should make using multiple docker-machines or recreating existing ones less of an hassle in terms of getting the base set of images.
 
 This simple setup makes pulling in images much faster, and also saves bandwidth. Hope it is useful in your work environment too.
