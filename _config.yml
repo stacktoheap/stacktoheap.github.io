@@ -30,6 +30,7 @@ google_analytics_tracking_id: UA-35693303-1
 
 gems:
   - jekyll-archives
+  - jekyll-sitemap
 
 jekyll-archives:
   enabled:
