@@ -1,9 +1,11 @@
 ---
 layout: post
 title: "Sharing docker images without a registry"
+excerpt: "Sharing docker images between developer workstations without a registry"
 date: 2015-11-22 23:30
 comments: true
-categories: [docker, registry, docker-machine]
+categories: [docker]
+tags: [docker, docker-machine, docker-sync, registry, docker-save, docker-load]
 ---
 
 One of the well-known ways of sharing docker images is via a registry - be it the hosted ones like [DockerHub](https://hub.docker.com/) or [Quay.io](https://quay.io/), or private registries setup within your organization.
