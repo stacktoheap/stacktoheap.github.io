@@ -2,6 +2,7 @@
 layout: post
 title: "Sharing docker images without a registry"
 excerpt: "Sharing docker images between developer workstations without a registry"
+reading_time: "5 mins"
 date: 2015-11-22 23:30
 comments: true
 categories: [docker]
