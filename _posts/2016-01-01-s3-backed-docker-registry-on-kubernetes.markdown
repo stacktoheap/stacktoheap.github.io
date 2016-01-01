@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Hosting an S3 backed Docker Registry on Kubernetes"
-excerpt: "Sharing docker images between developer workstations without a registry"
+excerpt: "Hosting an S3 backed Docker Registry on Kubernetes"
 reading_time: "6 mins"
 date: 2016-01-01 23:20
 comments: true
@@ -74,7 +74,7 @@ spec:
           protocol: TCP
 {% endhighlight %}
 
-It is important to set `REGISTRY_STORAGE` to `S3` so that the default storage configuration is overridden. If this is not done, you will get an error regarding multiple storage drivers. `REGISTRY_HTTP_SECRET` has been added so that load balancing across multiple pods will work, when needed. Rest of the settings are pretty standard for a S3 backed registry, as per the docs.
+It is important to set `REGISTRY_STORAGE` to `S3` so that the default storage configuration is overridden. If this is not done, you will get an error regarding multiple storage drivers. `REGISTRY_HTTP_SECRET` has been added so that load balancing across multiple pods will work, when needed. Rest of the settings are pretty standard for a S3 backed registry, [as per the docs](https://github.com/docker/distribution/blob/master/docs/configuration.md#storage).
 
 We have a service that looks like below (For context, our Kubernetes cluster is on AWS, and has AWS aware features enabled):
 
