@@ -2,7 +2,7 @@
 layout: post
 title: "How to git add only files that have already been staged"
 excerpt: "Adding only those files already staged, back to the index with new changes"
-reading_time: "2 mins"
+reading_time: "3 mins"
 date: 2016-01-02 21:42
 comments: true
 categories: [git]
