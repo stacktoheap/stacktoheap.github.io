@@ -1,92 +1,104 @@
 ---
 layout: post
-title: "How to git add only files that have already been staged"
-excerpt: "Adding only those files already staged, back to the index with new changes"
-reading_time: "3 mins"
-date: 2016-01-02 21:42
+title: "Hosting an S3 backed Docker Registry on Kubernetes"
+excerpt: "Hosting an S3 backed Docker Registry on Kubernetes"
+reading_time: "6 mins"
+date: 2016-01-01 23:20
 comments: true
-categories: [git]
-tags: [restage, git-index]
+categories: [docker, kubernetes]
+tags: [docker, kubernetes, docker-registry, S3]
 ---
 
-Git has many shortcuts that you can use to make yourself more productive. One of the little known (and simple!) features is regarding restaging files that have already been staged.
+Running a docker registry (v2) on Kubernetes is [well documented as an addon to Kubernetes](https://github.com/kubernetes/kubernetes/tree/master/cluster/addons/registry).
 
-Let's create a simple repository with three files to setup an example:
+That setup, however, involves proxying the registry as `localhost` on each Kubernetes node. While this simplifies pulling on nodes (no insecure registry issue, as it is localhost), this makes building and pushing outside the Kubernetes cluster unnecessarily complex and hacky  (you need to `kubectl port-forward` to access the registry, and you also must build your images with the tag like `localhost:5000/repository/image:version`.) Moreover, it is based on Persistent Volume storage.
 
-{% highlight bash %}
-git init .
-touch file1 file2 file3
-git add .
-git commit -am "Add files"
+For a better docker registry setup, we wanted two things:
+
+ - S3 backed registry so that storage is managed better.
+ - Proper service for registry so that push and pull are more sane, and image tags are proper. We would like to push and pull from local workstation and our CI boxes. Also, at any time we can move to a different hosting solution for our private registry without have to retag and push images.
+
+For S3 storage, we can utilize the ability to override all the configuration for the registry via environment variables. Our `ReplicationController` looks like the following:
+
+{% highlight yaml %}
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: kube-registry-v0
+  namespace: kube-system
+  labels:
+    k8s-app: kube-registry
+    version: v0
+    kubernetes.io/cluster-service: "true"
+spec:
+  replicas: 1
+  selector:
+    k8s-app: kube-registry
+    version: v0
+  template:
+    metadata:
+      labels:
+        k8s-app: kube-registry
+        version: v0
+        kubernetes.io/cluster-service: "true"
+    spec:
+      containers:
+      - name: registry
+        image: registry:2.2.1
+        env:
+        - name: REGISTRY_HTTP_ADDR
+          value: :5000
+        - name: REGISTRY_STORAGE
+          value: S3
+        - name: REGISTRY_STORAGE_S3_ACCESSKEY
+          value: <access_key>
+        - name: REGISTRY_STORAGE_S3_SECRETKEY
+          value: <secret_key>
+        - name: REGISTRY_STORAGE_S3_REGION
+          value: us-east-1
+        - name: REGISTRY_STORAGE_S3_BUCKET
+          value: <S3_bucket>
+        - name: REGISTRY_STORAGE_S3_ENCRYPT
+          value: "true"
+        - name: REGISTRY_STORAGE_S3_SECURE
+          value: "true"
+        - name: REGISTRY_STORAGE_S3_V4AUTH
+          value: "true"
+        - name: REGISTRY_STORAGE_S3_CHUNKSIZE
+          value: "5242880"
+        - name: REGISTRY_HTTP_SECRET
+          value: "<secret>"
+        ports:
+        - containerPort: 5000
+          name: registry
+          protocol: TCP
 {% endhighlight %}
 
-All right. With the initial commit done, let's make changes to these files, and add the changes to the index:
+It is important to set `REGISTRY_STORAGE` to `S3` so that the default storage configuration is overridden. If this is not done, you will get an error regarding multiple storage drivers. `REGISTRY_HTTP_SECRET` has been added so that load balancing across multiple pods will work, when needed. Rest of the settings are pretty standard for a S3 backed registry, [as per the docs](https://github.com/docker/distribution/blob/master/docs/configuration.md#storage).
 
-{% highlight bash %}
-echo "file1" > file1
-echo "file2" > file2
-git add file1 file2
-git status
-#On branch master
-#Changes to be committed:
-#  (use "git reset HEAD <file>..." to unstage)
-#
-# modified:   file1
-# modified:   file2
+We have a service that looks like below (For context, our Kubernetes cluster is on AWS, and has AWS aware features enabled):
+
+{% highlight yaml %}
+apiVersion: v1
+kind: Service
+metadata:
+  name: kube-registry
+  namespace: kube-system
+  labels:
+    k8s-app: kube-registry
+    kubernetes.io/cluster-service: "true"
+    kubernetes.io/name: "KubeRegistry"
+spec:
+  selector:
+    k8s-app: kube-registry
+  type: LoadBalancer
+  ports:
+  - name: registry
+    port: 80
+    targetPort: 5000
+    protocol: TCP
 {% endhighlight %}
 
-So, `file1` and `file2` have been changed, and added to the index. Let's say we now make changes to `file1` and `file3`:
+We have a nice Route53 alias for the resulting ELB so that we can push and pull like we would to any other private registry. With the DNS name and S3 storage, moving away from Kubernetes for the registry is trivial too.
 
-{% highlight bash %}
-echo "file1" >> file1
-echo "file3" > file3
-git status
-#On branch master
-#Changes to be committed:
-#  (use "git reset HEAD <file>..." to unstage)
-#
-# modified:   file1
-# modified:   file2
-#
-#Changes not staged for commit:
-#  (use "git add <file>..." to update what will be committed)
-#  (use "git checkout -- <file>..." to discard changes in working directory)
-#
-# modified:   file1
-# modified:   file3
-{% endhighlight %}
-
-`file1` and `file2`, with their initials changes, are in the index. New changes to `file1` are to be added, along with changes to `file3`.
-
-So with our contrived example all setup, we can actually come to the main material of the post. Suppose you want to add only files that have already been staged, but have new changes in the working directory now. Files like `file1`. Git has an handy shortcut for this, but you have to look beyond `git add`. All that is needed to "restage" files in git is the following command:
-
-{% highlight bash %}
-git update-index --again
-git status
-#On branch master
-#Changes to be committed:
-#  (use "git reset HEAD <file>..." to unstage)
-#
-# modified:   file1
-# modified:   file2
-#
-#Changes not staged for commit:
-#  (use "git add <file>..." to update what will be committed)
-#  (use "git checkout -- <file>..." to discard changes in working directory)
-#
-# modified:   file3
-{% endhighlight %}
-
-From the docs, this
-
-{% blockquote %}
-Runs git update-index itself on the paths whose index entries are different from those from the HEAD commit.
-{% endblockquote %}
-
-Which is exactly what we want in this scenario. Hope this nice little command makes you more productive. Git has lots of these unused little gems. Git is a complex beast, yes, but some of these need to be discovered and used.
-
-For those who add aliases for these things, here you go:
-
-{% highlight bash %}
-git config --global alias.restage "update-index --again"
-{% endhighlight %}
+Improvements: Obviously, we are running an insecure registry at the moment. That's something on our TODO list of things to fix. Currently, our CoreOS nodes, local workstations and CI boxes have Docker service running with the `--insecure-registry` flag.
