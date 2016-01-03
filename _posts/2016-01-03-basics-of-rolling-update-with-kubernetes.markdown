@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Basics of rolling updates with Kubernetes"
-excerpt: "Basics of rolling updates with Kubernetes. Based on "
+excerpt: "Basics of rolling updates with Kubernetes. Describes a basic ReplicationController template for rolling updates"
 reading_time: "5 mins"
 date: 2016-01-03 18:48
 comments: true
