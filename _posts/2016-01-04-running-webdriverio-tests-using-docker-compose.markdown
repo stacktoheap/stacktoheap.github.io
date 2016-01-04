@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Running WebDriverIO tests using docker-compose"
-excerpt: "Running WebDriverIO tests using docker-compose for developement and CI"
+excerpt: "Running WebDriverIO tests using docker-compose for development and CI"
 reading_time: "7 mins"
 date: 2016-01-04 23:48
 comments: true
