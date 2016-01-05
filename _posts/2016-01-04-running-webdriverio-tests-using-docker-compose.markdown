@@ -13,7 +13,7 @@ I have been in the process of setting up a Docker and docker-compose based workf
 
 #WebDriverIO setup
 
-Apart from the standard bootstrap steps outlined in the WebDriverIO docs, I use the awesome [`node-config`](https://github.com/lorenwest/node-config) library for configuration. This helps in neatly configuring the differences between different environments - in this case, local development setup and docker based CI.
+Apart from the standard bootstrap steps outlined in the [WebDriverIO docs](http://webdriver.io/guide.html), I use the awesome [`node-config`](https://github.com/lorenwest/node-config) library for configuration. This helps in neatly configuring the differences between different environments - in this case, local development setup and docker based CI.
 
 The `test` folder has the following structure:
 
