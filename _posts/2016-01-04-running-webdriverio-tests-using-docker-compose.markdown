@@ -113,6 +113,8 @@ The entire thing is a composition of three containers, as described below:
 
 With the above compose file, we can run the functional tests using:
 
+{% highlight yaml %}
 docker-compose -f docker-compose.ft.yml run --rm app_ft
+{% endhighlight %}
 
 Happy testing!
