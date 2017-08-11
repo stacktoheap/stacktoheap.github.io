@@ -1,10 +1,13 @@
 ---
 layout: page
 title: About
+header: true
 permalink: /about/
 ---
 
-Manoj Mahalingam S is a Software Engineer at [Indix](http://www.indix.com). Before that he was an Application Developer at [ThoughtWorks](http://www.thoughtworks.com)
+![Manoj Mahalingam]({{ site.url }}/images/profile.jpg)
+
+Manoj Mahalingam is a Principal Engineer at [Indix](http://www.indix.com). Previously, he worked with [ThoughtWorks](http://www.thoughtworks.com) as a Senior Application Developer.
 
 Manoj is the author of the book [Learning Continuous Integration with TeamCity](https://www.packtpub.com/web-development/learning-continuous-integration-teamcity-raw)
 
@@ -12,4 +15,4 @@ He codes in Scala, Javascript, Python, Ruby and C#. He likes to think he knows H
 
 He has employed Continuous Integration and Continuous Delivery in a number of projects, ranging across all the major tech stacks. He has also spoken at a number of conferences, including Pycon India and Devopsdays India.
 
-He can be found answering questions on Stack Overflow at [manojlds](http://stackoverflow.com/users/526535/manojlds) and also contributing to a number of projects on GitHub.
+He can be found answering questions on Stack Overflow at [manojlds](http://stackoverflow.com/users/526535/manojlds) and also contributing to a number of projects on [GitHub](https://github.com/manojlds).
