@@ -28,7 +28,7 @@ disqus_show_comment_count: true
 # Google Analytics
 google_analytics_tracking_id: UA-35693303-1
 
-gems:
+plugins:
   - jekyll-archives
   - jekyll-sitemap
 
