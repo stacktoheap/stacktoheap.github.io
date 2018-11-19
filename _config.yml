@@ -19,7 +19,7 @@ github_username:  manojlds
 
 # Build settings
 markdown: kramdown
-exclude: [Gemfile, Gemfile.lock, deploy.sh]
+exclude: [Gemfile, Gemfile.lock, deploy.sh, vendor]
 
 # Disqus Comments
 disqus_short_name: stacktoheap
