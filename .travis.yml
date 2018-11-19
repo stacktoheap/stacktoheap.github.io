@@ -16,6 +16,7 @@ branches:
   - source
 deploy:
 - provider: pages
+  local-dir: _site
   skip_cleanup: true
   target_branch: master
   github_token:
