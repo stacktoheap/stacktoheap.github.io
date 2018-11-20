@@ -1,0 +1,781 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>StackToHeap</title>
+    <description>StackToHeap: No Overflow
+</description>
+    <link>https://stacktoheap.com/</link>
+    <atom:link href="https://stacktoheap.com/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Tue, 20 Nov 2018 06:11:48 +0000</pubDate>
+    <lastBuildDate>Tue, 20 Nov 2018 06:11:48 +0000</lastBuildDate>
+    <generator>Jekyll v3.7.4</generator>
+    
+      <item>
+        <title>MLFlow as a model repository in your CI/CD workflow</title>
+        <description>&lt;p&gt;&lt;a href=&quot;https://mlflow.org/&quot;&gt;MLFlow&lt;/a&gt; is an open source platform for the entire end-to-end machine learning lifecycle. At Indix, we saw it as a good fit within our interal ML Platform as a model repository. We also integrated MLFlow with GoCD, our CI/CD tool of choice for years.&lt;/p&gt;
+
+&lt;h2 id=&quot;requirements-from-a-model-repository&quot;&gt;Requirements from a model repository&lt;/h2&gt;
+
+&lt;p&gt;We see a model repository as being similar to other artifact repositories like Maven and Ivy. It should help us to add and track models based on different libraries (scikit-learn, MLLib, fastText etc.) along with all the associated metadata like the hyperparams and metrics. Essentially, everything that went into training the model (the notebook itself or library version, training data, hyper params etc) and all the output (including the model themselves alongwith all the relevant metrics) should be versioned and available for consumption.&lt;/p&gt;
+
+&lt;h2 id=&quot;mlflow-as-a-model-repository&quot;&gt;MLFlow as a model repository.&lt;/h2&gt;
+
+&lt;p&gt;MLFlow is a complete end-to-end machine learning lifecycle platform. The missing piece in our internal ML Platform has been the model repository and MLFlow fit in pretty well. For this purpose we utilize the MLFlow Tracking API and the UI to track our &lt;code class=&quot;highlighter-rouge&quot;&gt;experiments&lt;/code&gt; and the different &lt;code class=&quot;highlighter-rouge&quot;&gt;runs&lt;/code&gt; within them as we iterate on the models.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://stacktoheap.com/images/mlflow-ui.png&quot; alt=&quot;mlflow-ui&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;mlflow-integration-with-gocd&quot;&gt;MLFlow integration with GoCD&lt;/h2&gt;
+
+&lt;p&gt;Our CI/CD process involves taking builds out of promoted models and performing test set validations, delta stats from previous version, containerization, deployments for online predictions and creating AWS AMIs backed with the model containers for offline batch processing.&lt;/p&gt;
+
+&lt;p&gt;At every stage, it is essential that it is possible to track back to the model version being used and even the training data and hyperparams used to build the said model. MLFLow makes it easy to track all the inputs and outputs of each and every model building process. GoCD, the open source CI/CD tool from ThoughtWorks makes it trivial to track artifacts as they flow through various CD pipelines. It was a no-brainer that we ended up integrating MLFlow as a package repository in GoCD so that a model deployed in production can be traced back to its corresponding run all the way back to MLFlow.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://stacktoheap.com/images/mlflow-vsm.png&quot; alt=&quot;mlflow-vsm&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;A run within an experiment that is deemed to be production ready is tagged with a “promote” tag and any time a model is promoted, a new build is triggered on GoCD just like how a new commit to Git triggers a new build.&lt;/p&gt;
+
+&lt;p&gt;More details about the &lt;a href=&quot;https://github.com/indix/mlflow-gocd&quot;&gt;open source mlflow-gocd plugin can be found here&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;MLFlow is an amazing and evolving ML lifecycle tool. It can also be used in parts within your already existing tools and platform. MLFlow with GoCD is the right fit for us at Indix for our level of maturity in building and managing our own ML platforms. Watch this space for more evolutions on this.&lt;/p&gt;
+
+</description>
+        <pubDate>Mon, 19 Nov 2018 10:45:00 +0000</pubDate>
+        <link>https://stacktoheap.com/blog/2018/11/19/mlflow-model-repository-ci-cd/</link>
+        <guid isPermaLink="true">https://stacktoheap.com/blog/2018/11/19/mlflow-model-repository-ci-cd/</guid>
+        
+        <category>ml</category>
+        
+        <category>mlflow</category>
+        
+        <category>gocd</category>
+        
+        <category>machine-learning</category>
+        
+        
+        <category>ml</category>
+        
+      </item>
+    
+      <item>
+        <title>Using multiple worktrees with git</title>
+        <description>&lt;p&gt;One of my recent observations is that when working with multiple branches at the same time, people clone the whole git repository again. Mostly, there are no issues with this, and this could simplify the workflow a lot.&lt;/p&gt;
+
+&lt;p&gt;But, when you use git hooks, new clones can be inconvenient. As is the standard practice, we checkin our hooks to the repo. These are then symlinked into &lt;code class=&quot;highlighter-rouge&quot;&gt;.git/hooks&lt;/code&gt; via a bootstrap script that the user has to run after the initial clone. When cloning a repo again, the user has to remember to install the hooks in the new clone as well.&lt;/p&gt;
+
+&lt;p&gt;With or without hooks in the picture, the ideal, and  the most efficient, approach to working with multiple independent working copies is to make use of the &lt;code class=&quot;highlighter-rouge&quot;&gt;git worktree&lt;/code&gt; feature. This was added in git 2.5, and is the focus of this article.&lt;/p&gt;
+
+&lt;h2 id=&quot;working-with-multiple-branches&quot;&gt;Working with multiple branches&lt;/h2&gt;
+
+&lt;p&gt;Say you are on a feature branch, and want to make a bug fix in &lt;code class=&quot;highlighter-rouge&quot;&gt;master&lt;/code&gt;. You can create a whole new working copy based on master as follows:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;git fetch
+git worktree add &lt;span class=&quot;nt&quot;&gt;-b&lt;/span&gt; bugfix-1234 ../bugfix origin/master&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;The above sets up a new worktree at &lt;code class=&quot;highlighter-rouge&quot;&gt;../bugfix&lt;/code&gt; (assuming, and recommended that you are at the root of your original cloned repository). The &lt;code class=&quot;highlighter-rouge&quot;&gt;-b bugfix-1234&lt;/code&gt; option creates a new branch, named &lt;code class=&quot;highlighter-rouge&quot;&gt;bugfix-1234&lt;/code&gt;, based off master. If the &lt;code class=&quot;highlighter-rouge&quot;&gt;-b&lt;/code&gt; option is not given, a new branch matching the directory of your worktree, &lt;code class=&quot;highlighter-rouge&quot;&gt;bugfix&lt;/code&gt;, is created. You can now &lt;code class=&quot;highlighter-rouge&quot;&gt;cd ../bugfix&lt;/code&gt; and work on this new worktree (and branch) as though it were a new clone of the repository. Your original clone and work is not interrupted&lt;/p&gt;
+
+&lt;p&gt;And best of all, your hooks are carried over as well!&lt;/p&gt;
+
+&lt;h2 id=&quot;long-running-tasks&quot;&gt;Long running tasks&lt;/h2&gt;
+
+&lt;p&gt;Another use case for the worktree feature is when you have long running tasks (say, running build, unit tests, integration tests and functional test) that you want to run while continuing to work on the codebase. In that case, you can:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;git worktree add &lt;span class=&quot;nt&quot;&gt;--detach&lt;/span&gt; ../project-build HEAD
+&lt;span class=&quot;nb&quot;&gt;cd&lt;/span&gt; ../project-build
+./run_build.sh&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;The above creates a worktree with detached branch off current &lt;code class=&quot;highlighter-rouge&quot;&gt;HEAD&lt;/code&gt;. We can use this temporary worktree to run our long running task, and continue to make changes in our original worktree. Using &lt;code class=&quot;highlighter-rouge&quot;&gt;--detach&lt;/code&gt; is ideal in this situation, as this is a temporary worktree, and we don’t want to create a branch for this.&lt;/p&gt;
+
+&lt;h2 id=&quot;cleanup&quot;&gt;Cleanup&lt;/h2&gt;
+
+&lt;p&gt;As of this writing, there are no helpers to remove worktrees, so you can just &lt;code class=&quot;highlighter-rouge&quot;&gt;rm -rf ../bugfix &amp;amp;&amp;amp; git worktree prune&lt;/code&gt; when you are done with your new worktree. The &lt;code class=&quot;highlighter-rouge&quot;&gt;git worktree prune&lt;/code&gt; is optional, and will remove metadata around your worktree from the repository immediately. If not used, the normal git garbage collection process will eventually clean it up.&lt;/p&gt;
+</description>
+        <pubDate>Tue, 19 Jan 2016 12:07:00 +0000</pubDate>
+        <link>https://stacktoheap.com/blog/2016/01/19/using-multiple-worktrees-with-git/</link>
+        <guid isPermaLink="true">https://stacktoheap.com/blog/2016/01/19/using-multiple-worktrees-with-git/</guid>
+        
+        <category>git</category>
+        
+        <category>worktree</category>
+        
+        <category>productivity</category>
+        
+        
+        <category>git</category>
+        
+      </item>
+    
+      <item>
+        <title>Running WebDriverIO tests using docker-compose</title>
+        <description>&lt;p&gt;I have been in the process of setting up a Docker and docker-compose based workflow for development and CI. As part of this setup, we have been able to run automated functional tests on docker as well.&lt;/p&gt;
+
+&lt;p&gt;#WebDriverIO setup&lt;/p&gt;
+
+&lt;p&gt;Apart from the standard bootstrap steps outlined in the &lt;a href=&quot;http://webdriver.io/guide.html&quot;&gt;WebDriverIO docs&lt;/a&gt;, I use the awesome &lt;a href=&quot;https://github.com/lorenwest/node-config&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;node-config&lt;/code&gt;&lt;/a&gt; library for configuration. This helps in neatly configuring the differences between different environments - in this case, local development setup and docker based CI.&lt;/p&gt;
+
+&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;test&lt;/code&gt; folder has the following structure:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;tree ./test/
+./test/
+├── config
+│   ├── default.json
+│   └── docker.json
+├── specs
+│   └── home.js
+└── wdio.conf.js&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;The config files have the default driver settings in &lt;code class=&quot;highlighter-rouge&quot;&gt;default.json&lt;/code&gt;. These are used for running the tests in development. &lt;code class=&quot;highlighter-rouge&quot;&gt;docker.json&lt;/code&gt;, similarly, has the settings needed for docker based functional tests (which run in CI, but can also be run in development, if needed.)&lt;/p&gt;
+
+&lt;p&gt;For local development, we use local chrome driver for the tests. Accordingly, the default.json looks something like the following:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-json&quot; data-lang=&quot;json&quot;&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;driver_host&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;127.0.0.1&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;driver_port&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;9515&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;driver_path&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;/&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;local_chrome_driver&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;app_base_path&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://localhost:9090&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;For docker based tests, we use standalone selenium, running in a docker container (details in the following section.) Accordingly, &lt;code class=&quot;highlighter-rouge&quot;&gt;docker.json&lt;/code&gt; looks like the following:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-json&quot; data-lang=&quot;json&quot;&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;driver_host&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;chrome_standalone&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;driver_port&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4444&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;driver_path&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;/wd/hub&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;local_chrome_driver&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;app_base_path&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;http://app_built:9090&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Note that &lt;code class=&quot;highlighter-rouge&quot;&gt;chrome_standalone&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;app_built&lt;/code&gt; are hostnames populated by the link mechanisms of docker and docker-compose.&lt;/p&gt;
+
+&lt;p&gt;A simple npm script command is added in &lt;code class=&quot;highlighter-rouge&quot;&gt;package.json&lt;/code&gt; for running the functional tests:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-json&quot; data-lang=&quot;json&quot;&gt;&lt;span class=&quot;s2&quot;&gt;&quot;scripts&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;err&quot;&gt;...&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;ft&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;NODE_CONFIG_DIR=./test/config wdio ./test/wdio.conf.js&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;The above allows us to run the functional tests as &lt;code class=&quot;highlighter-rouge&quot;&gt;npm run ft&lt;/code&gt;. Docker based functional tests can be run with &lt;code class=&quot;highlighter-rouge&quot;&gt;NODE_ENV=docker npm run ft&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Note: The environment variable &lt;code class=&quot;highlighter-rouge&quot;&gt;NODE_CONFIG_DIR&lt;/code&gt; is set to &lt;code class=&quot;highlighter-rouge&quot;&gt;./test/config&lt;/code&gt; so that tests can have their own isolated configs, and not be interleaved with configs used by the application.&lt;/p&gt;
+
+&lt;p&gt;#Compose file&lt;/p&gt;
+
+&lt;p&gt;The functional testing specific docker-compose file - called &lt;code class=&quot;highlighter-rouge&quot;&gt;docker-compose.fy.yml&lt;/code&gt; has, in its simplest form, the following:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-yaml&quot; data-lang=&quot;yaml&quot;&gt;&lt;span class=&quot;na&quot;&gt;app_built&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;registry/repository/app:${VERSION}&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;ports&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;9090:9090&quot;&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;environment&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;NODE_ENV=&quot;production&quot;&lt;/span&gt;
+
+&lt;span class=&quot;na&quot;&gt;chrome_standalone&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;selenium/standalone-chrome:2.48.2&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;volumes&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;/dev/shm:/dev/shm&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;ports&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;4444:4444&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;links&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;app_built&lt;/span&gt;
+
+&lt;span class=&quot;na&quot;&gt;app_ft&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;build&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;.&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;dockerfile&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Dockerfile.build&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;command&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;bash -c &quot;npm install &amp;amp;&amp;amp; npm run ft&quot;&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;volumes&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;.:/app:rw&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;links&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;chrome_standalone&lt;/span&gt;
+  &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;app_built&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;environment&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;NODE_ENV=docker&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;The entire thing is a composition of three containers, as described below:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;em&gt;app_built&lt;/em&gt; - This docker-compose service represents the actual application to be tested. The container has been built and pushed to a private registry as part of a separate build process.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;em&gt;chrome_standalone&lt;/em&gt; - This is the service that runs Selenium standalone along with Chrome. More details on the &lt;code class=&quot;highlighter-rouge&quot;&gt;selenium/standalone-chrome&lt;/code&gt; can be obtained here - &lt;a href=&quot;https://github.com/SeleniumHQ/docker-selenium&quot;&gt;https://github.com/SeleniumHQ/docker-selenium&lt;/a&gt;. For a more mature setup, this can be replaced with a multi-container Selenium hub, also detailed in the link above. This service links to &lt;em&gt;app_built&lt;/em&gt; since it needs to access the app to run the tests.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;em&gt;app_ft&lt;/em&gt; - this is the service &lt;em&gt;from&lt;/em&gt; which we run the functional tests. &lt;code class=&quot;highlighter-rouge&quot;&gt;Dockerfile.build&lt;/code&gt; helps in creating a simple node.js based container that can run node.js script/commands. As described in the previous section, we also pass the &lt;code class=&quot;highlighter-rouge&quot;&gt;NODE_ENV&lt;/code&gt; environment variable, set to &lt;code class=&quot;highlighter-rouge&quot;&gt;docker&lt;/code&gt;. This makes the tests pick up the settings from &lt;code class=&quot;highlighter-rouge&quot;&gt;docker.json&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;With the above compose file, we can run the functional tests using:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-yaml&quot; data-lang=&quot;yaml&quot;&gt;&lt;span class=&quot;s&quot;&gt;docker-compose -f docker-compose.ft.yml run --rm app_ft&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Happy testing!&lt;/p&gt;
+</description>
+        <pubDate>Mon, 04 Jan 2016 23:48:00 +0000</pubDate>
+        <link>https://stacktoheap.com/blog/2016/01/04/running-webdriverio-tests-using-docker-compose/</link>
+        <guid isPermaLink="true">https://stacktoheap.com/blog/2016/01/04/running-webdriverio-tests-using-docker-compose/</guid>
+        
+        <category>docker</category>
+        
+        <category>docker-compose</category>
+        
+        <category>webdriverio</category>
+        
+        <category>selenium</category>
+        
+        <category>node.js</category>
+        
+        
+        <category>docker</category>
+        
+        <category>docker-compose</category>
+        
+      </item>
+    
+      <item>
+        <title>Basics of rolling updates with Kubernetes</title>
+        <description>&lt;p&gt;It is very easy to get started with &lt;code class=&quot;highlighter-rouge&quot;&gt;Pods&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;ReplicationControllers&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;Services&lt;/code&gt; in Kubernetes. Doing a seamless rolling update for your application, however, needs your replication controllers to be configured in a certain way to make it work. The aim of this post is to talk about the basics of configuring a production ready ReplicationController that is ready for rolling updates.&lt;/p&gt;
+
+&lt;h3 id=&quot;barebones-template&quot;&gt;Barebones Template&lt;/h3&gt;
+
+&lt;p&gt;Following is a barebones template/example of a ReplicationController to enable rolling updates:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-yaml&quot; data-lang=&quot;yaml&quot;&gt;&lt;span class=&quot;na&quot;&gt;apiVersion&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;v1&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;kind&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;ReplicationController&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;metadata&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;my-application-{{ MY_APPLICATION_VERSION }}&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;labels&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;my-application&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;version&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;{{&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;MY_APPLICATION_VERSION&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;}}&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;spec&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;replicas&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;1&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;selector&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;my-application&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;version&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;{{&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;MY_APPLICATION_VERSION&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;}}&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;template&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;metadata&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;labels&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;app&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;my-application&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;version&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;{{&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;MY_APPLICATION_VERSION&lt;/span&gt; &lt;span class=&quot;pi&quot;&gt;}}&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;spec&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;containers&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;my-application&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;my-application:{{ MY_APPLICATION_VERSION }}&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;ports&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;containerPort&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;8080&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;The most important sections are the labels for the RC and pod, and the selectors. These include a &lt;code class=&quot;highlighter-rouge&quot;&gt;version&lt;/code&gt; label, whose value is incremented (actually, all that matters is that this changes between deploys) during a rolling update. In my template, I have also tied up the &lt;code class=&quot;highlighter-rouge&quot;&gt;version&lt;/code&gt; value with the version of the image being used in the pod, but that is not strictly necessary. The approach might have to be changed slightly if your pod contains multiple containers.&lt;/p&gt;
+
+&lt;p&gt;As you might have guessed from the &lt;code class=&quot;highlighter-rouge&quot;&gt;{{ MY_APPLICATION_VERSION }}&lt;/code&gt; syntax, the above is a jinja2 template. The &lt;code class=&quot;highlighter-rouge&quot;&gt;MY_APPLICATION_VERSION&lt;/code&gt; variable’s value is supplied at deploy time (from the deployment script, pipeline etc.) The RC template is usually saved as &lt;code class=&quot;highlighter-rouge&quot;&gt;my-application-rc.yml.tpl&lt;/code&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;deploys&quot;&gt;Deploys&lt;/h3&gt;
+
+&lt;p&gt;For deployment, we render template into an actual RC configuration at deploy time. I use &lt;a href=&quot;https://github.com/andreasjansson/envtpl&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;envtpl&lt;/code&gt;&lt;/a&gt; for this purpose in my deploy scripts. &lt;a href=&quot;https://github.com/kolypto/j2cli&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;j2cli&lt;/code&gt;&lt;/a&gt; is another alternative.&lt;/p&gt;
+
+&lt;p&gt;My deployment script looks something like the following (simplified to highlight the salient details):&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;MY_APPLICATION_VERSION&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$VERSION&lt;/span&gt; envtpl &amp;lt; my-application-rc.yml.tpl &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; my-application-rc.yml
+&lt;span class=&quot;nv&quot;&gt;OLD_CONTROLLER&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;$(&lt;/span&gt;kubectl get rc &lt;span class=&quot;nt&quot;&gt;-l&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;my-application &lt;span class=&quot;nt&quot;&gt;-o&lt;/span&gt; name&lt;span class=&quot;k&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;OLD_CONTROLLER&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;${&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;OLD_CONTROLLER&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;##*/&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;}&lt;/span&gt;
+kubectl rolling-update &lt;span class=&quot;nv&quot;&gt;$OLD_CONTROLLER&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;-f&lt;/span&gt; my-application-rc.yml&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;First, we render the template rc configuration into a proper yaml file. Then, we get the name of the existing controller for the application using &lt;code class=&quot;highlighter-rouge&quot;&gt;kubectl get&lt;/code&gt; with the label selector (&lt;code class=&quot;highlighter-rouge&quot;&gt;-l&lt;/code&gt;) option. Using this old controller name, we start our rolling deploy.&lt;/p&gt;
+
+&lt;p&gt;Now, your application is ready for proper rolling deploys.&lt;/p&gt;
+</description>
+        <pubDate>Sun, 03 Jan 2016 18:48:00 +0000</pubDate>
+        <link>https://stacktoheap.com/blog/2016/01/03/basics-of-rolling-update-with-kubernetes/</link>
+        <guid isPermaLink="true">https://stacktoheap.com/blog/2016/01/03/basics-of-rolling-update-with-kubernetes/</guid>
+        
+        <category>docker</category>
+        
+        <category>kubernetes</category>
+        
+        <category>kubectl</category>
+        
+        <category>rolling-updates</category>
+        
+        <category>versions</category>
+        
+        
+        <category>kubernetes</category>
+        
+      </item>
+    
+      <item>
+        <title>How to git add only files that have already been staged</title>
+        <description>&lt;p&gt;Git has many shortcuts that you can use to make yourself more productive. One of the little known (and simple!) features is regarding restaging files that have already been staged.&lt;/p&gt;
+
+&lt;p&gt;Let’s create a simple repository with three files to setup an example:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;git init &lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt;
+touch file1 file2 file3
+git add &lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt;
+git commit &lt;span class=&quot;nt&quot;&gt;-am&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;Add files&quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;All right. With the initial commit done, let’s make changes to these files, and add the changes to the index:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;file1&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; file1
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;file2&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; file2
+git add file1 file2
+git status
+&lt;span class=&quot;c&quot;&gt;#On branch master&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#Changes to be committed:&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#  (use &quot;git reset HEAD &amp;lt;file&amp;gt;...&quot; to unstage)&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# modified:   file1&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# modified:   file2&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;So, &lt;code class=&quot;highlighter-rouge&quot;&gt;file1&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;file2&lt;/code&gt; have been changed, and added to the index. Let’s say we now make changes to &lt;code class=&quot;highlighter-rouge&quot;&gt;file1&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;file3&lt;/code&gt;:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;file1&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&amp;gt;&lt;/span&gt; file1
+&lt;span class=&quot;nb&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;file3&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; file3
+git status
+&lt;span class=&quot;c&quot;&gt;#On branch master&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#Changes to be committed:&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#  (use &quot;git reset HEAD &amp;lt;file&amp;gt;...&quot; to unstage)&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# modified:   file1&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# modified:   file2&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#Changes not staged for commit:&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#  (use &quot;git add &amp;lt;file&amp;gt;...&quot; to update what will be committed)&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#  (use &quot;git checkout -- &amp;lt;file&amp;gt;...&quot; to discard changes in working directory)&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# modified:   file1&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# modified:   file3&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;file1&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;file2&lt;/code&gt;, with their initials changes, are in the index. New changes to &lt;code class=&quot;highlighter-rouge&quot;&gt;file1&lt;/code&gt; are to be added, along with changes to &lt;code class=&quot;highlighter-rouge&quot;&gt;file3&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;So with our contrived example all setup, we can actually come to the main material of the post. Suppose you want to add only files that have already been staged, but have new changes in the working directory now. Files like &lt;code class=&quot;highlighter-rouge&quot;&gt;file1&lt;/code&gt;. Git has an handy shortcut for this, but you have to look beyond &lt;code class=&quot;highlighter-rouge&quot;&gt;git add&lt;/code&gt;. All that is needed to “restage” files in git is the following command:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;git update-index &lt;span class=&quot;nt&quot;&gt;--again&lt;/span&gt;
+git status
+&lt;span class=&quot;c&quot;&gt;#On branch master&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#Changes to be committed:&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#  (use &quot;git reset HEAD &amp;lt;file&amp;gt;...&quot; to unstage)&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# modified:   file1&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# modified:   file2&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#Changes not staged for commit:&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#  (use &quot;git add &amp;lt;file&amp;gt;...&quot; to update what will be committed)&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#  (use &quot;git checkout -- &amp;lt;file&amp;gt;...&quot; to discard changes in working directory)&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;#&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# modified:   file3&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;From the docs, this&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;Runs git update-index itself on the paths whose index entries are different from those from the HEAD commit.&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;Which is exactly what we want in this scenario. Hope this nice little command makes you more productive. Git has lots of these unused little gems. Git is a complex beast, yes, but some of these need to be discovered and used.&lt;/p&gt;
+
+&lt;p&gt;For those who add aliases for these things, here you go:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;git config &lt;span class=&quot;nt&quot;&gt;--global&lt;/span&gt; alias.restage &lt;span class=&quot;s2&quot;&gt;&quot;update-index --again&quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+</description>
+        <pubDate>Sat, 02 Jan 2016 21:42:00 +0000</pubDate>
+        <link>https://stacktoheap.com/blog/2016/01/02/git-add-only-files-already-staged/</link>
+        <guid isPermaLink="true">https://stacktoheap.com/blog/2016/01/02/git-add-only-files-already-staged/</guid>
+        
+        <category>restage</category>
+        
+        <category>git-index</category>
+        
+        
+        <category>git</category>
+        
+      </item>
+    
+      <item>
+        <title>Hosting an S3 backed Docker Registry on Kubernetes</title>
+        <description>&lt;p&gt;Running a docker registry (v2) on Kubernetes is &lt;a href=&quot;https://github.com/kubernetes/kubernetes/tree/master/cluster/addons/registry&quot;&gt;well documented as an addon to Kubernetes&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;That setup, however, involves proxying the registry as &lt;code class=&quot;highlighter-rouge&quot;&gt;localhost&lt;/code&gt; on each Kubernetes node. While this simplifies pulling on nodes (no insecure registry issue, as it is localhost), this makes building and pushing outside the Kubernetes cluster unnecessarily complex and hacky  (you need to &lt;code class=&quot;highlighter-rouge&quot;&gt;kubectl port-forward&lt;/code&gt; to access the registry, and you also must build your images with the tag like &lt;code class=&quot;highlighter-rouge&quot;&gt;localhost:5000/repository/image:version&lt;/code&gt;.) Moreover, it is based on Persistent Volume storage.&lt;/p&gt;
+
+&lt;p&gt;For a better docker registry setup, we wanted two things:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;S3 backed registry so that storage is managed better.&lt;/li&gt;
+  &lt;li&gt;Proper service for registry so that push and pull are more sane, and image tags are proper. We would like to push and pull from local workstation and our CI boxes. Also, at any time we can move to a different hosting solution for our private registry without have to retag and push images.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;For S3 storage, we can utilize the ability to override all the configuration for the registry via environment variables. Our &lt;code class=&quot;highlighter-rouge&quot;&gt;ReplicationController&lt;/code&gt; looks like the following:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-yaml&quot; data-lang=&quot;yaml&quot;&gt;&lt;span class=&quot;na&quot;&gt;apiVersion&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;v1&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;kind&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;ReplicationController&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;metadata&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;kube-registry-v0&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;namespace&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;kube-system&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;labels&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;k8s-app&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;kube-registry&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;version&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;v0&lt;/span&gt;
+    &lt;span class=&quot;s&quot;&gt;kubernetes.io/cluster-service&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;true&quot;&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;spec&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;replicas&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;1&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;selector&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;k8s-app&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;kube-registry&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;version&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;v0&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;template&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;metadata&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;labels&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;k8s-app&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;kube-registry&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;version&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;v0&lt;/span&gt;
+        &lt;span class=&quot;s&quot;&gt;kubernetes.io/cluster-service&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;true&quot;&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;spec&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;na&quot;&gt;containers&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+      &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;registry&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;image&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;registry:2.2.1&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;env&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;REGISTRY_HTTP_ADDR&lt;/span&gt;
+          &lt;span class=&quot;na&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;:5000&lt;/span&gt;
+        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;REGISTRY_STORAGE&lt;/span&gt;
+          &lt;span class=&quot;na&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;S3&lt;/span&gt;
+        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;REGISTRY_STORAGE_S3_ACCESSKEY&lt;/span&gt;
+          &lt;span class=&quot;na&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;lt;access_key&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;REGISTRY_STORAGE_S3_SECRETKEY&lt;/span&gt;
+          &lt;span class=&quot;na&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;lt;secret_key&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;REGISTRY_STORAGE_S3_REGION&lt;/span&gt;
+          &lt;span class=&quot;na&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;us-east-1&lt;/span&gt;
+        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;REGISTRY_STORAGE_S3_BUCKET&lt;/span&gt;
+          &lt;span class=&quot;na&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&amp;lt;S3_bucket&amp;gt;&lt;/span&gt;
+        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;REGISTRY_STORAGE_S3_ENCRYPT&lt;/span&gt;
+          &lt;span class=&quot;na&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;true&quot;&lt;/span&gt;
+        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;REGISTRY_STORAGE_S3_SECURE&lt;/span&gt;
+          &lt;span class=&quot;na&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;true&quot;&lt;/span&gt;
+        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;REGISTRY_STORAGE_S3_V4AUTH&lt;/span&gt;
+          &lt;span class=&quot;na&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;true&quot;&lt;/span&gt;
+        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;REGISTRY_STORAGE_S3_CHUNKSIZE&lt;/span&gt;
+          &lt;span class=&quot;na&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;5242880&quot;&lt;/span&gt;
+        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;REGISTRY_HTTP_SECRET&lt;/span&gt;
+          &lt;span class=&quot;na&quot;&gt;value&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&amp;lt;secret&amp;gt;&quot;&lt;/span&gt;
+        &lt;span class=&quot;na&quot;&gt;ports&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;containerPort&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;5000&lt;/span&gt;
+          &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;registry&lt;/span&gt;
+          &lt;span class=&quot;na&quot;&gt;protocol&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;TCP&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;It is important to set &lt;code class=&quot;highlighter-rouge&quot;&gt;REGISTRY_STORAGE&lt;/code&gt; to &lt;code class=&quot;highlighter-rouge&quot;&gt;S3&lt;/code&gt; so that the default storage configuration is overridden. If this is not done, you will get an error regarding multiple storage drivers. &lt;code class=&quot;highlighter-rouge&quot;&gt;REGISTRY_HTTP_SECRET&lt;/code&gt; has been added so that load balancing across multiple pods will work, when needed. Rest of the settings are pretty standard for a S3 backed registry, &lt;a href=&quot;https://github.com/docker/distribution/blob/master/docs/configuration.md#storage&quot;&gt;as per the docs&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;We have a service that looks like below (For context, our Kubernetes cluster is on AWS, and has AWS aware features enabled):&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-yaml&quot; data-lang=&quot;yaml&quot;&gt;&lt;span class=&quot;na&quot;&gt;apiVersion&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;v1&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;kind&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Service&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;metadata&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;kube-registry&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;namespace&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;kube-system&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;labels&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;k8s-app&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;kube-registry&lt;/span&gt;
+    &lt;span class=&quot;s&quot;&gt;kubernetes.io/cluster-service&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;true&quot;&lt;/span&gt;
+    &lt;span class=&quot;s&quot;&gt;kubernetes.io/name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;KubeRegistry&quot;&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;spec&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;selector&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;k8s-app&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;kube-registry&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;type&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;LoadBalancer&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;ports&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+  &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;registry&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;port&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;80&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;targetPort&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;5000&lt;/span&gt;
+    &lt;span class=&quot;na&quot;&gt;protocol&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;TCP&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;We have a nice Route53 alias for the resulting ELB so that we can push and pull like we would to any other private registry. With the DNS name and S3 storage, moving away from Kubernetes for the registry is trivial too.&lt;/p&gt;
+
+&lt;p&gt;Improvements: Obviously, we are running an insecure registry at the moment. That’s something on our TODO list of things to fix. Currently, our CoreOS nodes, local workstations and CI boxes have Docker service running with the &lt;code class=&quot;highlighter-rouge&quot;&gt;--insecure-registry&lt;/code&gt; flag.&lt;/p&gt;
+</description>
+        <pubDate>Fri, 01 Jan 2016 23:20:00 +0000</pubDate>
+        <link>https://stacktoheap.com/blog/2016/01/01/s3-backed-docker-registry-on-kubernetes/</link>
+        <guid isPermaLink="true">https://stacktoheap.com/blog/2016/01/01/s3-backed-docker-registry-on-kubernetes/</guid>
+        
+        <category>docker</category>
+        
+        <category>kubernetes</category>
+        
+        <category>docker-registry</category>
+        
+        <category>S3</category>
+        
+        
+        <category>docker</category>
+        
+        <category>kubernetes</category>
+        
+      </item>
+    
+      <item>
+        <title>Sharing docker images without a registry</title>
+        <description>&lt;p&gt;One of the well-known ways of sharing docker images is via a registry - be it the hosted ones like &lt;a href=&quot;https://hub.docker.com/&quot;&gt;DockerHub&lt;/a&gt; or &lt;a href=&quot;https://quay.io/&quot;&gt;Quay.io&lt;/a&gt;, or private registries setup within your organization.&lt;/p&gt;
+
+&lt;p&gt;Also, once a workstation has a set of images, pulling in new versions or similar images becomes a breeze.&lt;/p&gt;
+
+&lt;p&gt;But we wanted to share images between developer workstations, without having to push and pull from a registry.&lt;/p&gt;
+
+&lt;h3 id=&quot;why-no-registry&quot;&gt;Why no registry?&lt;/h3&gt;
+
+&lt;p&gt;Recently, when we were switching to a docker based workflow, we found that pulling in the base set of images from our internal registry on AWS + S3 was taking a lot of time. Not to mention that it was also eating up our bandwidth. In order to make it easy and fast for new developers to get started with our project, we wanted to setup a local “store” of images that we can pull our images from. This store will also help us share new images quicker as well.&lt;/p&gt;
+
+&lt;p&gt;Instead of setting up a local registry in our office LAN, we decided to keep things simple and setup a simple workstation to pull in images via SSH. The &lt;code class=&quot;highlighter-rouge&quot;&gt;docker save&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;docker load&lt;/code&gt; commands helped us beautifully here. We also piped from/to these command directly to/from the workstation, and avoided local files altogether.&lt;/p&gt;
+
+&lt;h3 id=&quot;docker-save-and-docker-load&quot;&gt;docker save and docker load&lt;/h3&gt;
+
+&lt;p&gt;First, some basics about &lt;code class=&quot;highlighter-rouge&quot;&gt;docker save&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;docker load&lt;/code&gt;:&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;docker save&lt;/code&gt; allows use to save a image to a tar archive. It streams to STDOUT by default, or to a file specified by the &lt;code class=&quot;highlighter-rouge&quot;&gt;-o, --output&lt;/code&gt; flag.&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;docker load&lt;/code&gt; sits in the other end, and takes in input from a file, specified by the &lt;code class=&quot;highlighter-rouge&quot;&gt;-i, --input&lt;/code&gt; flag or STDIN.&lt;/p&gt;
+
+&lt;h3 id=&quot;sync-tofrom-external-host-via-ssh&quot;&gt;Sync to/from external host via ssh&lt;/h3&gt;
+
+&lt;p&gt;Once we had the workstation in our LAN (let’s say its IP is 192.168.0.42), syncing an image to it is as simple as:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;docker save internal-registry/image | bzip2 | &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+  pv | ssh 192.168.0.42 &lt;span class=&quot;s2&quot;&gt;&quot;cat &amp;gt; ~/docker_images/image&quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;(this push can be done from a one workstation where the image was built, or pulled in from a registry)&lt;/p&gt;
+
+&lt;p&gt;We used &lt;code class=&quot;highlighter-rouge&quot;&gt;bzip2&lt;/code&gt; to compress the data, and the amazing &lt;code class=&quot;highlighter-rouge&quot;&gt;pv&lt;/code&gt; tool to visualize the transfer.&lt;/p&gt;
+
+&lt;p&gt;Pulling in an image is not much different:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;ssh 192.168.0.42 &lt;span class=&quot;s2&quot;&gt;&quot;cat ~/docker_images/image&quot;&lt;/span&gt; | pv | &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+  bunzip2 | docker load&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h3 id=&quot;sync-between-multiple-docker-machines&quot;&gt;Sync between multiple docker machines&lt;/h3&gt;
+
+&lt;p&gt;We use &lt;a href=&quot;https://docs.docker.com/machine/&quot;&gt;docker-machine&lt;/a&gt; on OS X for development. This strategy can also be used to share or backup images between different docker-machines. If there are two machines, say &lt;code class=&quot;highlighter-rouge&quot;&gt;dev1&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;dev2&lt;/code&gt; running, we can sync an image between the two like below:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;docker &lt;span class=&quot;k&quot;&gt;$(&lt;/span&gt;docker-machine config dev1&lt;span class=&quot;k&quot;&gt;)&lt;/span&gt; save image | &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+  docker &lt;span class=&quot;k&quot;&gt;$(&lt;/span&gt;docker-machine config dev2&lt;span class=&quot;k&quot;&gt;)&lt;/span&gt; load&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;If a machine (say &lt;code class=&quot;highlighter-rouge&quot;&gt;dev&lt;/code&gt;) is going to be recreated, we can save the image(s) and reload:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;docker &lt;span class=&quot;k&quot;&gt;$(&lt;/span&gt;docker-machine config dev&lt;span class=&quot;k&quot;&gt;)&lt;/span&gt; save &lt;span class=&quot;nt&quot;&gt;-o&lt;/span&gt; image.tar image
+docker-machine rm dev
+docker-machine create &lt;span class=&quot;nt&quot;&gt;--provider&lt;/span&gt; virtualbox dev
+docker &lt;span class=&quot;k&quot;&gt;$(&lt;/span&gt;docker-machine config dev&lt;span class=&quot;k&quot;&gt;)&lt;/span&gt; load &lt;span class=&quot;nt&quot;&gt;-i&lt;/span&gt; image.tar&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;This should make using multiple docker-machines or recreating existing ones less of an hassle in terms of getting the base set of images.&lt;/p&gt;
+
+&lt;p&gt;This simple setup makes pulling in images much faster, and also saves bandwidth. Hope it is useful in your work environment too.&lt;/p&gt;
+</description>
+        <pubDate>Sun, 22 Nov 2015 23:30:00 +0000</pubDate>
+        <link>https://stacktoheap.com/blog/2015/11/22/sharing-docker-images-without-registry/</link>
+        <guid isPermaLink="true">https://stacktoheap.com/blog/2015/11/22/sharing-docker-images-without-registry/</guid>
+        
+        <category>docker</category>
+        
+        <category>docker-machine</category>
+        
+        <category>docker-sync</category>
+        
+        <category>registry</category>
+        
+        <category>docker-save</category>
+        
+        <category>docker-load</category>
+        
+        
+        <category>docker</category>
+        
+      </item>
+    
+      <item>
+        <title>Things you may not know about git - autocorrect your commands</title>
+        <description>&lt;p&gt;Did you ever fat finger a git command? Did git actually ask you if you meant the command which you intended to type anyway? Were you mildly irritated that git didn’t go ahead and executed the command it deduced? Something like the interaction below:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;git psuh
+git: &lt;span class=&quot;s1&quot;&gt;'psuh'&lt;/span&gt; is not a git command. See &lt;span class=&quot;s1&quot;&gt;'git --help'&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt;
+
+Did you mean this?
+  push&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Well, you can turn your irritation into admiration for git. git has a autocorrect feature that you can enable if needed.&lt;/p&gt;
+
+&lt;p&gt;The feature can be enabled by setting the &lt;code class=&quot;highlighter-rouge&quot;&gt;help.autocorrect&lt;/code&gt; config appropriately. Here’s what the man pages have to say about the setting:&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;Automatically correct and execute mistyped commands after waiting for the given number of deciseconds (0.1 sec). If more than one command can be deduced from the entered text, nothing will be executed. If the value of this option is negative, the corrected command will be executed immediately. If the value is 0 - the command will be just shown but not executed. This is the default.&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;By default, the &lt;code class=&quot;highlighter-rouge&quot;&gt;help.autocorrect&lt;/code&gt; value is 0, which means that you get the &lt;code class=&quot;highlighter-rouge&quot;&gt;Did you mean this?&lt;/code&gt; question, but no correction happens. Setting it to a positive value will make git correct to deduced command after that much time (in deciseconds - so setting a value of 10 will make git autocorrect in a second.) Setting a negative value will make git autocorrect immediately, and this is probably something you don’t want.&lt;/p&gt;
+
+&lt;p&gt;So go ahead and set &lt;code class=&quot;highlighter-rouge&quot;&gt;help.autocorrect&lt;/code&gt; to a sane value, and stop worrying about your typos:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;git config &lt;span class=&quot;nt&quot;&gt;--global&lt;/span&gt; help.autocorrect 10&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Now, you interaction with git can be irritation-free:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;git psuh
+WARNING: You called a Git &lt;span class=&quot;nb&quot;&gt;command &lt;/span&gt;named &lt;span class=&quot;s1&quot;&gt;'psuh'&lt;/span&gt;, which does not exist.
+Continuing under the assumption that you meant &lt;span class=&quot;s1&quot;&gt;'push'&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;in &lt;/span&gt;1.0 seconds automatically...&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Related: While the above is only for git, you might want to look at &lt;a href=&quot;https://github.com/nvbn/thefuck&quot;&gt;thefuck&lt;/a&gt; if you want similar autocorrect for any command you type. The appropriately named utility goes beyond just correcting typos, however. It can also do suggested commands (like &lt;code class=&quot;highlighter-rouge&quot;&gt;git push&lt;/code&gt; when no upstream is set.)&lt;/p&gt;
+</description>
+        <pubDate>Sun, 01 Nov 2015 02:30:00 +0000</pubDate>
+        <link>https://stacktoheap.com/blog/2015/11/01/git-autocorrect-feature/</link>
+        <guid isPermaLink="true">https://stacktoheap.com/blog/2015/11/01/git-autocorrect-feature/</guid>
+        
+        
+        <category>ansible</category>
+        
+        <category>iaas</category>
+        
+        <category>python</category>
+        
+        <category>django</category>
+        
+        <category>chef</category>
+        
+      </item>
+    
+      <item>
+        <title>Getting started with Ansbile for a Django project</title>
+        <description>&lt;p&gt;On a Django project, I have been using Chef for configuration management. I am totally happy with Chef. It gets the job done. The community cookbooks are great.&lt;/p&gt;
+
+&lt;p&gt;But there’s a new (relatively) kid in the block, by the name of Ansible, and I wanted to try it out for three main reasons:&lt;/p&gt;
+
+&lt;p&gt;1) It’s way simpler than existing solutions like Chef and Puppet. From reading the docs, and seeing its yaml based playbooks, it does seem simple to write. My experience with it, enough to write this blog post, does show that it simple, flexible and well thought out.&lt;/p&gt;
+
+&lt;p&gt;2) It is written in Python and can be &lt;code class=&quot;highlighter-rouge&quot;&gt;pip&lt;/code&gt; installed. That means no more dependency on Ruby when you are working on a Python project. Also, it provides some Python / Django stack specific modules like the &lt;code class=&quot;highlighter-rouge&quot;&gt;django_manage&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;supervisorctl&lt;/code&gt; modules already.&lt;/p&gt;
+
+&lt;p&gt;3) It doesn’t need any client software on the machines we intend to bootstrap. All that it would require is Python 2.4 or later ( not Python 3). It gets its job done through ssh. That is great news! Since many distributions have, and need, a relatively recent version of Python 2.X, this means that you don’t need to install ANYTHING on the box being configured to use Ansible.&lt;/p&gt;
+
+&lt;h3 id=&quot;installing-ansible&quot;&gt;Installing Ansible&lt;/h3&gt;
+
+&lt;p&gt;I decided to install it through &lt;code class=&quot;highlighter-rouge&quot;&gt;pip&lt;/code&gt; on Mac OS X. &lt;a href=&quot;http://www.ansibleworks.com/docs/intro_installation.html&quot;&gt;Other installation methods&lt;/a&gt; include using the package manager of your OS, or running from source.&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;pythonbrew venv create test-ansible
+pythonbrew venv use test-ansbile
+pip install ansible
+pip freeze &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; requirements.txt&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;I use pythonbrew for managing my pythons and my virtualenvs, as mentioned in one of my previous blog posts - &lt;a href=&quot;/blog/2013/03/11/why-use-virtualenv-when-there-is-pythonbrew/&quot;&gt;Why use virtualenv when there is pythonbrew&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;vagrant&quot;&gt;Vagrant&lt;/h3&gt;
+
+&lt;p&gt;Of course, the next step is to get your Vagrant box up, and test your Ansible provisioning on it. The amazing authors of Vagrant have also provided a provisioner for Ansible, so using Ansible with Vagrant is simpler than it already is.&lt;/p&gt;
+
+&lt;p&gt;Do a &lt;code class=&quot;highlighter-rouge&quot;&gt;vagrant init&lt;/code&gt; and configure it to provision with &lt;code class=&quot;highlighter-rouge&quot;&gt;ansible&lt;/code&gt;. Your &lt;code class=&quot;highlighter-rouge&quot;&gt;Vagrantfile&lt;/code&gt; may look something like below:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;no&quot;&gt;Vagrant&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;configure&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;2&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;config&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+  &lt;span class=&quot;n&quot;&gt;config&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;vm&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;box&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;debian-7.1.0&quot;&lt;/span&gt;
+
+  &lt;span class=&quot;n&quot;&gt;config&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;vm&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;network&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:private_network&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;ip: &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;192.168.33.10&quot;&lt;/span&gt;
+
+  &lt;span class=&quot;n&quot;&gt;config&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;vm&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;provision&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;ansible&quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ansible&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;ansible&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;playbook&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;site.yml&quot;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;ansible&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;inventory_path&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;hosts&quot;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;ansible&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;verbose&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;v&quot;&lt;/span&gt;
+  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;If you have done Chef/Puppet provisioning with Vagrant before, this should be familiar. All that the above does is to enable ansible provisioning and specifies the main playbook - &lt;code class=&quot;highlighter-rouge&quot;&gt;site.yml&lt;/code&gt;. While Vagrant can automatically handle your inventory, I like to explicitly specify the hosts. For now, the &lt;code class=&quot;highlighter-rouge&quot;&gt;hosts&lt;/code&gt; file would look like:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;webservers&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;mf&quot;&gt;192.168&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;33.10&lt;/span&gt;
+
+&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dbservers&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
+&lt;span class=&quot;mf&quot;&gt;192.168&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;33.10&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;where &lt;code class=&quot;highlighter-rouge&quot;&gt;webserver&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;dbservers&lt;/code&gt; are host groups.&lt;/p&gt;
+
+&lt;h3 id=&quot;directory-layout&quot;&gt;Directory Layout&lt;/h3&gt;
+
+&lt;p&gt;I decided to follow the directory layout and structure as prescribed in the &lt;a href=&quot;http://www.ansibleworks.com/docs/playbooks_best_practices.html&quot;&gt;Ansible best practises&lt;/a&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;ansible-playbooks&quot;&gt;Ansible Playbooks&lt;/h3&gt;
+
+&lt;p&gt;I have setup a top level playbook &lt;code class=&quot;highlighter-rouge&quot;&gt;site.yml&lt;/code&gt;, as mentioned in the VagrantFile, which just includes playbooks for different server roles. It looks something like:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-yaml&quot; data-lang=&quot;yaml&quot;&gt;&lt;span class=&quot;nn&quot;&gt;---&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# file: site.yml&lt;/span&gt;
+&lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;include&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;webservers.yml&lt;/span&gt;
+&lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;include&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;dbservers.yml&lt;/span&gt; &lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;The &lt;code class=&quot;highlighter-rouge&quot;&gt;webservers.yml&lt;/code&gt; and &lt;code class=&quot;highlighter-rouge&quot;&gt;dbservers.yml&lt;/code&gt; look similar to what’s described in the best practises link above.&lt;/p&gt;
+
+&lt;h3 id=&quot;common-tasks&quot;&gt;Common tasks&lt;/h3&gt;
+
+&lt;p&gt;Common tasks like updating the apt cache, installing &lt;code class=&quot;highlighter-rouge&quot;&gt;build-essentials&lt;/code&gt; and installing packages like git can be placed in the &lt;code class=&quot;highlighter-rouge&quot;&gt;common&lt;/code&gt; role’s tasks. The playbook for this would look something like:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-yaml&quot; data-lang=&quot;yaml&quot;&gt;&lt;span class=&quot;nn&quot;&gt;---&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;# file: roles/common/tasks/main.yml&lt;/span&gt;
+
+&lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;update apt cache&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;apt&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;update_cache=yes cache_valid_time=3600&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;tags&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;apt&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;sudo&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;yes&lt;/span&gt;
+
+&lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;install build essentials&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;apt&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;name=$item state=installed&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;with_items&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;autoconf&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;binutils-doc&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;bison&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;build-essential&lt;/span&gt;
+    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;flex&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;sudo&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;yes&lt;/span&gt;
+
+&lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;install git&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;apt&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;name=git state=latest&lt;/span&gt;
+  &lt;span class=&quot;na&quot;&gt;sudo&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;yes&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;h3 id=&quot;vagrant-provision&quot;&gt;Vagrant provision&lt;/h3&gt;
+
+&lt;p&gt;We are now ready to provision:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;vagrant provision   &lt;span class=&quot;c&quot;&gt;# vagrant up&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Change ansbile verbosity by setting the &lt;code class=&quot;highlighter-rouge&quot;&gt;ansible.verbose&lt;/code&gt; property appropriately in your VagrantFile.&lt;/p&gt;
+
+&lt;p&gt;That’s all for this blog post. I will add more posts as I continue to configure the entire stack with Ansible. I am loving Ansible already. It takes the best of Puppet / Chef and comes with a very simplified way of doing configuration management. As I proceed, there will be some roadblocks, but I am looking forward to them as well.&lt;/p&gt;
+
+&lt;p&gt;I have setup a repo on Github - &lt;a href=&quot;https://github.com/manojlds/django-ansible&quot;&gt;django-ansible&lt;/a&gt;.&lt;/p&gt;
+</description>
+        <pubDate>Sun, 20 Oct 2013 00:44:00 +0000</pubDate>
+        <link>https://stacktoheap.com/blog/2013/10/20/getting-started-with-ansbile-for-a-django-project/</link>
+        <guid isPermaLink="true">https://stacktoheap.com/blog/2013/10/20/getting-started-with-ansbile-for-a-django-project/</guid>
+        
+        
+        <category>ansible</category>
+        
+        <category>iaas</category>
+        
+        <category>python</category>
+        
+        <category>django</category>
+        
+        <category>chef</category>
+        
+      </item>
+    
+      <item>
+        <title>Using git at a hackathon where git:// port is blocked</title>
+        <description>&lt;p&gt;Stuck in a network where the &lt;code class=&quot;highlighter-rouge&quot;&gt;git://&lt;/code&gt; protocol is blocked ( port 9418)?&lt;/p&gt;
+
+&lt;p&gt;I was. At a hackathon and having to do &lt;code class=&quot;highlighter-rouge&quot;&gt;bower install&lt;/code&gt;, where a lot of packages were installed through “git://” from Github. Unfortunately, the port was blocked and the installation was not going through.&lt;/p&gt;
+
+&lt;p&gt;One option under such scenarios is to ask git to use the &lt;code class=&quot;highlighter-rouge&quot;&gt;https://&lt;/code&gt; protocol ( hopefully, that one is open ) instead of the &lt;code class=&quot;highlighter-rouge&quot;&gt;git://&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;It can be simply done as follow:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;git config &lt;span class=&quot;nt&quot;&gt;--global&lt;/span&gt; url.&lt;span class=&quot;s2&quot;&gt;&quot;https://&quot;&lt;/span&gt;.insteadOf &lt;span class=&quot;s2&quot;&gt;&quot;git://&quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;This is not just for changing the protocol, but for replacing the beginning part of ANY url with the one you specify. In our case, we are replacing urls beginning with &lt;code class=&quot;highlighter-rouge&quot;&gt;git://&lt;/code&gt; to &lt;code class=&quot;highlighter-rouge&quot;&gt;https://&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;A simple solution, instead of having to get the port opened, etc. Just remember to unset this config once done.&lt;/p&gt;
+</description>
+        <pubDate>Sat, 24 Aug 2013 15:29:00 +0000</pubDate>
+        <link>https://stacktoheap.com/blog/2013/08/24/using-git-at-a-hackathon-where-git-slash-slash-port-is-blocked/</link>
+        <guid isPermaLink="true">https://stacktoheap.com/blog/2013/08/24/using-git-at-a-hackathon-where-git-slash-slash-port-is-blocked/</guid>
+        
+        
+        <category>git</category>
+        
+        <category>https</category>
+        
+        <category>git protocol</category>
+        
+      </item>
+    
+  </channel>
+</rss>
