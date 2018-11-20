@@ -7,6 +7,7 @@ date: 2018-11-19 10:45
 comments: true
 categories: [ml]
 tags: [ml, mlflow, gocd, machine-learning]
+image: "mlflow-vsm.png"
 ---
 
 [MLFlow](https://mlflow.org/) is an open source platform for the entire end-to-end machine learning lifecycle. At Indix, we saw it as a good fit within our interal ML Platform as a model repository. We also integrated MLFlow with GoCD, our CI/CD tool of choice for years.

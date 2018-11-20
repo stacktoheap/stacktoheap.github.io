@@ -1,6 +1,11 @@
 <meta name="twitter:site" value="@{{ site.twitter_username }}">
 <meta name="twitter:creator" value="@{{ site.twitter_username }}">
 <meta name="twitter:card" value="summary_large_image">
+{% if page.image %}
+<meta name="twitter:image" content="{{ site.url }}/images/{{ page.image }}">
+{% else %}
+<meta name="twitter:image" content="{{ site.url }}/images/logo-high-resolution.png">
+{% endif %}
 {% if page.reading_time %}
   <meta name="twitter:label1" value="Reading time">
   <meta name="twitter:data1" value="{{ page.reading_time }} 🕑">
