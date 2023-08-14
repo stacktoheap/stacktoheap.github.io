@@ -436,7 +436,7 @@ pre {
 
 <p>A typical contract test, which are Nunit tests, looked like this:</p>
 
-<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="na">[Test]</span>
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="p">[</span><span class="n">Test</span><span class="p">]</span>
 <span class="k">public</span> <span class="k">void</span> <span class="nf">ShouldBeAbleToValidateTheJSONServiceResponseForFunctionalityA</span><span class="p">()</span>
 <span class="p">{</span>
     <span class="k">const</span> <span class="kt">string</span> <span class="n">schemaJson</span> <span class="p">=</span> <span class="s">@"
@@ -465,7 +465,7 @@ pre {
     <span class="nf">AssertResponseIsValidSchema</span><span class="p">(</span><span class="n">schemaJson</span><span class="p">,</span> <span class="n">parameters</span><span class="p">);</span>
 <span class="p">}</span></code></pre></figure>
 
-<p>The <code class="highlighter-rouge">AssertResponseIsValidSchema()</code> is pretty standard. It uses RestSharp to get the API response and validates the schema with a Nunit assert:</p>
+<p>The <code class="language-plaintext highlighter-rouge">AssertResponseIsValidSchema()</code> is pretty standard. It uses RestSharp to get the API response and validates the schema with a Nunit assert:</p>
 
 <figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">private</span> <span class="k">void</span> <span class="nf">AssertResponseIsValidSchema</span><span class="p">(</span><span class="kt">string</span> <span class="n">schemaJson</span><span class="p">,</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">object</span><span class="p">&gt;</span> <span class="n">parameters</span><span class="p">)</span>
 <span class="p">{</span>
@@ -478,7 +478,7 @@ pre {
     <span class="n">Assert</span><span class="p">.</span><span class="nf">That</span><span class="p">(</span><span class="n">availablity</span><span class="p">.</span><span class="nf">IsValid</span><span class="p">(</span><span class="n">schema</span><span class="p">),</span> <span class="n">Is</span><span class="p">.</span><span class="n">True</span><span class="p">);</span>
 <span class="p">}</span></code></pre></figure>
 
-<p>The JSON schema is written as per the <a href="http://json-schema.org/">proposed draft</a> and JSON.NET’s <code class="highlighter-rouge">IsValid()</code> is used to perfom the validation itself.</p>
+<p>The JSON schema is written as per the <a href="http://json-schema.org/">proposed draft</a> and JSON.NET’s <code class="language-plaintext highlighter-rouge">IsValid()</code> is used to perfom the validation itself.</p>
 
 <p>The contract tests are also not run along with the normal build pipeline, but in a separate flow. Since we are hitting a service, we don’t want our main builds to be affected if the service is down or to slow down the builds. The separately run tests are the right balance in making sure the contract is not broken, while making sure the external factors don’t affect the builds.</p>
 

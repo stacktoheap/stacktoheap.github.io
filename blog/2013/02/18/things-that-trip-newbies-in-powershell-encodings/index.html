@@ -434,53 +434,53 @@ pre {
 
 <p>In this post, I will be concentrating on Encodings. When I began using Powershell, it managed to confuse, trick and irritate me a lot. Encodings issues continue to be problematic with Powershell even in v3.0.</p>
 
-<p>Let me start off with a common enough usage that might come to bite you. Say you have a git repo. You can want to pipe some content to <code class="highlighter-rouge">.gitignore</code> to ignore some files and directories. Easy right?</p>
+<p>Let me start off with a common enough usage that might come to bite you. Say you have a git repo. You can want to pipe some content to <code class="language-plaintext highlighter-rouge">.gitignore</code> to ignore some files and directories. Easy right?</p>
 
 <p>You can do:</p>
 
-<figure class="highlight"><pre><code class="language-powershell" data-lang="powershell"><span class="s2">"*.dll"</span> <span class="o">&gt;</span> .gitignore</code></pre></figure>
+<figure class="highlight"><pre><code class="language-powershell" data-lang="powershell"><span class="s2">"*.dll"</span><span class="w"> </span><span class="err">&gt;</span><span class="w"> </span><span class="o">.</span><span class="nf">gitignore</span></code></pre></figure>
 
 <p>As any git user would know, that should ignore any dll file in your repo. But will it? Go ahead try it out.</p>
 
-<figure class="highlight"><pre><code class="language-powershell" data-lang="powershell"><span class="nb">PS</span><span class="o">&gt;</span> git init <span class="nb">.</span>
-<span class="nb">PS</span><span class="o">&gt;</span> touch a.dll
-<span class="nb">PS</span><span class="o">&gt;</span> <span class="s2">"*.dll"</span> <span class="o">&gt;</span> .gitignore
-<span class="nb">PS</span><span class="o">&gt;</span> git add <span class="nb">.</span>
-<span class="nb">PS</span><span class="o">&gt;</span> git status
-<span class="c1"># On branch master</span>
-<span class="c1">#</span>
-<span class="c1"># Initial commit</span>
-<span class="c1">#</span>
-<span class="c1"># Changes to be committed:</span>
-<span class="c1">#   (use "git rm --cached &lt;file&gt;..." to unstage)</span>
-<span class="c1">#</span>
-<span class="c1">#       new file:   .gitignore</span>
-<span class="c1">#       new file:   a.dll</span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-powershell" data-lang="powershell"><span class="n">PS</span><span class="err">&gt;</span><span class="w"> </span><span class="nx">git</span><span class="w"> </span><span class="nx">init</span><span class="w"> </span><span class="o">.</span><span class="w">
+</span><span class="n">PS</span><span class="err">&gt;</span><span class="w"> </span><span class="nx">touch</span><span class="w"> </span><span class="nx">a.dll</span><span class="w">
+</span><span class="n">PS</span><span class="err">&gt;</span><span class="w"> </span><span class="s2">"*.dll"</span><span class="w"> </span><span class="err">&gt;</span><span class="w"> </span><span class="o">.</span><span class="nf">gitignore</span><span class="w">
+</span><span class="nx">PS</span><span class="err">&gt;</span><span class="w"> </span><span class="nx">git</span><span class="w"> </span><span class="nx">add</span><span class="w"> </span><span class="o">.</span><span class="w">
+</span><span class="n">PS</span><span class="err">&gt;</span><span class="w"> </span><span class="nx">git</span><span class="w"> </span><span class="nx">status</span><span class="w">
+</span><span class="c"># On branch master</span><span class="w">
+</span><span class="c">#</span><span class="w">
+</span><span class="c"># Initial commit</span><span class="w">
+</span><span class="c">#</span><span class="w">
+</span><span class="c"># Changes to be committed:</span><span class="w">
+</span><span class="c">#   (use "git rm --cached &lt;file&gt;..." to unstage)</span><span class="w">
+</span><span class="c">#</span><span class="w">
+</span><span class="c">#       new file:   .gitignore</span><span class="w">
+</span><span class="c">#       new file:   a.dll</span></code></pre></figure>
 
-<p>What??? Shouldn’t <code class="highlighter-rouge">a.dll</code> be ignored. Let’s see what’s going on here:</p>
+<p>What??? Shouldn’t <code class="language-plaintext highlighter-rouge">a.dll</code> be ignored. Let’s see what’s going on here:</p>
 
-<figure class="highlight"><pre><code class="language-powershell" data-lang="powershell"><span class="nb">PS</span><span class="o">&gt;</span> git <span class="nb">diff</span> --cached
-<span class="nb">diff</span> --git a/.gitignore b/.gitignore
-new file mode 100644
-index 0000000..2f14638
-Binary files /dev/null and b/.gitignore differ
-<span class="nb">diff</span> --git a/a.dll b/a.dll
-new file mode 100644
-index 0000000..e69de29</code></pre></figure>
+<figure class="highlight"><pre><code class="language-powershell" data-lang="powershell"><span class="n">PS</span><span class="err">&gt;</span><span class="w"> </span><span class="nx">git</span><span class="w"> </span><span class="nx">diff</span><span class="w"> </span><span class="nt">--cached</span><span class="w">
+</span><span class="n">diff</span><span class="w"> </span><span class="nt">--git</span><span class="w"> </span><span class="nx">a/.gitignore</span><span class="w"> </span><span class="nx">b/.gitignore</span><span class="w">
+</span><span class="n">new</span><span class="w"> </span><span class="nx">file</span><span class="w"> </span><span class="nx">mode</span><span class="w"> </span><span class="nx">100644</span><span class="w">
+</span><span class="n">index</span><span class="w"> </span><span class="nx">0000000..2f14638</span><span class="w">
+</span><span class="n">Binary</span><span class="w"> </span><span class="nx">files</span><span class="w"> </span><span class="nx">/dev/null</span><span class="w"> </span><span class="nx">and</span><span class="w"> </span><span class="nx">b/.gitignore</span><span class="w"> </span><span class="nx">differ</span><span class="w">
+</span><span class="n">diff</span><span class="w"> </span><span class="nt">--git</span><span class="w"> </span><span class="nx">a/a.dll</span><span class="w"> </span><span class="nx">b/a.dll</span><span class="w">
+</span><span class="n">new</span><span class="w"> </span><span class="nx">file</span><span class="w"> </span><span class="nx">mode</span><span class="w"> </span><span class="nx">100644</span><span class="w">
+</span><span class="n">index</span><span class="w"> </span><span class="nx">0000000..e69de29</span></code></pre></figure>
 
-<p>So git is treating the <code class="highlighter-rouge">.gitignore</code> file as a binary. This is where encodings come into the picture.</p>
+<p>So git is treating the <code class="language-plaintext highlighter-rouge">.gitignore</code> file as a binary. This is where encodings come into the picture.</p>
 
-<p>Doing <code class="highlighter-rouge">"*.dll" &gt; .gitignore</code> is pretty much the same as doing <code class="highlighter-rouge">"*.dll" | out-file .gitignore</code>. The default encoding that is used here is <code class="highlighter-rouge">UCS-2</code>. Many tools like git are not happy with it, at least by default.</p>
+<p>Doing <code class="language-plaintext highlighter-rouge">"*.dll" &gt; .gitignore</code> is pretty much the same as doing <code class="language-plaintext highlighter-rouge">"*.dll" | out-file .gitignore</code>. The default encoding that is used here is <code class="language-plaintext highlighter-rouge">UCS-2</code>. Many tools like git are not happy with it, at least by default.</p>
 
 <p>We have this, from the <a href="http://technet.microsoft.com/en-us/library/dd347585.aspx">docs</a>:</p>
 
 <blockquote><p>By default, the Out-File cmdlet creates a Unicode file. This is the best default in the long run, but it means that tools that expect ASCII files will not work correctly with the default output format. You can change the default output format to ASCII by using the Encoding parameter</p></blockquote>
 
-<p>To make git happy, you can convert the <code class="highlighter-rouge">.gitignore</code> file to, say  <code class="highlighter-rouge">ascii</code>. Actually, the <code class="highlighter-rouge">out-file</code> cmdlet provides ability to do just that.</p>
+<p>To make git happy, you can convert the <code class="language-plaintext highlighter-rouge">.gitignore</code> file to, say  <code class="language-plaintext highlighter-rouge">ascii</code>. Actually, the <code class="language-plaintext highlighter-rouge">out-file</code> cmdlet provides ability to do just that.</p>
 
-<figure class="highlight"><pre><code class="language-powershell" data-lang="powershell"> <span class="s2">"*.dll"</span> | <span class="nb">out-file</span> -Encoding ascii .gitignore</code></pre></figure>
+<figure class="highlight"><pre><code class="language-powershell" data-lang="powershell"><span class="w"> </span><span class="s2">"*.dll"</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">out-file</span><span class="w"> </span><span class="nt">-Encoding</span><span class="w"> </span><span class="nx">ascii</span><span class="w"> </span><span class="o">.</span><span class="nf">gitignore</span></code></pre></figure>
 
-<p>Now, the dlls should be ignored as expected. Unfortunately, there is no way to change how <code class="highlighter-rouge">&gt;</code> behaves in this aspect!</p>
+<p>Now, the dlls should be ignored as expected. Unfortunately, there is no way to change how <code class="language-plaintext highlighter-rouge">&gt;</code> behaves in this aspect!</p>
 
   </div>
 

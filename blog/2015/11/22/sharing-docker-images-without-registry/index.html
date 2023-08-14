@@ -453,15 +453,15 @@ pre {
 
 <p>Recently, when we were switching to a docker based workflow, we found that pulling in the base set of images from our internal registry on AWS + S3 was taking a lot of time. Not to mention that it was also eating up our bandwidth. In order to make it easy and fast for new developers to get started with our project, we wanted to setup a local “store” of images that we can pull our images from. This store will also help us share new images quicker as well.</p>
 
-<p>Instead of setting up a local registry in our office LAN, we decided to keep things simple and setup a simple workstation to pull in images via SSH. The <code class="highlighter-rouge">docker save</code> and <code class="highlighter-rouge">docker load</code> commands helped us beautifully here. We also piped from/to these command directly to/from the workstation, and avoided local files altogether.</p>
+<p>Instead of setting up a local registry in our office LAN, we decided to keep things simple and setup a simple workstation to pull in images via SSH. The <code class="language-plaintext highlighter-rouge">docker save</code> and <code class="language-plaintext highlighter-rouge">docker load</code> commands helped us beautifully here. We also piped from/to these command directly to/from the workstation, and avoided local files altogether.</p>
 
 <h3 id="docker-save-and-docker-load">docker save and docker load</h3>
 
-<p>First, some basics about <code class="highlighter-rouge">docker save</code> and <code class="highlighter-rouge">docker load</code>:</p>
+<p>First, some basics about <code class="language-plaintext highlighter-rouge">docker save</code> and <code class="language-plaintext highlighter-rouge">docker load</code>:</p>
 
-<p><code class="highlighter-rouge">docker save</code> allows use to save a image to a tar archive. It streams to STDOUT by default, or to a file specified by the <code class="highlighter-rouge">-o, --output</code> flag.</p>
+<p><code class="language-plaintext highlighter-rouge">docker save</code> allows use to save a image to a tar archive. It streams to STDOUT by default, or to a file specified by the <code class="language-plaintext highlighter-rouge">-o, --output</code> flag.</p>
 
-<p><code class="highlighter-rouge">docker load</code> sits in the other end, and takes in input from a file, specified by the <code class="highlighter-rouge">-i, --input</code> flag or STDIN.</p>
+<p><code class="language-plaintext highlighter-rouge">docker load</code> sits in the other end, and takes in input from a file, specified by the <code class="language-plaintext highlighter-rouge">-i, --input</code> flag or STDIN.</p>
 
 <h3 id="sync-tofrom-external-host-via-ssh">Sync to/from external host via ssh</h3>
 
@@ -472,7 +472,7 @@ pre {
 
 <p>(this push can be done from a one workstation where the image was built, or pulled in from a registry)</p>
 
-<p>We used <code class="highlighter-rouge">bzip2</code> to compress the data, and the amazing <code class="highlighter-rouge">pv</code> tool to visualize the transfer.</p>
+<p>We used <code class="language-plaintext highlighter-rouge">bzip2</code> to compress the data, and the amazing <code class="language-plaintext highlighter-rouge">pv</code> tool to visualize the transfer.</p>
 
 <p>Pulling in an image is not much different:</p>
 
@@ -481,17 +481,17 @@ pre {
 
 <h3 id="sync-between-multiple-docker-machines">Sync between multiple docker machines</h3>
 
-<p>We use <a href="https://docs.docker.com/machine/">docker-machine</a> on OS X for development. This strategy can also be used to share or backup images between different docker-machines. If there are two machines, say <code class="highlighter-rouge">dev1</code> and <code class="highlighter-rouge">dev2</code> running, we can sync an image between the two like below:</p>
+<p>We use <a href="https://docs.docker.com/machine/">docker-machine</a> on OS X for development. This strategy can also be used to share or backup images between different docker-machines. If there are two machines, say <code class="language-plaintext highlighter-rouge">dev1</code> and <code class="language-plaintext highlighter-rouge">dev2</code> running, we can sync an image between the two like below:</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash">docker <span class="k">$(</span>docker-machine config dev1<span class="k">)</span> save image | <span class="se">\</span>
-  docker <span class="k">$(</span>docker-machine config dev2<span class="k">)</span> load</code></pre></figure>
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">docker <span class="si">$(</span>docker-machine config dev1<span class="si">)</span> save image | <span class="se">\</span>
+  docker <span class="si">$(</span>docker-machine config dev2<span class="si">)</span> load</code></pre></figure>
 
-<p>If a machine (say <code class="highlighter-rouge">dev</code>) is going to be recreated, we can save the image(s) and reload:</p>
+<p>If a machine (say <code class="language-plaintext highlighter-rouge">dev</code>) is going to be recreated, we can save the image(s) and reload:</p>
 
-<figure class="highlight"><pre><code class="language-bash" data-lang="bash">docker <span class="k">$(</span>docker-machine config dev<span class="k">)</span> save <span class="nt">-o</span> image.tar image
-docker-machine rm dev
+<figure class="highlight"><pre><code class="language-bash" data-lang="bash">docker <span class="si">$(</span>docker-machine config dev<span class="si">)</span> save <span class="nt">-o</span> image.tar image
+docker-machine <span class="nb">rm </span>dev
 docker-machine create <span class="nt">--provider</span> virtualbox dev
-docker <span class="k">$(</span>docker-machine config dev<span class="k">)</span> load <span class="nt">-i</span> image.tar</code></pre></figure>
+docker <span class="si">$(</span>docker-machine config dev<span class="si">)</span> load <span class="nt">-i</span> image.tar</code></pre></figure>
 
 <p>This should make using multiple docker-machines or recreating existing ones less of an hassle in terms of getting the base set of images.</p>
 

@@ -19,7 +19,7 @@
   <meta content="article" property="og:type">
 
 
-  <meta content="<p>With Resharper 7, JetBrains has built upon the existing annotations attributes like <code class="highlighter-rouge">CanBeNull</code> to introduce contract annotations in the form of <code class="highlighter-rouge">ContractAnnotationAttribute</code></p>
+  <meta content="<p>With Resharper 7, JetBrains has built upon the existing annotations attributes like <code class="language-plaintext highlighter-rouge">CanBeNull</code> to introduce contract annotations in the form of <code class="language-plaintext highlighter-rouge">ContractAnnotationAttribute</code></p>
 
 " property="og:description">
 
@@ -430,7 +430,7 @@ pre {
   </header>
 
   <div class="post-content" itemprop="articleBody">
-    <p>With Resharper 7, JetBrains has built upon the existing annotations attributes like <code class="highlighter-rouge">CanBeNull</code> to introduce contract annotations in the form of <code class="highlighter-rouge">ContractAnnotationAttribute</code></p>
+    <p>With Resharper 7, JetBrains has built upon the existing annotations attributes like <code class="language-plaintext highlighter-rouge">CanBeNull</code> to introduce contract annotations in the form of <code class="language-plaintext highlighter-rouge">ContractAnnotationAttribute</code></p>
 
 <p>In this post I am going to talk about a particular use case for these - writing validation (extension) methods.</p>
 
@@ -465,17 +465,17 @@ pre {
     <span class="k">return</span> <span class="k">true</span><span class="p">;</span>
 <span class="p">}</span></code></pre></figure>
 
-<p>For the <code class="highlighter-rouge">test.Call()</code>, Resharper would give a warning <code class="highlighter-rouge">Possible 'NullReferenceException'</code>. As far as Resharper knows, <code class="highlighter-rouge">test</code> can be <code class="highlighter-rouge">null</code> if <code class="highlighter-rouge">SomeCondition()</code> returns false and hence raises the warning for you ( note that for performance and reasons beyond the scope of this post, Resharper doesn’t analyze that <code class="highlighter-rouge">SomeCondtion()</code>, in this case, only returns true.)</p>
+<p>For the <code class="language-plaintext highlighter-rouge">test.Call()</code>, Resharper would give a warning <code class="language-plaintext highlighter-rouge">Possible 'NullReferenceException'</code>. As far as Resharper knows, <code class="language-plaintext highlighter-rouge">test</code> can be <code class="language-plaintext highlighter-rouge">null</code> if <code class="language-plaintext highlighter-rouge">SomeCondition()</code> returns false and hence raises the warning for you ( note that for performance and reasons beyond the scope of this post, Resharper doesn’t analyze that <code class="language-plaintext highlighter-rouge">SomeCondtion()</code>, in this case, only returns true.)</p>
 
-<p>And, as far as Resharper is concerned, <code class="highlighter-rouge">test.IsNotNull()</code> can be true or false irrespective of <code class="highlighter-rouge">test</code> being null or not.</p>
+<p>And, as far as Resharper is concerned, <code class="language-plaintext highlighter-rouge">test.IsNotNull()</code> can be true or false irrespective of <code class="language-plaintext highlighter-rouge">test</code> being null or not.</p>
 
-<p>This is where contracts annotations can help Resharper analyze the situation better. You can add the contracts saying <code class="highlighter-rouge">IsNotNull</code> will return false when the input is null.</p>
+<p>This is where contracts annotations can help Resharper analyze the situation better. You can add the contracts saying <code class="language-plaintext highlighter-rouge">IsNotNull</code> will return false when the input is null.</p>
 
 <p><img src="https://stacktoheap.com/images/resharper_contract_annotations.png" alt="resharper_contracts_annotations" /></p>
 
-<p>To add code contracts, you can go to menu <code class="highlighter-rouge">Resharper -&gt; Options -&gt; Code Annotations -&gt; Copy Default Implementation to Clipboard</code>. Paste the copied code to some file like <code class="highlighter-rouge">ResharperAnalysisHelpers.cs</code> and place it in an appropriate location.</p>
+<p>To add code contracts, you can go to menu <code class="language-plaintext highlighter-rouge">Resharper -&gt; Options -&gt; Code Annotations -&gt; Copy Default Implementation to Clipboard</code>. Paste the copied code to some file like <code class="language-plaintext highlighter-rouge">ResharperAnalysisHelpers.cs</code> and place it in an appropriate location.</p>
 
-<p>Next, add the <code class="highlighter-rouge">ContractsAnnotationAttribute</code> to the extension methods stating the necessasry contract:</p>
+<p>Next, add the <code class="language-plaintext highlighter-rouge">ContractsAnnotationAttribute</code> to the extension methods stating the necessasry contract:</p>
 
 <figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">public</span> <span class="k">static</span> <span class="k">class</span> <span class="nc">ObjectExtensions</span>
 <span class="p">{</span>
@@ -492,9 +492,9 @@ pre {
     <span class="p">}</span>
 <span class="p">}</span></code></pre></figure>
 
-<p>It is pretty straightforward. For the <code class="highlighter-rouge">IsNull</code> method, we specify that if the input is null, the method returns true. For <code class="highlighter-rouge">IsNotNull</code>, it’s the other way around.</p>
+<p>It is pretty straightforward. For the <code class="language-plaintext highlighter-rouge">IsNull</code> method, we specify that if the input is null, the method returns true. For <code class="language-plaintext highlighter-rouge">IsNotNull</code>, it’s the other way around.</p>
 
-<p>Once this is done, we will see that Resharper doesn’t warn about the possible null reference anymore. It got the “hint” that <code class="highlighter-rouge">IsNotNull</code> will return true only when the input was not null ( too bad it didn’t know that from the name of the method ;))</p>
+<p>Once this is done, we will see that Resharper doesn’t warn about the possible null reference anymore. It got the “hint” that <code class="language-plaintext highlighter-rouge">IsNotNull</code> will return true only when the input was not null ( too bad it didn’t know that from the name of the method ;))</p>
 
 <p>Contracts annotations allow you to specify parameter names, out variable values, that the method can throw exception etc. For more details, see this <a href="http://blogs.jetbrains.com/dotnet/2012/08/contract-annotations-in-resharper-7/">blog post</a></p>
 

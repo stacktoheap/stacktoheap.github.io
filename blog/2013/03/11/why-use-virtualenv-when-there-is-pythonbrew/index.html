@@ -19,7 +19,7 @@
   <meta content="article" property="og:type">
 
 
-  <meta content="<p>One of the first things that people coming from the Ruby / Rails world and entering the amazing world of Python / Django ( ahem ) want to know is what is the equivalent of <code class="highlighter-rouge">rvm</code>? Or to be more generic, how does one manage their “pythons” and the manage their “gemsets”</p>
+  <meta content="<p>One of the first things that people coming from the Ruby / Rails world and entering the amazing world of Python / Django ( ahem ) want to know is what is the equivalent of <code class="language-plaintext highlighter-rouge">rvm</code>? Or to be more generic, how does one manage their “pythons” and the manage their “gemsets”</p>
 
 " property="og:description">
 
@@ -430,13 +430,13 @@ pre {
   </header>
 
   <div class="post-content" itemprop="articleBody">
-    <p>One of the first things that people coming from the Ruby / Rails world and entering the amazing world of Python / Django ( ahem ) want to know is what is the equivalent of <code class="highlighter-rouge">rvm</code>? Or to be more generic, how does one manage their “pythons” and the manage their “gemsets”</p>
+    <p>One of the first things that people coming from the Ruby / Rails world and entering the amazing world of Python / Django ( ahem ) want to know is what is the equivalent of <code class="language-plaintext highlighter-rouge">rvm</code>? Or to be more generic, how does one manage their “pythons” and the manage their “gemsets”</p>
 
-<p>I see that newcomers to Python are still being pointed to <code class="highlighter-rouge">virtualenv</code> and then to the <code class="highlighter-rouge">virtualenvwrapper</code> which apparently makes working with <code class="highlighter-rouge">virtualenv</code> much easier. As someone coming back to the world of Python, from the days of installing all the packages for every project that your are working on system wide, I too, was led towards the aforementioned duo.</p>
+<p>I see that newcomers to Python are still being pointed to <code class="language-plaintext highlighter-rouge">virtualenv</code> and then to the <code class="language-plaintext highlighter-rouge">virtualenvwrapper</code> which apparently makes working with <code class="language-plaintext highlighter-rouge">virtualenv</code> much easier. As someone coming back to the world of Python, from the days of installing all the packages for every project that your are working on system wide, I too, was led towards the aforementioned duo.</p>
 
-<p>Until I came across <a href="https://github.com/utahta/pythonbrew">pythonbrew</a>, that is. It describes itself rather modestly as “..a program to automate the building and installation of Python in the users $HOME”, and claims to be inspired by <code class="highlighter-rouge">rvm</code> itself.</p>
+<p>Until I came across <a href="https://github.com/utahta/pythonbrew">pythonbrew</a>, that is. It describes itself rather modestly as “..a program to automate the building and installation of Python in the users $HOME”, and claims to be inspired by <code class="language-plaintext highlighter-rouge">rvm</code> itself.</p>
 
-<p>What many don’t seem to realize is that <code class="highlighter-rouge">pythonbrew</code> itself is a wrapper to <code class="highlighter-rouge">virtualenv</code> and allows the ability to manage virtual environments in addition to your pythons.  The interface is consistent and it does more than what <code class="highlighter-rouge">virtualenv</code> or <code class="highlighter-rouge">virtualenvwrapper</code> do.</p>
+<p>What many don’t seem to realize is that <code class="language-plaintext highlighter-rouge">pythonbrew</code> itself is a wrapper to <code class="language-plaintext highlighter-rouge">virtualenv</code> and allows the ability to manage virtual environments in addition to your pythons.  The interface is consistent and it does more than what <code class="language-plaintext highlighter-rouge">virtualenv</code> or <code class="language-plaintext highlighter-rouge">virtualenvwrapper</code> do.</p>
 
 <p>This is how you create and use virtual environments with pythonbrew:</p>
 
@@ -448,17 +448,17 @@ pythonbrew venv use proj</code></pre></figure>
 <figure class="highlight"><pre><code class="language-bash" data-lang="bash">virtualenv proj
 <span class="nb">source </span>bin/activate</code></pre></figure>
 
-<p>Bit better with <code class="highlighter-rouge">virtualenvwrapper</code>:</p>
+<p>Bit better with <code class="language-plaintext highlighter-rouge">virtualenvwrapper</code>:</p>
 
 <figure class="highlight"><pre><code class="language-bash" data-lang="bash">mkvirtualenv proj <span class="c">#this also activates it</span>
 <span class="c">#later</span>
 workon proj</code></pre></figure>
 
-<p>Can you see the consistency in interface with pythonbrew that I am talking about? One you start with <code class="highlighter-rouge">pythonbrew</code>, you know where to go next. What the next step would be. Maybe I am spoilt by <code class="highlighter-rouge">rvm</code>, but <code class="highlighter-rouge">pythonbrew</code> just seems to be right approach here for me. The fact that it uses <code class="highlighter-rouge">virtualenv</code> under the wraps means you can always go down a level and use it directly.</p>
+<p>Can you see the consistency in interface with pythonbrew that I am talking about? One you start with <code class="language-plaintext highlighter-rouge">pythonbrew</code>, you know where to go next. What the next step would be. Maybe I am spoilt by <code class="language-plaintext highlighter-rouge">rvm</code>, but <code class="language-plaintext highlighter-rouge">pythonbrew</code> just seems to be right approach here for me. The fact that it uses <code class="language-plaintext highlighter-rouge">virtualenv</code> under the wraps means you can always go down a level and use it directly.</p>
 
 <p>With the 2.7.x python and 3.x python being used simultaneously, I surely hope people do need easy ways to install and use multiple pythons, in addition to managing the packages.</p>
 
-<p>I have been using <code class="highlighter-rouge">pythonbrew</code> in my Django project and have had absolutely no problems with it. I had no problems setting up <code class="highlighter-rouge">Pycharm</code> with it, as well. It is exactly what I needed, without the complexity of the <code class="highlighter-rouge">virtualenv</code> interface, with a consistent way of doing things, and similarity to <code class="highlighter-rouge">rvm</code>.</p>
+<p>I have been using <code class="language-plaintext highlighter-rouge">pythonbrew</code> in my Django project and have had absolutely no problems with it. I had no problems setting up <code class="language-plaintext highlighter-rouge">Pycharm</code> with it, as well. It is exactly what I needed, without the complexity of the <code class="language-plaintext highlighter-rouge">virtualenv</code> interface, with a consistent way of doing things, and similarity to <code class="language-plaintext highlighter-rouge">rvm</code>.</p>
 
 <p>So my question to pythonistas is, why do you still use / recommend virtualenv ( alone ) when there is pythonbrew? Or am is just reading old docs and blogs?</p>
 

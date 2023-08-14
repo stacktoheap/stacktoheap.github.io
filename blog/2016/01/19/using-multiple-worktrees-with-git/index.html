@@ -439,18 +439,18 @@ pre {
   <div class="post-content" itemprop="articleBody">
     <p>One of my recent observations is that when working with multiple branches at the same time, people clone the whole git repository again. Mostly, there are no issues with this, and this could simplify the workflow a lot.</p>
 
-<p>But, when you use git hooks, new clones can be inconvenient. As is the standard practice, we checkin our hooks to the repo. These are then symlinked into <code class="highlighter-rouge">.git/hooks</code> via a bootstrap script that the user has to run after the initial clone. When cloning a repo again, the user has to remember to install the hooks in the new clone as well.</p>
+<p>But, when you use git hooks, new clones can be inconvenient. As is the standard practice, we checkin our hooks to the repo. These are then symlinked into <code class="language-plaintext highlighter-rouge">.git/hooks</code> via a bootstrap script that the user has to run after the initial clone. When cloning a repo again, the user has to remember to install the hooks in the new clone as well.</p>
 
-<p>With or without hooks in the picture, the ideal, and  the most efficient, approach to working with multiple independent working copies is to make use of the <code class="highlighter-rouge">git worktree</code> feature. This was added in git 2.5, and is the focus of this article.</p>
+<p>With or without hooks in the picture, the ideal, and  the most efficient, approach to working with multiple independent working copies is to make use of the <code class="language-plaintext highlighter-rouge">git worktree</code> feature. This was added in git 2.5, and is the focus of this article.</p>
 
 <h2 id="working-with-multiple-branches">Working with multiple branches</h2>
 
-<p>Say you are on a feature branch, and want to make a bug fix in <code class="highlighter-rouge">master</code>. You can create a whole new working copy based on master as follows:</p>
+<p>Say you are on a feature branch, and want to make a bug fix in <code class="language-plaintext highlighter-rouge">master</code>. You can create a whole new working copy based on master as follows:</p>
 
 <figure class="highlight"><pre><code class="language-bash" data-lang="bash">git fetch
 git worktree add <span class="nt">-b</span> bugfix-1234 ../bugfix origin/master</code></pre></figure>
 
-<p>The above sets up a new worktree at <code class="highlighter-rouge">../bugfix</code> (assuming, and recommended that you are at the root of your original cloned repository). The <code class="highlighter-rouge">-b bugfix-1234</code> option creates a new branch, named <code class="highlighter-rouge">bugfix-1234</code>, based off master. If the <code class="highlighter-rouge">-b</code> option is not given, a new branch matching the directory of your worktree, <code class="highlighter-rouge">bugfix</code>, is created. You can now <code class="highlighter-rouge">cd ../bugfix</code> and work on this new worktree (and branch) as though it were a new clone of the repository. Your original clone and work is not interrupted</p>
+<p>The above sets up a new worktree at <code class="language-plaintext highlighter-rouge">../bugfix</code> (assuming, and recommended that you are at the root of your original cloned repository). The <code class="language-plaintext highlighter-rouge">-b bugfix-1234</code> option creates a new branch, named <code class="language-plaintext highlighter-rouge">bugfix-1234</code>, based off master. If the <code class="language-plaintext highlighter-rouge">-b</code> option is not given, a new branch matching the directory of your worktree, <code class="language-plaintext highlighter-rouge">bugfix</code>, is created. You can now <code class="language-plaintext highlighter-rouge">cd ../bugfix</code> and work on this new worktree (and branch) as though it were a new clone of the repository. Your original clone and work is not interrupted</p>
 
 <p>And best of all, your hooks are carried over as well!</p>
 
@@ -462,11 +462,11 @@ git worktree add <span class="nt">-b</span> bugfix-1234 ../bugfix origin/master<
 <span class="nb">cd</span> ../project-build
 ./run_build.sh</code></pre></figure>
 
-<p>The above creates a worktree with detached branch off current <code class="highlighter-rouge">HEAD</code>. We can use this temporary worktree to run our long running task, and continue to make changes in our original worktree. Using <code class="highlighter-rouge">--detach</code> is ideal in this situation, as this is a temporary worktree, and we don’t want to create a branch for this.</p>
+<p>The above creates a worktree with detached branch off current <code class="language-plaintext highlighter-rouge">HEAD</code>. We can use this temporary worktree to run our long running task, and continue to make changes in our original worktree. Using <code class="language-plaintext highlighter-rouge">--detach</code> is ideal in this situation, as this is a temporary worktree, and we don’t want to create a branch for this.</p>
 
 <h2 id="cleanup">Cleanup</h2>
 
-<p>As of this writing, there are no helpers to remove worktrees, so you can just <code class="highlighter-rouge">rm -rf ../bugfix &amp;&amp; git worktree prune</code> when you are done with your new worktree. The <code class="highlighter-rouge">git worktree prune</code> is optional, and will remove metadata around your worktree from the repository immediately. If not used, the normal git garbage collection process will eventually clean it up.</p>
+<p>As of this writing, there are no helpers to remove worktrees, so you can just <code class="language-plaintext highlighter-rouge">rm -rf ../bugfix &amp;&amp; git worktree prune</code> when you are done with your new worktree. The <code class="language-plaintext highlighter-rouge">git worktree prune</code> is optional, and will remove metadata around your worktree from the repository immediately. If not used, the normal git garbage collection process will eventually clean it up.</p>
 
   </div>
 

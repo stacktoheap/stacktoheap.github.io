@@ -441,7 +441,7 @@ pre {
   </header>
 
   <div class="post-content" itemprop="articleBody">
-    <p>It is very easy to get started with <code class="highlighter-rouge">Pods</code>, <code class="highlighter-rouge">ReplicationControllers</code> and <code class="highlighter-rouge">Services</code> in Kubernetes. Doing a seamless rolling update for your application, however, needs your replication controllers to be configured in a certain way to make it work. The aim of this post is to talk about the basics of configuring a production ready ReplicationController that is ready for rolling updates.</p>
+    <p>It is very easy to get started with <code class="language-plaintext highlighter-rouge">Pods</code>, <code class="language-plaintext highlighter-rouge">ReplicationControllers</code> and <code class="language-plaintext highlighter-rouge">Services</code> in Kubernetes. Doing a seamless rolling update for your application, however, needs your replication controllers to be configured in a certain way to make it work. The aim of this post is to talk about the basics of configuring a production ready ReplicationController that is ready for rolling updates.</p>
 
 <h3 id="barebones-template">Barebones Template</h3>
 
@@ -455,7 +455,7 @@ pre {
     <span class="na">name</span><span class="pi">:</span> <span class="s">my-application</span>
     <span class="na">version</span><span class="pi">:</span> <span class="pi">{{</span> <span class="nv">MY_APPLICATION_VERSION</span> <span class="pi">}}</span>
 <span class="na">spec</span><span class="pi">:</span>
-  <span class="na">replicas</span><span class="pi">:</span> <span class="s">1</span>
+  <span class="na">replicas</span><span class="pi">:</span> <span class="m">1</span>
   <span class="na">selector</span><span class="pi">:</span>
     <span class="na">app</span><span class="pi">:</span> <span class="s">my-application</span>
     <span class="na">version</span><span class="pi">:</span> <span class="pi">{{</span> <span class="nv">MY_APPLICATION_VERSION</span> <span class="pi">}}</span>
@@ -471,22 +471,22 @@ pre {
         <span class="na">ports</span><span class="pi">:</span>
         <span class="pi">-</span> <span class="na">containerPort</span><span class="pi">:</span> <span class="s">8080</span></code></pre></figure>
 
-<p>The most important sections are the labels for the RC and pod, and the selectors. These include a <code class="highlighter-rouge">version</code> label, whose value is incremented (actually, all that matters is that this changes between deploys) during a rolling update. In my template, I have also tied up the <code class="highlighter-rouge">version</code> value with the version of the image being used in the pod, but that is not strictly necessary. The approach might have to be changed slightly if your pod contains multiple containers.</p>
+<p>The most important sections are the labels for the RC and pod, and the selectors. These include a <code class="language-plaintext highlighter-rouge">version</code> label, whose value is incremented (actually, all that matters is that this changes between deploys) during a rolling update. In my template, I have also tied up the <code class="language-plaintext highlighter-rouge">version</code> value with the version of the image being used in the pod, but that is not strictly necessary. The approach might have to be changed slightly if your pod contains multiple containers.</p>
 
-<p>As you might have guessed from the <code class="highlighter-rouge">{{ MY_APPLICATION_VERSION }}</code> syntax, the above is a jinja2 template. The <code class="highlighter-rouge">MY_APPLICATION_VERSION</code> variable’s value is supplied at deploy time (from the deployment script, pipeline etc.) The RC template is usually saved as <code class="highlighter-rouge">my-application-rc.yml.tpl</code></p>
+<p>As you might have guessed from the <code class="language-plaintext highlighter-rouge">{{ MY_APPLICATION_VERSION }}</code> syntax, the above is a jinja2 template. The <code class="language-plaintext highlighter-rouge">MY_APPLICATION_VERSION</code> variable’s value is supplied at deploy time (from the deployment script, pipeline etc.) The RC template is usually saved as <code class="language-plaintext highlighter-rouge">my-application-rc.yml.tpl</code></p>
 
 <h3 id="deploys">Deploys</h3>
 
-<p>For deployment, we render template into an actual RC configuration at deploy time. I use <a href="https://github.com/andreasjansson/envtpl"><code class="highlighter-rouge">envtpl</code></a> for this purpose in my deploy scripts. <a href="https://github.com/kolypto/j2cli"><code class="highlighter-rouge">j2cli</code></a> is another alternative.</p>
+<p>For deployment, we render template into an actual RC configuration at deploy time. I use <a href="https://github.com/andreasjansson/envtpl"><code class="language-plaintext highlighter-rouge">envtpl</code></a> for this purpose in my deploy scripts. <a href="https://github.com/kolypto/j2cli"><code class="language-plaintext highlighter-rouge">j2cli</code></a> is another alternative.</p>
 
 <p>My deployment script looks something like the following (simplified to highlight the salient details):</p>
 
 <figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">MY_APPLICATION_VERSION</span><span class="o">=</span><span class="nv">$VERSION</span> envtpl &lt; my-application-rc.yml.tpl <span class="o">&gt;</span> my-application-rc.yml
-<span class="nv">OLD_CONTROLLER</span><span class="o">=</span><span class="k">$(</span>kubectl get rc <span class="nt">-l</span> <span class="nv">name</span><span class="o">=</span>my-application <span class="nt">-o</span> name<span class="k">)</span>
+<span class="nv">OLD_CONTROLLER</span><span class="o">=</span><span class="si">$(</span>kubectl get rc <span class="nt">-l</span> <span class="nv">name</span><span class="o">=</span>my-application <span class="nt">-o</span> name<span class="si">)</span>
 <span class="nv">OLD_CONTROLLER</span><span class="o">=</span><span class="k">${</span><span class="nv">OLD_CONTROLLER</span><span class="p">##*/</span><span class="k">}</span>
 kubectl rolling-update <span class="nv">$OLD_CONTROLLER</span> <span class="nt">-f</span> my-application-rc.yml</code></pre></figure>
 
-<p>First, we render the template rc configuration into a proper yaml file. Then, we get the name of the existing controller for the application using <code class="highlighter-rouge">kubectl get</code> with the label selector (<code class="highlighter-rouge">-l</code>) option. Using this old controller name, we start our rolling deploy.</p>
+<p>First, we render the template rc configuration into a proper yaml file. Then, we get the name of the existing controller for the application using <code class="language-plaintext highlighter-rouge">kubectl get</code> with the label selector (<code class="language-plaintext highlighter-rouge">-l</code>) option. Using this old controller name, we start our rolling deploy.</p>
 
 <p>Now, your application is ready for proper rolling deploys.</p>
 

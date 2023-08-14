@@ -433,48 +433,48 @@ pre {
   <div class="post-content" itemprop="articleBody">
     <p>Powershell is amazing. It really lives upto its name. But many a times, I have found new comers tripping on a few Powershell oddities. Here I higlight my favorite three.</p>
 
-<p>First and foremost, something that confuses most anyone who starts using Powershell is what version of Powershell that they are using. Micorosft, in its usual ways, install Powershell, upto the latest 3.0 version, at the <code class="highlighter-rouge">C:\Windows\System32\WindowsPowerShell\v1.0</code> ( you can get it by doing <code class="highlighter-rouge">$pshome</code> from a Powershell console.) Notice the <code class="highlighter-rouge">v1.0</code> at the end. Seeing that, it obviously raises confusion as most resource on Powershell is for v2.0 ( at the time of this writing, eventhough v3.0 is out.) ad people want to be on v2.0 and not v1.0. The easiest way to identify the Powershell version is to just run <code class="highlighter-rouge">get-host</code> in Powershell. Or to be more specific <code class="highlighter-rouge">(get-host).Version</code>.</p>
+<p>First and foremost, something that confuses most anyone who starts using Powershell is what version of Powershell that they are using. Micorosft, in its usual ways, install Powershell, upto the latest 3.0 version, at the <code class="language-plaintext highlighter-rouge">C:\Windows\System32\WindowsPowerShell\v1.0</code> ( you can get it by doing <code class="language-plaintext highlighter-rouge">$pshome</code> from a Powershell console.) Notice the <code class="language-plaintext highlighter-rouge">v1.0</code> at the end. Seeing that, it obviously raises confusion as most resource on Powershell is for v2.0 ( at the time of this writing, eventhough v3.0 is out.) ad people want to be on v2.0 and not v1.0. The easiest way to identify the Powershell version is to just run <code class="language-plaintext highlighter-rouge">get-host</code> in Powershell. Or to be more specific <code class="language-plaintext highlighter-rouge">(get-host).Version</code>.</p>
 
 <p>Another thing that causes even more confusion is the way to pass arguments to functions.</p>
 
 <p>Say there is a function as defined below:</p>
 
-<figure class="highlight"><pre><code class="language-powershell" data-lang="powershell"><span class="k">function </span>Name<span class="o">(</span><span class="nv">$firstName</span>, <span class="nv">$lastName</span><span class="o">){</span>
-    <span class="nb">write-host</span> <span class="s2">"First name: </span><span class="nv">$firstName</span><span class="s2">"</span>
-    <span class="nb">write-host</span> <span class="s2">"Last name: </span><span class="nv">$lastName</span><span class="s2">"</span>
-<span class="o">}</span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-powershell" data-lang="powershell"><span class="kr">function</span><span class="w"> </span><span class="nf">Name</span><span class="p">(</span><span class="nv">$firstName</span><span class="p">,</span><span class="w"> </span><span class="nv">$lastName</span><span class="p">){</span><span class="w">
+    </span><span class="n">write-host</span><span class="w"> </span><span class="s2">"First name: </span><span class="nv">$firstName</span><span class="s2">"</span><span class="w">
+    </span><span class="n">write-host</span><span class="w"> </span><span class="s2">"Last name: </span><span class="nv">$lastName</span><span class="s2">"</span><span class="w">
+</span><span class="p">}</span></code></pre></figure>
 
-<p>If we call the function <code class="highlighter-rouge">Name John, Smith</code>, the expected output would be something like:</p>
+<p>If we call the function <code class="language-plaintext highlighter-rouge">Name John, Smith</code>, the expected output would be something like:</p>
 
-<figure class="highlight"><pre><code class="language-powershell" data-lang="powershell">First name: John
-Last name: Smith</code></pre></figure>
+<figure class="highlight"><pre><code class="language-powershell" data-lang="powershell"><span class="n">First</span><span class="w"> </span><span class="nx">name:</span><span class="w"> </span><span class="nx">John</span><span class="w">
+</span><span class="n">Last</span><span class="w"> </span><span class="nx">name:</span><span class="w"> </span><span class="nx">Smith</span></code></pre></figure>
 
 <p>But what would be seen is:</p>
 
-<figure class="highlight"><pre><code class="language-powershell" data-lang="powershell">First name: John Smith
-Last name:</code></pre></figure>
+<figure class="highlight"><pre><code class="language-powershell" data-lang="powershell"><span class="n">First</span><span class="w"> </span><span class="nx">name:</span><span class="w"> </span><span class="nx">John</span><span class="w"> </span><span class="nx">Smith</span><span class="w">
+</span><span class="n">Last</span><span class="w"> </span><span class="nx">name:</span></code></pre></figure>
 
-<p>I have seen many do this mistake. Arguments in Powershell, to Powershell functions are separated by space. When you comma delimit them, you are actually passing an array of those values. In this case, the array with two values <code class="highlighter-rouge">("John", "Smith"), was given to the parameter </code>$firstName` and hence the output you see.</p>
+<p>I have seen many do this mistake. Arguments in Powershell, to Powershell functions are separated by space. When you comma delimit them, you are actually passing an array of those values. In this case, the array with two values <code class="language-plaintext highlighter-rouge">("John", "Smith"), was given to the parameter </code>$firstName` and hence the output you see.</p>
 
 <p>I mention Powershell functions above because method calls on .NET objects still use comma to delimit arguments:</p>
 
-<figure class="highlight"><pre><code class="language-powershell" data-lang="powershell"><span class="o">[</span><span class="kt">string</span><span class="o">]</span>::format<span class="o">(</span><span class="s2">"{0},{1}"</span>, <span class="s2">"comma"</span>, <span class="s2">"delimited"</span><span class="o">)</span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-powershell" data-lang="powershell"><span class="p">[</span><span class="n">string</span><span class="p">]::</span><span class="n">format</span><span class="p">(</span><span class="s2">"{0},{1}"</span><span class="p">,</span><span class="w"> </span><span class="s2">"comma"</span><span class="p">,</span><span class="w"> </span><span class="s2">"delimited"</span><span class="p">)</span></code></pre></figure>
 
-<p>Lastly, I see newcomers get trumped by <code class="highlighter-rouge">Select-Object</code>. As known, Select-Object selects particular properties from objects and sends them to the pipeline.</p>
+<p>Lastly, I see newcomers get trumped by <code class="language-plaintext highlighter-rouge">Select-Object</code>. As known, Select-Object selects particular properties from objects and sends them to the pipeline.</p>
 
 <p>For example,</p>
 
-<figure class="highlight"><pre><code class="language-powershell" data-lang="powershell"><span class="nv">$names</span> <span class="o">=</span> <span class="nb">get-childitem</span> <span class="nb">.</span> | <span class="nb">select-object </span>Name</code></pre></figure>
+<figure class="highlight"><pre><code class="language-powershell" data-lang="powershell"><span class="nv">$names</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">get-childitem</span><span class="w"> </span><span class="o">.</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">select-object</span><span class="w"> </span><span class="nx">Name</span></code></pre></figure>
 
-<p>would put the names of directories and files in the current directory in <code class="highlighter-rouge">$names</code></p>
+<p>would put the names of directories and files in the current directory in <code class="language-plaintext highlighter-rouge">$names</code></p>
 
-<p>It is logical to thing that <code class="highlighter-rouge">$names</code> is a collection of strings. But it is not! It is a collection of objects with a single property (in this case) <code class="highlighter-rouge">Name</code>. To access the actual name, you do <code class="highlighter-rouge">$names[0].Name</code>.</p>
+<p>It is logical to thing that <code class="language-plaintext highlighter-rouge">$names</code> is a collection of strings. But it is not! It is a collection of objects with a single property (in this case) <code class="language-plaintext highlighter-rouge">Name</code>. To access the actual name, you do <code class="language-plaintext highlighter-rouge">$names[0].Name</code>.</p>
 
-<p>If you wanted only the collection of string in the first place, you use the <code class="highlighter-rouge">-ExpandProperty</code> parameter (<code class="highlighter-rouge">-expand</code> in short) of <code class="highlighter-rouge">Select-Object</code>:</p>
+<p>If you wanted only the collection of string in the first place, you use the <code class="language-plaintext highlighter-rouge">-ExpandProperty</code> parameter (<code class="language-plaintext highlighter-rouge">-expand</code> in short) of <code class="language-plaintext highlighter-rouge">Select-Object</code>:</p>
 
-<figure class="highlight"><pre><code class="language-powershell" data-lang="powershell"><span class="nv">$names</span> <span class="o">=</span> <span class="nb">get-childitem</span> <span class="nb">.</span> | <span class="nb">select-object</span> -expand Name</code></pre></figure>
+<figure class="highlight"><pre><code class="language-powershell" data-lang="powershell"><span class="nv">$names</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">get-childitem</span><span class="w"> </span><span class="o">.</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">select-object</span><span class="w"> </span><span class="nt">-expand</span><span class="w"> </span><span class="nx">Name</span></code></pre></figure>
 
-<p>Now, <code class="highlighter-rouge">$names</code> is just a collection of vanilla strings.</p>
+<p>Now, <code class="language-plaintext highlighter-rouge">$names</code> is just a collection of vanilla strings.</p>
 
 
   </div>

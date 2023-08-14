@@ -436,7 +436,7 @@ pre {
 
 <blockquote><p>The patterns in .gitignore and .gitattributes files can have **/, as a pattern that matches 0 or more levels of subdirectory. E.g. "foo/**/bar" matches "bar" in "foo" itself or in a subdirectory of "foo".</p></blockquote>
 
-<p>This is great for ignoring, say <code class="highlighter-rouge">lib</code> folders within your <code class="highlighter-rouge">src</code> folder, but not ignoring <code class="highlighter-rouge">lib</code> folders elsewhere, especially, the root of your repsoitory. All the gross ways of achieving something like the above can be, well, ignore, and we can start using this.</p>
+<p>This is great for ignoring, say <code class="language-plaintext highlighter-rouge">lib</code> folders within your <code class="language-plaintext highlighter-rouge">src</code> folder, but not ignoring <code class="language-plaintext highlighter-rouge">lib</code> folders elsewhere, especially, the root of your repsoitory. All the gross ways of achieving something like the above can be, well, ignore, and we can start using this.</p>
 
 <p>Wait! 1.8.2 has even more in the art of ignoring thing:</p>
 
@@ -444,24 +444,24 @@ pre {
 
 <p>This seems neat! I have seen so many people struggle with trying to understand what is being ignored and what is not. Let’s see how this new command can help.</p>
 
-<p>You can pass path(s) to the <code class="highlighter-rouge">git check-ignore</code> command and it will tell you the pattern from <code class="highlighter-rouge">.gitignore</code> or elsewhere that ends up ignoring the path(s).</p>
+<p>You can pass path(s) to the <code class="language-plaintext highlighter-rouge">git check-ignore</code> command and it will tell you the pattern from <code class="language-plaintext highlighter-rouge">.gitignore</code> or elsewhere that ends up ignoring the path(s).</p>
 
 <p>Let’s try it out:</p>
 
 <figure class="highlight"><pre><code class="language-bash" data-lang="bash">git init <span class="nb">.</span>
-touch afile
-mkdir bin
-touch bin/abin.dll
+<span class="nb">touch </span>afile
+<span class="nb">mkdir </span>bin
+<span class="nb">touch </span>bin/abin.dll
 <span class="nb">echo</span> <span class="s2">"bin/"</span> <span class="o">&gt;</span> .gitignore</code></pre></figure>
 
-<p>Now if you do <code class="highlighter-rouge">git check-ignore bin</code> or <code class="highlighter-rouge">git check-ignore bin/abin.dll</code>, the command will spew back the paths, confirming that they are ignored. Of course, the <code class="highlighter-rouge">git check-ignore</code> command can go even further:</p>
+<p>Now if you do <code class="language-plaintext highlighter-rouge">git check-ignore bin</code> or <code class="language-plaintext highlighter-rouge">git check-ignore bin/abin.dll</code>, the command will spew back the paths, confirming that they are ignored. Of course, the <code class="language-plaintext highlighter-rouge">git check-ignore</code> command can go even further:</p>
 
 <figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>git check-ignore bin/a.dll <span class="nt">--verbose</span>
 .gitignore:1:bin/   bin/a.dll</code></pre></figure>
 
-<p>When you use the <code class="highlighter-rouge">--verbose</code> flag, it tells you the source of the ignore pattern, the line number, the pattern itself and the path being ignored because of the pattern.</p>
+<p>When you use the <code class="language-plaintext highlighter-rouge">--verbose</code> flag, it tells you the source of the ignore pattern, the line number, the pattern itself and the path being ignored because of the pattern.</p>
 
-<p>While most of the times our git ignores are pretty simple like <code class="highlighter-rouge">bi/</code> or <code class="highlighter-rouge">*.dll</code>, but <a href="http://stackoverflow.com/q/5738204/526535">for the times when things go out of hand</a>, it makes sense to use the <code class="highlighter-rouge">git check-ignore</code> command to debug what is going on.</p>
+<p>While most of the times our git ignores are pretty simple like <code class="language-plaintext highlighter-rouge">bi/</code> or <code class="language-plaintext highlighter-rouge">*.dll</code>, but <a href="http://stackoverflow.com/q/5738204/526535">for the times when things go out of hand</a>, it makes sense to use the <code class="language-plaintext highlighter-rouge">git check-ignore</code> command to debug what is going on.</p>
 
 
   </div>

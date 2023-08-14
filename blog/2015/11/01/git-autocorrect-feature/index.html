@@ -440,13 +440,13 @@ Did you mean this?
 
 <p>Well, you can turn your irritation into admiration for git. git has a autocorrect feature that you can enable if needed.</p>
 
-<p>The feature can be enabled by setting the <code class="highlighter-rouge">help.autocorrect</code> config appropriately. Here’s what the man pages have to say about the setting:</p>
+<p>The feature can be enabled by setting the <code class="language-plaintext highlighter-rouge">help.autocorrect</code> config appropriately. Here’s what the man pages have to say about the setting:</p>
 
 <blockquote><p>Automatically correct and execute mistyped commands after waiting for the given number of deciseconds (0.1 sec). If more than one command can be deduced from the entered text, nothing will be executed. If the value of this option is negative, the corrected command will be executed immediately. If the value is 0 - the command will be just shown but not executed. This is the default.</p></blockquote>
 
-<p>By default, the <code class="highlighter-rouge">help.autocorrect</code> value is 0, which means that you get the <code class="highlighter-rouge">Did you mean this?</code> question, but no correction happens. Setting it to a positive value will make git correct to deduced command after that much time (in deciseconds - so setting a value of 10 will make git autocorrect in a second.) Setting a negative value will make git autocorrect immediately, and this is probably something you don’t want.</p>
+<p>By default, the <code class="language-plaintext highlighter-rouge">help.autocorrect</code> value is 0, which means that you get the <code class="language-plaintext highlighter-rouge">Did you mean this?</code> question, but no correction happens. Setting it to a positive value will make git correct to deduced command after that much time (in deciseconds - so setting a value of 10 will make git autocorrect in a second.) Setting a negative value will make git autocorrect immediately, and this is probably something you don’t want.</p>
 
-<p>So go ahead and set <code class="highlighter-rouge">help.autocorrect</code> to a sane value, and stop worrying about your typos:</p>
+<p>So go ahead and set <code class="language-plaintext highlighter-rouge">help.autocorrect</code> to a sane value, and stop worrying about your typos:</p>
 
 <figure class="highlight"><pre><code class="language-bash" data-lang="bash">git config <span class="nt">--global</span> help.autocorrect 10</code></pre></figure>
 
@@ -457,7 +457,7 @@ WARNING: You called a Git <span class="nb">command </span>named <span class="s1"
 Continuing under the assumption that you meant <span class="s1">'push'</span>
 <span class="k">in </span>1.0 seconds automatically...</code></pre></figure>
 
-<p>Related: While the above is only for git, you might want to look at <a href="https://github.com/nvbn/thefuck">thefuck</a> if you want similar autocorrect for any command you type. The appropriately named utility goes beyond just correcting typos, however. It can also do suggested commands (like <code class="highlighter-rouge">git push</code> when no upstream is set.)</p>
+<p>Related: While the above is only for git, you might want to look at <a href="https://github.com/nvbn/thefuck">thefuck</a> if you want similar autocorrect for any command you type. The appropriately named utility goes beyond just correcting typos, however. It can also do suggested commands (like <code class="language-plaintext highlighter-rouge">git push</code> when no upstream is set.)</p>
 
   </div>
 

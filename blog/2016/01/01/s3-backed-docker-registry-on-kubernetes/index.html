@@ -441,7 +441,7 @@ pre {
   <div class="post-content" itemprop="articleBody">
     <p>Running a docker registry (v2) on Kubernetes is <a href="https://github.com/kubernetes/kubernetes/tree/master/cluster/addons/registry">well documented as an addon to Kubernetes</a>.</p>
 
-<p>That setup, however, involves proxying the registry as <code class="highlighter-rouge">localhost</code> on each Kubernetes node. While this simplifies pulling on nodes (no insecure registry issue, as it is localhost), this makes building and pushing outside the Kubernetes cluster unnecessarily complex and hacky  (you need to <code class="highlighter-rouge">kubectl port-forward</code> to access the registry, and you also must build your images with the tag like <code class="highlighter-rouge">localhost:5000/repository/image:version</code>.) Moreover, it is based on Persistent Volume storage.</p>
+<p>That setup, however, involves proxying the registry as <code class="language-plaintext highlighter-rouge">localhost</code> on each Kubernetes node. While this simplifies pulling on nodes (no insecure registry issue, as it is localhost), this makes building and pushing outside the Kubernetes cluster unnecessarily complex and hacky  (you need to <code class="language-plaintext highlighter-rouge">kubectl port-forward</code> to access the registry, and you also must build your images with the tag like <code class="language-plaintext highlighter-rouge">localhost:5000/repository/image:version</code>.) Moreover, it is based on Persistent Volume storage.</p>
 
 <p>For a better docker registry setup, we wanted two things:</p>
 
@@ -450,7 +450,7 @@ pre {
   <li>Proper service for registry so that push and pull are more sane, and image tags are proper. We would like to push and pull from local workstation and our CI boxes. Also, at any time we can move to a different hosting solution for our private registry without have to retag and push images.</li>
 </ul>
 
-<p>For S3 storage, we can utilize the ability to override all the configuration for the registry via environment variables. Our <code class="highlighter-rouge">ReplicationController</code> looks like the following:</p>
+<p>For S3 storage, we can utilize the ability to override all the configuration for the registry via environment variables. Our <code class="language-plaintext highlighter-rouge">ReplicationController</code> looks like the following:</p>
 
 <figure class="highlight"><pre><code class="language-yaml" data-lang="yaml"><span class="na">apiVersion</span><span class="pi">:</span> <span class="s">v1</span>
 <span class="na">kind</span><span class="pi">:</span> <span class="s">ReplicationController</span>
@@ -462,7 +462,7 @@ pre {
     <span class="na">version</span><span class="pi">:</span> <span class="s">v0</span>
     <span class="s">kubernetes.io/cluster-service</span><span class="pi">:</span> <span class="s2">"</span><span class="s">true"</span>
 <span class="na">spec</span><span class="pi">:</span>
-  <span class="na">replicas</span><span class="pi">:</span> <span class="s">1</span>
+  <span class="na">replicas</span><span class="pi">:</span> <span class="m">1</span>
   <span class="na">selector</span><span class="pi">:</span>
     <span class="na">k8s-app</span><span class="pi">:</span> <span class="s">kube-registry</span>
     <span class="na">version</span><span class="pi">:</span> <span class="s">v0</span>
@@ -500,11 +500,11 @@ pre {
         <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">REGISTRY_HTTP_SECRET</span>
           <span class="na">value</span><span class="pi">:</span> <span class="s2">"</span><span class="s">&lt;secret&gt;"</span>
         <span class="na">ports</span><span class="pi">:</span>
-        <span class="pi">-</span> <span class="na">containerPort</span><span class="pi">:</span> <span class="s">5000</span>
+        <span class="pi">-</span> <span class="na">containerPort</span><span class="pi">:</span> <span class="m">5000</span>
           <span class="na">name</span><span class="pi">:</span> <span class="s">registry</span>
           <span class="na">protocol</span><span class="pi">:</span> <span class="s">TCP</span></code></pre></figure>
 
-<p>It is important to set <code class="highlighter-rouge">REGISTRY_STORAGE</code> to <code class="highlighter-rouge">S3</code> so that the default storage configuration is overridden. If this is not done, you will get an error regarding multiple storage drivers. <code class="highlighter-rouge">REGISTRY_HTTP_SECRET</code> has been added so that load balancing across multiple pods will work, when needed. Rest of the settings are pretty standard for a S3 backed registry, <a href="https://github.com/docker/distribution/blob/master/docs/configuration.md#storage">as per the docs</a>.</p>
+<p>It is important to set <code class="language-plaintext highlighter-rouge">REGISTRY_STORAGE</code> to <code class="language-plaintext highlighter-rouge">S3</code> so that the default storage configuration is overridden. If this is not done, you will get an error regarding multiple storage drivers. <code class="language-plaintext highlighter-rouge">REGISTRY_HTTP_SECRET</code> has been added so that load balancing across multiple pods will work, when needed. Rest of the settings are pretty standard for a S3 backed registry, <a href="https://github.com/docker/distribution/blob/master/docs/configuration.md#storage">as per the docs</a>.</p>
 
 <p>We have a service that looks like below (For context, our Kubernetes cluster is on AWS, and has AWS aware features enabled):</p>
 
@@ -523,13 +523,13 @@ pre {
   <span class="na">type</span><span class="pi">:</span> <span class="s">LoadBalancer</span>
   <span class="na">ports</span><span class="pi">:</span>
   <span class="pi">-</span> <span class="na">name</span><span class="pi">:</span> <span class="s">registry</span>
-    <span class="na">port</span><span class="pi">:</span> <span class="s">80</span>
-    <span class="na">targetPort</span><span class="pi">:</span> <span class="s">5000</span>
+    <span class="na">port</span><span class="pi">:</span> <span class="m">80</span>
+    <span class="na">targetPort</span><span class="pi">:</span> <span class="m">5000</span>
     <span class="na">protocol</span><span class="pi">:</span> <span class="s">TCP</span></code></pre></figure>
 
 <p>We have a nice Route53 alias for the resulting ELB so that we can push and pull like we would to any other private registry. With the DNS name and S3 storage, moving away from Kubernetes for the registry is trivial too.</p>
 
-<p>Improvements: Obviously, we are running an insecure registry at the moment. That’s something on our TODO list of things to fix. Currently, our CoreOS nodes, local workstations and CI boxes have Docker service running with the <code class="highlighter-rouge">--insecure-registry</code> flag.</p>
+<p>Improvements: Obviously, we are running an insecure registry at the moment. That’s something on our TODO list of things to fix. Currently, our CoreOS nodes, local workstations and CI boxes have Docker service running with the <code class="language-plaintext highlighter-rouge">--insecure-registry</code> flag.</p>
 
   </div>
 

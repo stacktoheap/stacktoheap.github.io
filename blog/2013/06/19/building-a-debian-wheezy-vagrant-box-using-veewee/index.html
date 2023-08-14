@@ -27,7 +27,7 @@
   <meta content="https://stacktoheap.com/blog/2013/06/19/building-a-debian-wheezy-vagrant-box-using-veewee/" property="og:url">
 
 
-  <meta content="2013-06-19T18:24:00+00:00" property="article:published_time">
+  <meta content="2013-06-19T18:24:00+01:00" property="article:published_time">
   <meta content="https://stacktoheap.com/about/" property="article:author">
 
 
@@ -426,7 +426,7 @@ pre {
 
   <header class="post-header">
     <h1 class="post-title" itemprop="name headline">Building a Debian Wheezy vagrant box using veewee</h1>
-    <p class="post-meta"><time datetime="2013-06-19T18:24:00+00:00" itemprop="datePublished">Jun 19, 2013</time></p>
+    <p class="post-meta"><time datetime="2013-06-19T18:24:00+01:00" itemprop="datePublished">Jun 19, 2013</time></p>
   </header>
 
   <div class="post-content" itemprop="articleBody">
@@ -436,13 +436,13 @@ pre {
 
 <p>It turns out that there is one - <a href="https://github.com/jedi4ever/veewee">Veewee</a></p>
 
-<p>Installing <code class="highlighter-rouge">veewee</code> was pretty straightforward  and can be followed from the <a href="https://github.com/jedi4ever/veewee/blob/master/doc/installation.md">docs</a></p>
+<p>Installing <code class="language-plaintext highlighter-rouge">veewee</code> was pretty straightforward  and can be followed from the <a href="https://github.com/jedi4ever/veewee/blob/master/doc/installation.md">docs</a></p>
 
 <p>Since I wanted to create a debian 7.1 box, I used the following command to find the template I wanted:</p>
 
 <figure class="highlight"><pre><code class="language-bash" data-lang="bash">bundle <span class="nb">exec </span>veewee vbox templates | <span class="nb">grep</span> <span class="nt">-i</span> debian</code></pre></figure>
 
-<p>Turns out I need <code class="highlighter-rouge">Debian-7.1.0-amd64-netboot</code>. So the step to define your box is as simple as:</p>
+<p>Turns out I need <code class="language-plaintext highlighter-rouge">Debian-7.1.0-amd64-netboot</code>. So the step to define your box is as simple as:</p>
 
 <figure class="highlight"><pre><code class="language-bash" data-lang="bash">bundle <span class="nb">exec </span>veewee vbox define <span class="s1">'debian-7.1.0'</span> <span class="s1">'Debian-7.1.0-amd64-netboot'</span></code></pre></figure>
 

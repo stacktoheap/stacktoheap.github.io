@@ -19,7 +19,7 @@
   <meta content="article" property="og:type">
 
 
-  <meta content="<p>The most easiest way to get AppSettings in .NET is to use the <code class="highlighter-rouge">ConfigurationManager</code>. It goes like:</p>
+  <meta content="<p>The most easiest way to get AppSettings in .NET is to use the <code class="language-plaintext highlighter-rouge">ConfigurationManager</code>. It goes like:</p>
 
 " property="og:description">
 
@@ -430,13 +430,13 @@ pre {
   </header>
 
   <div class="post-content" itemprop="articleBody">
-    <p>The most easiest way to get AppSettings in .NET is to use the <code class="highlighter-rouge">ConfigurationManager</code>. It goes like:</p>
+    <p>The most easiest way to get AppSettings in .NET is to use the <code class="language-plaintext highlighter-rouge">ConfigurationManager</code>. It goes like:</p>
 
 <figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="kt">var</span> <span class="n">debugSetting</span> <span class="p">=</span> <span class="n">ConfigurationManager</span><span class="p">.</span><span class="n">AppSettings</span><span class="p">[</span><span class="s">"IsDebug"</span><span class="p">];</span></code></pre></figure>
 
-<p>The <code class="highlighter-rouge">AppSettings</code> property is just a <code class="highlighter-rouge">NameValueCollection</code> - an association of string keys and string values. You pass in the string key whose value you want and you get the string value back.</p>
+<p>The <code class="language-plaintext highlighter-rouge">AppSettings</code> property is just a <code class="language-plaintext highlighter-rouge">NameValueCollection</code> - an association of string keys and string values. You pass in the string key whose value you want and you get the string value back.</p>
 
-<p>So, if your <code class="highlighter-rouge">App.config</code> were like:</p>
+<p>So, if your <code class="language-plaintext highlighter-rouge">App.config</code> were like:</p>
 
 <figure class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version="1.0" encoding="utf-8" ?&gt;</span>
 <span class="nt">&lt;configuration&gt;</span>
@@ -445,7 +445,7 @@ pre {
   <span class="nt">&lt;/appSettings&gt;</span>
 <span class="nt">&lt;/configuration&gt;</span></code></pre></figure>
 
-<p>The <code class="highlighter-rouge">debugSetting</code> will have the string value “true”. But most often, you don’t want just the string. Even in this example, you want a boolean value to see if debug is enabled or not (contrived, yes). So, you end up doing something like:</p>
+<p>The <code class="language-plaintext highlighter-rouge">debugSetting</code> will have the string value “true”. But most often, you don’t want just the string. Even in this example, you want a boolean value to see if debug is enabled or not (contrived, yes). So, you end up doing something like:</p>
 
 <figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="kt">var</span> <span class="n">debugSetting</span> <span class="p">=</span> <span class="n">Convert</span><span class="p">.</span><span class="nf">ToBoolean</span><span class="p">(</span><span class="n">ConfigurationManager</span><span class="p">.</span><span class="n">AppSettings</span><span class="p">[</span><span class="s">"IsDebug"</span><span class="p">]);</span>
 <span class="k">if</span><span class="p">(</span><span class="n">debugSetting</span><span class="p">){</span>
@@ -454,9 +454,9 @@ pre {
 
 <p>Same goes for integers, urls, and so many other types. Get back the string, convert it to the type that is needed, and consume it.</p>
 
-<p>Is there a better way to all this, which is also pretty simple? <code class="highlighter-rouge">TypeConverters</code> to the rescue!</p>
+<p>Is there a better way to all this, which is also pretty simple? <code class="language-plaintext highlighter-rouge">TypeConverters</code> to the rescue!</p>
 
-<p>We can define an <code class="highlighter-rouge">AppSettings</code> helper like this:</p>
+<p>We can define an <code class="language-plaintext highlighter-rouge">AppSettings</code> helper like this:</p>
 
 <figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">public</span> <span class="k">static</span> <span class="k">class</span> <span class="nc">AppSettings</span>
 <span class="p">{</span>
@@ -473,9 +473,9 @@ pre {
 <span class="c1">//usage</span>
 <span class="kt">var</span> <span class="n">debugSetting</span> <span class="p">=</span> <span class="n">AppSettings</span><span class="p">.</span><span class="n">Get</span><span class="p">&lt;</span><span class="kt">bool</span><span class="p">&gt;(</span><span class="s">"Debug"</span><span class="p">);</span></code></pre></figure>
 
-<p>Here we use <code class="highlighter-rouge">TypeDescriptor.GetConverter()</code> method to get a <code class="highlighter-rouge">TypeConverter</code> for the type <code class="highlighter-rouge">T</code> we want to convert to. Then we get the converted value from the converter by calling its <code class="highlighter-rouge">ConvertFromInvariantString</code>, the input to which is of course the value from the appSetting.</p>
+<p>Here we use <code class="language-plaintext highlighter-rouge">TypeDescriptor.GetConverter()</code> method to get a <code class="language-plaintext highlighter-rouge">TypeConverter</code> for the type <code class="language-plaintext highlighter-rouge">T</code> we want to convert to. Then we get the converted value from the converter by calling its <code class="language-plaintext highlighter-rouge">ConvertFromInvariantString</code>, the input to which is of course the value from the appSetting.</p>
 
-<p>This helper can now be used for various types which have converters. Consider a sample <code class="highlighter-rouge">App.config</code>:</p>
+<p>This helper can now be used for various types which have converters. Consider a sample <code class="language-plaintext highlighter-rouge">App.config</code>:</p>
 
 <figure class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version="1.0" encoding="utf-8" ?&gt;</span>
 <span class="nt">&lt;configuration&gt;</span>
@@ -496,7 +496,7 @@ pre {
 <span class="kt">var</span> <span class="n">myFavColor</span> <span class="p">=</span> <span class="n">AppSettings</span><span class="p">.</span><span class="n">Get</span><span class="p">&lt;</span><span class="n">Color</span><span class="p">&gt;(</span><span class="s">"MyFavColor"</span><span class="p">);</span>
 <span class="kt">var</span> <span class="n">serviceEndpoint</span> <span class="p">=</span> <span class="n">AppSettings</span><span class="p">.</span><span class="n">Get</span><span class="p">&lt;</span><span class="n">Uri</span><span class="p">&gt;(</span><span class="s">"ServiceEndpoint"</span><span class="p">);</span></code></pre></figure>
 
-<p>The above example works for <code class="highlighter-rouge">bool</code>, <code class="highlighter-rouge">TestEnum</code>, <code class="highlighter-rouge">Color</code> and <code class="highlighter-rouge">Uri</code> types. Easy!</p>
+<p>The above example works for <code class="language-plaintext highlighter-rouge">bool</code>, <code class="language-plaintext highlighter-rouge">TestEnum</code>, <code class="language-plaintext highlighter-rouge">Color</code> and <code class="language-plaintext highlighter-rouge">Uri</code> types. Easy!</p>
 
   </div>
 

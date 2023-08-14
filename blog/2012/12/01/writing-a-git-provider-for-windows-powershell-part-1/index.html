@@ -19,7 +19,7 @@
   <meta content="article" property="og:type">
 
 
-  <meta content="<p>I have been wanting to write a Powershell provider that will help me manage git repositories on my machine. Kind of like what “Github for Windows” does, but for the console. For a start, I want a <code class="highlighter-rouge">git:\</code> drive which will list all the projects I am tracking in my machine and can quickly help me navigate to them and perform appropriate actions on them. I am still thinking about how else I can put this to use</p>
+  <meta content="<p>I have been wanting to write a Powershell provider that will help me manage git repositories on my machine. Kind of like what “Github for Windows” does, but for the console. For a start, I want a <code class="language-plaintext highlighter-rouge">git:\</code> drive which will list all the projects I am tracking in my machine and can quickly help me navigate to them and perform appropriate actions on them. I am still thinking about how else I can put this to use</p>
 
 " property="og:description">
 
@@ -430,13 +430,13 @@ pre {
   </header>
 
   <div class="post-content" itemprop="articleBody">
-    <p>I have been wanting to write a Powershell provider that will help me manage git repositories on my machine. Kind of like what “Github for Windows” does, but for the console. For a start, I want a <code class="highlighter-rouge">git:\</code> drive which will list all the projects I am tracking in my machine and can quickly help me navigate to them and perform appropriate actions on them. I am still thinking about how else I can put this to use</p>
+    <p>I have been wanting to write a Powershell provider that will help me manage git repositories on my machine. Kind of like what “Github for Windows” does, but for the console. For a start, I want a <code class="language-plaintext highlighter-rouge">git:\</code> drive which will list all the projects I am tracking in my machine and can quickly help me navigate to them and perform appropriate actions on them. I am still thinking about how else I can put this to use</p>
 
 <p>In this post, I talk about how to start writing a Powershell snap-in required to register and add the provider.</p>
 
 <p>First, start a standard C# class library. I suppose there are templates for creating Powershell snap-ins, cmdlets, providers etc. But the ones I came across were for 2005 and 2008. Anyway, I wanted to start afresh and see how it goes.</p>
 
-<p>We need a reference to <code class="highlighter-rouge">System.Management.Automation</code>. The easiest way I have come across so far is to simply add the line <code class="highlighter-rouge">&lt;Reference Include="System.Management.Automation" /&gt;</code> in the appropriate section in your csproj file:</p>
+<p>We need a reference to <code class="language-plaintext highlighter-rouge">System.Management.Automation</code>. The easiest way I have come across so far is to simply add the line <code class="language-plaintext highlighter-rouge">&lt;Reference Include="System.Management.Automation" /&gt;</code> in the appropriate section in your csproj file:</p>
 
 <figure class="highlight"><pre><code class="language-xml" data-lang="xml"><span class="nt">&lt;ItemGroup&gt;</span>
 	<span class="nt">&lt;Reference</span> <span class="na">Include=</span><span class="s">"System"</span> <span class="nt">/&gt;</span>
@@ -449,9 +449,9 @@ pre {
 	<span class="nt">&lt;Reference</span> <span class="na">Include=</span><span class="s">"System.Management.Automation"</span> <span class="nt">/&gt;</span>
 <span class="nt">&lt;/ItemGroup&gt;</span></code></pre></figure>
 
-<p>Next off, we start with the snap-in. When you want to register all the cmdlets and providers that can be registered from the assembly, it is as simple as adding a public class that extends the abstract <code class="highlighter-rouge">PSSnapIn</code>. A sample snapin class would like below, with necessary meta-data related members implemented:</p>
+<p>Next off, we start with the snap-in. When you want to register all the cmdlets and providers that can be registered from the assembly, it is as simple as adding a public class that extends the abstract <code class="language-plaintext highlighter-rouge">PSSnapIn</code>. A sample snapin class would like below, with necessary meta-data related members implemented:</p>
 
-<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="na">[RunInstaller(true)]</span>
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="p">[</span><span class="nf">RunInstaller</span><span class="p">(</span><span class="k">true</span><span class="p">)]</span>
 <span class="k">public</span> <span class="k">class</span> <span class="nc">Pit</span> <span class="p">:</span> <span class="n">PSSnapIn</span>
 <span class="p">{</span>
     <span class="k">public</span> <span class="k">override</span> <span class="kt">string</span> <span class="n">Name</span>
@@ -470,17 +470,17 @@ pre {
     <span class="p">}</span>
 <span class="p">}</span></code></pre></figure>
 
-<p>The <code class="highlighter-rouge">RunInstaller</code> attribute is required to register the snap-in using InstallUtil.</p>
+<p>The <code class="language-plaintext highlighter-rouge">RunInstaller</code> attribute is required to register the snap-in using InstallUtil.</p>
 
 <p><img src="https://stacktoheap.com/images/pssnapin.png" alt="powershellsnapin" /></p>
 
-<p>After building the project, we can register the snap-in in Powershell. For registering, as mentioned above, we make use of InstallUtil. For 64-bit and .Net Framework 4, you want to run the InstallUtil.exe located at <code class="highlighter-rouge">%systemroot%\Microsoft.NET\Framework64\v4.0.30319\installutil.exe</code>. Just pass in the path to the built assembly and the snap-in will be registered in Powershell ( might need an elevated prompt.) You may also add a post-build event to your project with: <code class="highlighter-rouge">%systemroot%\Microsoft.NET\Framework64\v4.0.30319\installutil.exe $(TargetPath)</code></p>
+<p>After building the project, we can register the snap-in in Powershell. For registering, as mentioned above, we make use of InstallUtil. For 64-bit and .Net Framework 4, you want to run the InstallUtil.exe located at <code class="language-plaintext highlighter-rouge">%systemroot%\Microsoft.NET\Framework64\v4.0.30319\installutil.exe</code>. Just pass in the path to the built assembly and the snap-in will be registered in Powershell ( might need an elevated prompt.) You may also add a post-build event to your project with: <code class="language-plaintext highlighter-rouge">%systemroot%\Microsoft.NET\Framework64\v4.0.30319\installutil.exe $(TargetPath)</code></p>
 
-<p>After registering, you can see if it was successfull by running <code class="highlighter-rouge">Get-PSSnapin -Registered</code></p>
+<p>After registering, you can see if it was successfull by running <code class="language-plaintext highlighter-rouge">Get-PSSnapin -Registered</code></p>
 
-<p>Registering doesn’t activate the snapin, however. You have to “add” the snap-in, with, ofcourse, the <code class="highlighter-rouge">Add-PSSnapin</code>  cmdlet.</p>
+<p>Registering doesn’t activate the snapin, however. You have to “add” the snap-in, with, ofcourse, the <code class="language-plaintext highlighter-rouge">Add-PSSnapin</code>  cmdlet.</p>
 
-<p>Note, you can uninstall a snapin registered with InstallUtil by running the same command as before but with the <code class="highlighter-rouge">/u</code> flag.</p>
+<p>Note, you can uninstall a snapin registered with InstallUtil by running the same command as before but with the <code class="language-plaintext highlighter-rouge">/u</code> flag.</p>
 
   </div>
 

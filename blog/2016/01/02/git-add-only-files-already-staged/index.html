@@ -440,7 +440,7 @@ pre {
 <p>Let’s create a simple repository with three files to setup an example:</p>
 
 <figure class="highlight"><pre><code class="language-bash" data-lang="bash">git init <span class="nb">.</span>
-touch file1 file2 file3
+<span class="nb">touch </span>file1 file2 file3
 git add <span class="nb">.</span>
 git commit <span class="nt">-am</span> <span class="s2">"Add files"</span></code></pre></figure>
 
@@ -457,7 +457,7 @@ git status
 <span class="c"># modified:   file1</span>
 <span class="c"># modified:   file2</span></code></pre></figure>
 
-<p>So, <code class="highlighter-rouge">file1</code> and <code class="highlighter-rouge">file2</code> have been changed, and added to the index. Let’s say we now make changes to <code class="highlighter-rouge">file1</code> and <code class="highlighter-rouge">file3</code>:</p>
+<p>So, <code class="language-plaintext highlighter-rouge">file1</code> and <code class="language-plaintext highlighter-rouge">file2</code> have been changed, and added to the index. Let’s say we now make changes to <code class="language-plaintext highlighter-rouge">file1</code> and <code class="language-plaintext highlighter-rouge">file3</code>:</p>
 
 <figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nb">echo</span> <span class="s2">"file1"</span> <span class="o">&gt;&gt;</span> file1
 <span class="nb">echo</span> <span class="s2">"file3"</span> <span class="o">&gt;</span> file3
@@ -476,9 +476,9 @@ git status
 <span class="c"># modified:   file1</span>
 <span class="c"># modified:   file3</span></code></pre></figure>
 
-<p><code class="highlighter-rouge">file1</code> and <code class="highlighter-rouge">file2</code>, with their initials changes, are in the index. New changes to <code class="highlighter-rouge">file1</code> are to be added, along with changes to <code class="highlighter-rouge">file3</code>.</p>
+<p><code class="language-plaintext highlighter-rouge">file1</code> and <code class="language-plaintext highlighter-rouge">file2</code>, with their initials changes, are in the index. New changes to <code class="language-plaintext highlighter-rouge">file1</code> are to be added, along with changes to <code class="language-plaintext highlighter-rouge">file3</code>.</p>
 
-<p>So with our contrived example all setup, we can actually come to the main material of the post. Suppose you want to add only files that have already been staged, but have new changes in the working directory now. Files like <code class="highlighter-rouge">file1</code>. Git has an handy shortcut for this, but you have to look beyond <code class="highlighter-rouge">git add</code>. All that is needed to “restage” files in git is the following command:</p>
+<p>So with our contrived example all setup, we can actually come to the main material of the post. Suppose you want to add only files that have already been staged, but have new changes in the working directory now. Files like <code class="language-plaintext highlighter-rouge">file1</code>. Git has an handy shortcut for this, but you have to look beyond <code class="language-plaintext highlighter-rouge">git add</code>. All that is needed to “restage” files in git is the following command:</p>
 
 <figure class="highlight"><pre><code class="language-bash" data-lang="bash">git update-index <span class="nt">--again</span>
 git status

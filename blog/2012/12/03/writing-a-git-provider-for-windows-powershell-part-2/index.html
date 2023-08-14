@@ -432,13 +432,13 @@ pre {
   <div class="post-content" itemprop="articleBody">
     <p>In <a href="http://stacktoheap.com/blog/2012/12/01/writing-a-git-provider-for-windows-powershell-part-1/">Part 1</a>, I described how to start writing a provider with the corresponding snap-in required to load the provider. In this post, I describe the more exciting part - writing the actual provider code.</p>
 
-<p>To recap, I am trying to write a git provider for Powershell that I can use to manage git repositories on my machine. The provider will create a <code class="highlighter-rouge">git:\</code> drive that will hold my tracked repositories. I can create new repositories or start following existing repositories. I can switch to one of the repositories being tracked. Categorize repositories. And many more ( read - I haven’t fully thought about it yet.)</p>
+<p>To recap, I am trying to write a git provider for Powershell that I can use to manage git repositories on my machine. The provider will create a <code class="language-plaintext highlighter-rouge">git:\</code> drive that will hold my tracked repositories. I can create new repositories or start following existing repositories. I can switch to one of the repositories being tracked. Categorize repositories. And many more ( read - I haven’t fully thought about it yet.)</p>
 
-<p>Let’s start by writing a <code class="highlighter-rouge">GitProvider</code>. A provider can derive from one of the abstract provider types based on what the provider is doing. As a bare minimum, a provider will extend from <code class="highlighter-rouge">DriveCmdletProvider</code>. Depending on what the provider does, a provider may extend from <code class="highlighter-rouge">ItemCmdletProvider</code> or <code class="highlighter-rouge">ContainerCmdletProvider</code> or <code class="highlighter-rouge">NavigationCmdletProvider</code> ( in order of least to most derived.)</p>
+<p>Let’s start by writing a <code class="language-plaintext highlighter-rouge">GitProvider</code>. A provider can derive from one of the abstract provider types based on what the provider is doing. As a bare minimum, a provider will extend from <code class="language-plaintext highlighter-rouge">DriveCmdletProvider</code>. Depending on what the provider does, a provider may extend from <code class="language-plaintext highlighter-rouge">ItemCmdletProvider</code> or <code class="language-plaintext highlighter-rouge">ContainerCmdletProvider</code> or <code class="language-plaintext highlighter-rouge">NavigationCmdletProvider</code> ( in order of least to most derived.)</p>
 
-<p>As I want the git provider to provide for containers ( categories ) and items ( the git repos themselves ), I am going to have my provider derive from <code class="highlighter-rouge">ContainerCmdletProvider</code>. The bare bones class will look like below:</p>
+<p>As I want the git provider to provide for containers ( categories ) and items ( the git repos themselves ), I am going to have my provider derive from <code class="language-plaintext highlighter-rouge">ContainerCmdletProvider</code>. The bare bones class will look like below:</p>
 
-<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="na">[CmdletProvider("Git", ProviderCapabilities.None)]</span>
+<figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="p">[</span><span class="nf">CmdletProvider</span><span class="p">(</span><span class="s">"Git"</span><span class="p">,</span> <span class="n">ProviderCapabilities</span><span class="p">.</span><span class="n">None</span><span class="p">)]</span>
 <span class="k">class</span> <span class="nc">GitProvider</span> <span class="p">:</span> <span class="n">ContainerCmdletProvider</span>
 <span class="p">{</span>
     <span class="k">protected</span> <span class="k">override</span> <span class="kt">bool</span> <span class="nf">IsValidPath</span><span class="p">(</span><span class="kt">string</span> <span class="n">path</span><span class="p">)</span>
@@ -447,9 +447,9 @@ pre {
     <span class="p">}</span>
 <span class="p">}</span></code></pre></figure>
 
-<p>The <code class="highlighter-rouge">CmdletProvider</code> attribute helps in loading the provider when the snap-in is added and specifies the name of the provider and its capabilities.</p>
+<p>The <code class="language-plaintext highlighter-rouge">CmdletProvider</code> attribute helps in loading the provider when the snap-in is added and specifies the name of the provider and its capabilities.</p>
 
-<p>Next, we override the <code class="highlighter-rouge">InitializeDefaultDrives</code> method to setup the default drives that are to be loaded when the provider is loaded.</p>
+<p>Next, we override the <code class="language-plaintext highlighter-rouge">InitializeDefaultDrives</code> method to setup the default drives that are to be loaded when the provider is loaded.</p>
 
 <figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">protected</span> <span class="k">override</span> <span class="n">Collection</span><span class="p">&lt;</span><span class="n">PSDriveInfo</span><span class="p">&gt;</span> <span class="nf">InitializeDefaultDrives</span><span class="p">()</span>
 <span class="p">{</span>
@@ -459,18 +459,18 @@ pre {
                <span class="p">};</span>
 <span class="p">}</span></code></pre></figure>
 
-<p>In this case, I setup a <code class="highlighter-rouge">git:</code> drive. <code class="highlighter-rouge">GitDriveInfo</code> is a simple wrapper over <code class="highlighter-rouge">PSDriveInfo</code> to hold state.</p>
+<p>In this case, I setup a <code class="language-plaintext highlighter-rouge">git:</code> drive. <code class="language-plaintext highlighter-rouge">GitDriveInfo</code> is a simple wrapper over <code class="language-plaintext highlighter-rouge">PSDriveInfo</code> to hold state.</p>
 
 <p><img src="https://stacktoheap.com/images/psdrives.png" alt="psdrives" /></p>
 
-<p>If you build and add the registered snap-in, you should be able to see the <code class="highlighter-rouge">git:</code> drive on doing <code class="highlighter-rouge">Get-PSDrive</code></p>
+<p>If you build and add the registered snap-in, you should be able to see the <code class="language-plaintext highlighter-rouge">git:</code> drive on doing <code class="language-plaintext highlighter-rouge">Get-PSDrive</code></p>
 
-<p>I plan to track the repositories in a <code class="highlighter-rouge">.gitdrive</code> file at <code class="highlighter-rouge">$HOME</code>. It will be a simple CSV file that holds the name of the project / repo and the filesystem path to it:</p>
+<p>I plan to track the repositories in a <code class="language-plaintext highlighter-rouge">.gitdrive</code> file at <code class="language-plaintext highlighter-rouge">$HOME</code>. It will be a simple CSV file that holds the name of the project / repo and the filesystem path to it:</p>
 
 <figure class="highlight"><pre><code class="language-bash" data-lang="bash">Name, Path
 pit,c:<span class="se">\p</span>roject<span class="se">\o</span>ss<span class="se">\p</span>it</code></pre></figure>
 
-<p>To do that, we need to create the base config file when the provider is loaded, if it doesn’t exist already. We can do that in the <code class="highlighter-rouge">Start</code> method like so:</p>
+<p>To do that, we need to create the base config file when the provider is loaded, if it doesn’t exist already. We can do that in the <code class="language-plaintext highlighter-rouge">Start</code> method like so:</p>
 
 <figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"> <span class="k">protected</span> <span class="k">override</span> <span class="n">ProviderInfo</span> <span class="nf">Start</span><span class="p">(</span><span class="n">ProviderInfo</span> <span class="n">providerInfo</span><span class="p">)</span>
 <span class="p">{</span>
@@ -478,18 +478,18 @@ pit,c:<span class="se">\p</span>roject<span class="se">\o</span>ss<span class="s
     <span class="k">return</span> <span class="n">ProviderInfo</span><span class="p">;</span>
 <span class="p">}</span></code></pre></figure>
 
-<p><code class="highlighter-rouge">gitConfigManager</code> just creates a base csv if it doesn’t already exists.</p>
+<p><code class="language-plaintext highlighter-rouge">gitConfigManager</code> just creates a base csv if it doesn’t already exists.</p>
 
-<p>We can’t switch into our <code class="highlighter-rouge">git:</code> drive just yet, as we haven’t provided much information about it. We now override the <code class="highlighter-rouge">ItemExists</code>method:</p>
+<p>We can’t switch into our <code class="language-plaintext highlighter-rouge">git:</code> drive just yet, as we haven’t provided much information about it. We now override the <code class="language-plaintext highlighter-rouge">ItemExists</code>method:</p>
 
 <figure class="highlight"><pre><code class="language-csharp" data-lang="csharp"><span class="k">protected</span> <span class="k">override</span> <span class="kt">bool</span> <span class="nf">ItemExists</span><span class="p">(</span><span class="kt">string</span> <span class="n">path</span><span class="p">)</span>
 <span class="p">{</span>
     <span class="k">return</span> <span class="kt">string</span><span class="p">.</span><span class="nf">IsNullOrEmpty</span><span class="p">(</span><span class="n">path</span><span class="p">);</span>
 <span class="p">}</span></code></pre></figure>
 
-<p>Currently, the logic is simple. If the path is null or empty, it is the root of the dirve, and we return true for it. As we proceed, we will see if the path is a valid tracked repo path in <code class="highlighter-rouge">ItemExists</code> as well.</p>
+<p>Currently, the logic is simple. If the path is null or empty, it is the root of the dirve, and we return true for it. As we proceed, we will see if the path is a valid tracked repo path in <code class="language-plaintext highlighter-rouge">ItemExists</code> as well.</p>
 
-<p>We will now be able to <code class="highlighter-rouge">cd git:\</code>. The provider has started taking shape!</p>
+<p>We will now be able to <code class="language-plaintext highlighter-rouge">cd git:\</code>. The provider has started taking shape!</p>
 
   </div>
 

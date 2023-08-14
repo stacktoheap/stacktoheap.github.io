@@ -445,9 +445,9 @@ pre {
 
 <p>#WebDriverIO setup</p>
 
-<p>Apart from the standard bootstrap steps outlined in the <a href="http://webdriver.io/guide.html">WebDriverIO docs</a>, I use the awesome <a href="https://github.com/lorenwest/node-config"><code class="highlighter-rouge">node-config</code></a> library for configuration. This helps in neatly configuring the differences between different environments - in this case, local development setup and docker based CI.</p>
+<p>Apart from the standard bootstrap steps outlined in the <a href="http://webdriver.io/guide.html">WebDriverIO docs</a>, I use the awesome <a href="https://github.com/lorenwest/node-config"><code class="language-plaintext highlighter-rouge">node-config</code></a> library for configuration. This helps in neatly configuring the differences between different environments - in this case, local development setup and docker based CI.</p>
 
-<p>The <code class="highlighter-rouge">test</code> folder has the following structure:</p>
+<p>The <code class="language-plaintext highlighter-rouge">test</code> folder has the following structure:</p>
 
 <figure class="highlight"><pre><code class="language-bash" data-lang="bash"><span class="nv">$ </span>tree ./test/
 ./test/
@@ -458,44 +458,44 @@ pre {
 │   └── home.js
 └── wdio.conf.js</code></pre></figure>
 
-<p>The config files have the default driver settings in <code class="highlighter-rouge">default.json</code>. These are used for running the tests in development. <code class="highlighter-rouge">docker.json</code>, similarly, has the settings needed for docker based functional tests (which run in CI, but can also be run in development, if needed.)</p>
+<p>The config files have the default driver settings in <code class="language-plaintext highlighter-rouge">default.json</code>. These are used for running the tests in development. <code class="language-plaintext highlighter-rouge">docker.json</code>, similarly, has the settings needed for docker based functional tests (which run in CI, but can also be run in development, if needed.)</p>
 
 <p>For local development, we use local chrome driver for the tests. Accordingly, the default.json looks something like the following:</p>
 
 <figure class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span><span class="w">
-  </span><span class="s2">"driver_host"</span><span class="p">:</span><span class="w"> </span><span class="s2">"127.0.0.1"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"driver_port"</span><span class="p">:</span><span class="w"> </span><span class="mi">9515</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"driver_path"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"local_chrome_driver"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"app_base_path"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:9090"</span><span class="w">
+  </span><span class="nl">"driver_host"</span><span class="p">:</span><span class="w"> </span><span class="s2">"127.0.0.1"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"driver_port"</span><span class="p">:</span><span class="w"> </span><span class="mi">9515</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"driver_path"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"local_chrome_driver"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"app_base_path"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://localhost:9090"</span><span class="w">
 </span><span class="p">}</span></code></pre></figure>
 
-<p>For docker based tests, we use standalone selenium, running in a docker container (details in the following section.) Accordingly, <code class="highlighter-rouge">docker.json</code> looks like the following:</p>
+<p>For docker based tests, we use standalone selenium, running in a docker container (details in the following section.) Accordingly, <code class="language-plaintext highlighter-rouge">docker.json</code> looks like the following:</p>
 
 <figure class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span><span class="w">
-  </span><span class="s2">"driver_host"</span><span class="p">:</span><span class="w"> </span><span class="s2">"chrome_standalone"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"driver_port"</span><span class="p">:</span><span class="w"> </span><span class="mi">4444</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"driver_path"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/wd/hub"</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"local_chrome_driver"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"app_base_path"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://app_built:9090"</span><span class="w">
+  </span><span class="nl">"driver_host"</span><span class="p">:</span><span class="w"> </span><span class="s2">"chrome_standalone"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"driver_port"</span><span class="p">:</span><span class="w"> </span><span class="mi">4444</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"driver_path"</span><span class="p">:</span><span class="w"> </span><span class="s2">"/wd/hub"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"local_chrome_driver"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"app_base_path"</span><span class="p">:</span><span class="w"> </span><span class="s2">"http://app_built:9090"</span><span class="w">
 </span><span class="p">}</span></code></pre></figure>
 
-<p>Note that <code class="highlighter-rouge">chrome_standalone</code> and <code class="highlighter-rouge">app_built</code> are hostnames populated by the link mechanisms of docker and docker-compose.</p>
+<p>Note that <code class="language-plaintext highlighter-rouge">chrome_standalone</code> and <code class="language-plaintext highlighter-rouge">app_built</code> are hostnames populated by the link mechanisms of docker and docker-compose.</p>
 
-<p>A simple npm script command is added in <code class="highlighter-rouge">package.json</code> for running the functional tests:</p>
+<p>A simple npm script command is added in <code class="language-plaintext highlighter-rouge">package.json</code> for running the functional tests:</p>
 
-<figure class="highlight"><pre><code class="language-json" data-lang="json"><span class="s2">"scripts"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+<figure class="highlight"><pre><code class="language-json" data-lang="json"><span class="nl">"scripts"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
   </span><span class="err">...</span><span class="w">
-  </span><span class="s2">"ft"</span><span class="p">:</span><span class="w"> </span><span class="s2">"NODE_CONFIG_DIR=./test/config wdio ./test/wdio.conf.js"</span><span class="w">
+  </span><span class="nl">"ft"</span><span class="p">:</span><span class="w"> </span><span class="s2">"NODE_CONFIG_DIR=./test/config wdio ./test/wdio.conf.js"</span><span class="w">
 </span><span class="p">}</span></code></pre></figure>
 
-<p>The above allows us to run the functional tests as <code class="highlighter-rouge">npm run ft</code>. Docker based functional tests can be run with <code class="highlighter-rouge">NODE_ENV=docker npm run ft</code>.</p>
+<p>The above allows us to run the functional tests as <code class="language-plaintext highlighter-rouge">npm run ft</code>. Docker based functional tests can be run with <code class="language-plaintext highlighter-rouge">NODE_ENV=docker npm run ft</code>.</p>
 
-<p>Note: The environment variable <code class="highlighter-rouge">NODE_CONFIG_DIR</code> is set to <code class="highlighter-rouge">./test/config</code> so that tests can have their own isolated configs, and not be interleaved with configs used by the application.</p>
+<p>Note: The environment variable <code class="language-plaintext highlighter-rouge">NODE_CONFIG_DIR</code> is set to <code class="language-plaintext highlighter-rouge">./test/config</code> so that tests can have their own isolated configs, and not be interleaved with configs used by the application.</p>
 
 <p>#Compose file</p>
 
-<p>The functional testing specific docker-compose file - called <code class="highlighter-rouge">docker-compose.fy.yml</code> has, in its simplest form, the following:</p>
+<p>The functional testing specific docker-compose file - called <code class="language-plaintext highlighter-rouge">docker-compose.fy.yml</code> has, in its simplest form, the following:</p>
 
 <figure class="highlight"><pre><code class="language-yaml" data-lang="yaml"><span class="na">app_built</span><span class="pi">:</span>
   <span class="na">image</span><span class="pi">:</span> <span class="s">registry/repository/app:${VERSION}</span>
@@ -532,10 +532,10 @@ pre {
     <p><em>app_built</em> - This docker-compose service represents the actual application to be tested. The container has been built and pushed to a private registry as part of a separate build process.</p>
   </li>
   <li>
-    <p><em>chrome_standalone</em> - This is the service that runs Selenium standalone along with Chrome. More details on the <code class="highlighter-rouge">selenium/standalone-chrome</code> can be obtained here - <a href="https://github.com/SeleniumHQ/docker-selenium">https://github.com/SeleniumHQ/docker-selenium</a>. For a more mature setup, this can be replaced with a multi-container Selenium hub, also detailed in the link above. This service links to <em>app_built</em> since it needs to access the app to run the tests.</p>
+    <p><em>chrome_standalone</em> - This is the service that runs Selenium standalone along with Chrome. More details on the <code class="language-plaintext highlighter-rouge">selenium/standalone-chrome</code> can be obtained here - <a href="https://github.com/SeleniumHQ/docker-selenium">https://github.com/SeleniumHQ/docker-selenium</a>. For a more mature setup, this can be replaced with a multi-container Selenium hub, also detailed in the link above. This service links to <em>app_built</em> since it needs to access the app to run the tests.</p>
   </li>
   <li>
-    <p><em>app_ft</em> - this is the service <em>from</em> which we run the functional tests. <code class="highlighter-rouge">Dockerfile.build</code> helps in creating a simple node.js based container that can run node.js script/commands. As described in the previous section, we also pass the <code class="highlighter-rouge">NODE_ENV</code> environment variable, set to <code class="highlighter-rouge">docker</code>. This makes the tests pick up the settings from <code class="highlighter-rouge">docker.json</code></p>
+    <p><em>app_ft</em> - this is the service <em>from</em> which we run the functional tests. <code class="language-plaintext highlighter-rouge">Dockerfile.build</code> helps in creating a simple node.js based container that can run node.js script/commands. As described in the previous section, we also pass the <code class="language-plaintext highlighter-rouge">NODE_ENV</code> environment variable, set to <code class="language-plaintext highlighter-rouge">docker</code>. This makes the tests pick up the settings from <code class="language-plaintext highlighter-rouge">docker.json</code></p>
   </li>
 </ul>
 

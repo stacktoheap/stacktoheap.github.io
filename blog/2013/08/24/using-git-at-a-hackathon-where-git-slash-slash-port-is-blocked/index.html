@@ -19,7 +19,7 @@
   <meta content="article" property="og:type">
 
 
-  <meta content="<p>Stuck in a network where the <code class="highlighter-rouge">git://</code> protocol is blocked ( port 9418)?</p>
+  <meta content="<p>Stuck in a network where the <code class="language-plaintext highlighter-rouge">git://</code> protocol is blocked ( port 9418)?</p>
 
 " property="og:description">
 
@@ -27,7 +27,7 @@
   <meta content="https://stacktoheap.com/blog/2013/08/24/using-git-at-a-hackathon-where-git-slash-slash-port-is-blocked/" property="og:url">
 
 
-  <meta content="2013-08-24T15:29:00+00:00" property="article:published_time">
+  <meta content="2013-08-24T15:29:00+01:00" property="article:published_time">
   <meta content="https://stacktoheap.com/about/" property="article:author">
 
 
@@ -426,21 +426,21 @@ pre {
 
   <header class="post-header">
     <h1 class="post-title" itemprop="name headline">Using git at a hackathon where git:// port is blocked</h1>
-    <p class="post-meta"><time datetime="2013-08-24T15:29:00+00:00" itemprop="datePublished">Aug 24, 2013</time></p>
+    <p class="post-meta"><time datetime="2013-08-24T15:29:00+01:00" itemprop="datePublished">Aug 24, 2013</time></p>
   </header>
 
   <div class="post-content" itemprop="articleBody">
-    <p>Stuck in a network where the <code class="highlighter-rouge">git://</code> protocol is blocked ( port 9418)?</p>
+    <p>Stuck in a network where the <code class="language-plaintext highlighter-rouge">git://</code> protocol is blocked ( port 9418)?</p>
 
-<p>I was. At a hackathon and having to do <code class="highlighter-rouge">bower install</code>, where a lot of packages were installed through “git://” from Github. Unfortunately, the port was blocked and the installation was not going through.</p>
+<p>I was. At a hackathon and having to do <code class="language-plaintext highlighter-rouge">bower install</code>, where a lot of packages were installed through “git://” from Github. Unfortunately, the port was blocked and the installation was not going through.</p>
 
-<p>One option under such scenarios is to ask git to use the <code class="highlighter-rouge">https://</code> protocol ( hopefully, that one is open ) instead of the <code class="highlighter-rouge">git://</code>.</p>
+<p>One option under such scenarios is to ask git to use the <code class="language-plaintext highlighter-rouge">https://</code> protocol ( hopefully, that one is open ) instead of the <code class="language-plaintext highlighter-rouge">git://</code>.</p>
 
 <p>It can be simply done as follow:</p>
 
 <figure class="highlight"><pre><code class="language-bash" data-lang="bash">git config <span class="nt">--global</span> url.<span class="s2">"https://"</span>.insteadOf <span class="s2">"git://"</span></code></pre></figure>
 
-<p>This is not just for changing the protocol, but for replacing the beginning part of ANY url with the one you specify. In our case, we are replacing urls beginning with <code class="highlighter-rouge">git://</code> to <code class="highlighter-rouge">https://</code>.</p>
+<p>This is not just for changing the protocol, but for replacing the beginning part of ANY url with the one you specify. In our case, we are replacing urls beginning with <code class="language-plaintext highlighter-rouge">git://</code> to <code class="language-plaintext highlighter-rouge">https://</code>.</p>
 
 <p>A simple solution, instead of having to get the port opened, etc. Just remember to unset this config once done.</p>
 
