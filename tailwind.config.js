@@ -10,6 +10,9 @@ module.exports = {
       './*.html',
     ],
     darkMode: 'media',
+    daisyui: {
+      themes: ["light", "dark"],
+    },
     theme: {
       container: {
         center: true,
@@ -43,6 +46,6 @@ module.exports = {
       },
     },
     plugins: [
-        require('@tailwindcss/typography')
+        require('@tailwindcss/typography'), require("daisyui")
     ]
   }
