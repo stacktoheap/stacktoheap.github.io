@@ -1,24 +1,17 @@
 ---
 layout: default
 ---
-<article class="post">
 
-  <header class="post-header">
-    <h1 class="post-title">Archive of posts from {{ page.date | date: "%Y" }}</h1>
-  </header>
+<div>
 
-  <div class="post-content">
-    <ul class="post-list">
-      {% for post in page.posts %}
-        <li>
-          <span class="post-meta">{{ post.date | date: "%b %-d, %Y" }}</span>
+  <h1 class="text-5xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
+    Archive of posts from {{ page.date | date: "%Y" }}
+  </h1>
 
-          <h2>
-            <a class="post-link" href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
-          </h2>
-        </li>
-      {% endfor %}
-    </ul>
-  </div>
+  <ul class="grid grid-cols-3 gap-4 mt-6">
+    {% for post in page.posts %}
+      {% include post_card.html post=post %}
+    {% endfor %}
+  </ul>
+</div>
 
-</article>
