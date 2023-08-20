@@ -3,7 +3,8 @@ layout: post
 title: "Using git at a hackathon where git:// port is blocked"
 date: 2013-08-24 15:29
 comments: true
-categories: [git, https, git protocol]
+categories: [git,https,git protocol]
+excerpt: "A quick guide to using git over https instead of git protocol when the latter is blocked."
 ---
 
 Stuck in a network where the `git://` protocol is blocked ( port 9418)?

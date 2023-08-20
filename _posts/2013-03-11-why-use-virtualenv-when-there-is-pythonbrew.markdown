@@ -4,6 +4,7 @@ title: "Why use virtualenv when there is pythonbrew?"
 date: 2013-03-11 23:30
 comments: true
 categories: [virtualenv, python, rvm, pythonbrew]
+excerpt: "A comparison of virtualenv vs pythonbrew for managing python environments"
 ---
 
 One of the first things that people coming from the Ruby / Rails world and entering the amazing world of Python / Django ( ahem ) want to know is what is the equivalent of `rvm`? Or to be more generic, how does one manage their "pythons" and the manage their "gemsets"

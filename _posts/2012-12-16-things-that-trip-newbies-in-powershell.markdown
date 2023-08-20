@@ -4,6 +4,7 @@ title: "Things that trip newbies in Powershell"
 date: 2012-12-16 22:44
 comments: true
 categories: [powershell]
+excerpt: "Some common things that trip up new Powershell users."
 ---
 
 Powershell is amazing. It really lives upto its name. But many a times, I have found new comers tripping on a few Powershell oddities. Here I higlight my favorite three.

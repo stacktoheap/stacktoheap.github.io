@@ -4,6 +4,7 @@ title: "Better code analysis with Resharper 7 contract annotations"
 date: 2012-12-02 17:57
 comments: true
 categories: [resharper, c#, visual studio, resharper 7, contract annotations]
+excerpt: "Resharper 7 introduces support for Code Contracts annotations in .NET code. This allows for more robust static analysis and validation of code contracts."
 ---
 
 With Resharper 7, JetBrains has built upon the existing annotations attributes like `CanBeNull` to introduce contract annotations in the form of `ContractAnnotationAttribute`

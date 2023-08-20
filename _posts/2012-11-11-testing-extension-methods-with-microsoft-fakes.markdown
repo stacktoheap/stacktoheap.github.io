@@ -4,6 +4,7 @@ title: "Testing extension methods with Microsoft Fakes"
 date: 2012-11-11 21:55
 comments: true
 categories: [unit testing, fakes, shims, nunit, moq]
+excerpt: "With right dosage of proper design, decoupling objects, dependency injection and simplicity, you can write testable code without requiring sophisticated tools."
 ---
 
 Testing static methods, or to be more specific, extensions methods is imposssible with the standard mocking frameworks like Moq ( which I prefer ) and RhinoMocks. There do exist more sophisticated frameworks like TypeMock and JustMock which can do the job for you. I have been pretty contended with the simplicity of Moq. Also, when you want to mock static methods or do some other magic, many a times, it means that there is something wrong with the design. With right dosage of proper design, decoupling objects, dependency injection and simplicity, you can write testable code without requiring sophisticated tools.

@@ -4,6 +4,7 @@ title: "Learning by answering questions"
 date: 2012-10-17 14:44
 comments: true
 categories: [stackoverflow, git, learnings]
+excerpt: "I have been learning a lot lately by answering questions on Stack Overflow. This post is about my journey of learning by answering questions."
 ---
 
 It started out as a fun past-time. It grew because I had better Googling skills. It ended up being the primary place I learn things from ( and also, remember forever things I tend to quickly forget. )

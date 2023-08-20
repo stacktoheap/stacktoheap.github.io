@@ -4,6 +4,7 @@ title: "Why I love Jetbrains TeamCity as a .NET developer"
 date: 2012-11-18 21:50
 comments: true
 categories: [teamcity, .net, ci, cd, nuget]
+excerpt: "TeamCity is great for any tech stack. It's .NET related features make it stand out in the .NEt world"
 ---
 
 TeamCity is a delightful CI server in its own right. The amazing [features](http://www.jetbrains.com/teamcity/features/index.html) make it a very good offering in the CI / CD space.

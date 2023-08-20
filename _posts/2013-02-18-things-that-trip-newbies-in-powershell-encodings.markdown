@@ -5,6 +5,7 @@ date: 2013-02-18 11:46
 comments: true
 categories: [powershell, out-file, encoding, utf-8, utf-16]
 published: true
+excerpt: "Powershell has some quirks around text encodings that often trip new users. This post covers the common gotchas."
 ---
 
 This is a follow up to the previous [post on things that trip newbies in Powershell](http://stacktoheap.com/blog/2012/12/16/things-that-trip-newbies-in-powershell/)

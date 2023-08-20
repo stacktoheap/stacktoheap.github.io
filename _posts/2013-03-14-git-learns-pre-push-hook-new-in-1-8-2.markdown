@@ -4,6 +4,7 @@ title: "git learns pre-push hook - new in 1.8.2"
 date: 2013-03-14 09:40
 comments: true
 categories: [git, 1.8.2, pre-push, hook]
+excerpt: "A new feature in Git 1.8.2 - pre-push hook to control what gets pushed out."
 ---
 
 The 1.8.2 version of Git is here and one of the most sought features in git finally reaches the fans - the `pre-push` hook.

@@ -4,6 +4,7 @@ title: "Things that trip newbies in Powershell - Pipeline Output"
 date: 2013-06-15 00:37
 comments: true
 categories: [powershell, gotchas, piepline, newbie]
+excerpt: "Some common things that trip new Powershell users when working with pipeline output"
 ---
 
 After the previous posts that pointed out the [gotchas with powershell](/blog/2013/02/18/things-that-trip-newbies-in-powershell-encodings/), now is the time to look at a more confusing aspect of Powershell. One that almost every newbie encounters, and gets immensely frustrated trying to figure out what's happening.

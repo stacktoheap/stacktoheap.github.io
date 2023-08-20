@@ -4,6 +4,7 @@ title: "git learns to ignore better - new in 1.8.2"
 date: 2013-03-14 10:53
 comments: true
 categories: [git, 1.8.2, gitignore, check-ignore]
+excerpt: "A new feature in Git 1.8.2 - better ignoring of files through .gitignore and git check-ignore."
 ---
 
 The new version of git - 1.8.2 is here and with it, git is better at ignoring things. The files and directories in your repository, that is.

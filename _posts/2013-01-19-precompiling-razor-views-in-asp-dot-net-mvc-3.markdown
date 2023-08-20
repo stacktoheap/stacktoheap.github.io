@@ -4,6 +4,7 @@ title: "Precompiling Razor views in ASP.NET MVC 3"
 date: 2013-01-19 22:38
 comments: true
 categories: [mvc, asp.net, mvc 3, .net, c#, razor]
+excerpt: "A quick guide to precompiling Razor views in ASP.NET MVC 3 for improved performance."
 ---
 
 Before I start talking about how to go about precompiling razor views in ASP.NET MVC 3, let's talk about the why.

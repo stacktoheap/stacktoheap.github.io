@@ -4,6 +4,7 @@ title: "Getting started with Ansbile for a Django project"
 date: 2013-10-20 00:44
 comments: true
 categories: [ansible, iaas, python, django, chef]
+excerpt: "This post walks through setting up a Django project with Ansible for provisioning and deployment."
 ---
 
 On a Django project, I have been using Chef for configuration management. I am totally happy with Chef. It gets the job done. The community cookbooks are great.

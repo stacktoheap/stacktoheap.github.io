@@ -4,6 +4,7 @@ title: "Using TypeConverters to get AppSettings in .NET"
 date: 2013-01-20 03:01
 comments: true
 categories: [c#, .net, AppSetting, TypeConverters]
+excerpt: "A quick way to get strongly typed AppSettings in .NET using TypeConverters."
 ---
 
 The most easiest way to get AppSettings in .NET is to use the `ConfigurationManager`. It goes like:

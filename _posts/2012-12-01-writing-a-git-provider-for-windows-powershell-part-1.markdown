@@ -4,6 +4,7 @@ title: "Writing a Git provider for Windows Powershell - Part 1"
 date: 2012-12-01 22:03
 comments: true
 categories: [git, powershell, provider, pit]
+excerpt: "In this first part, we will look at setting up the infrastructure required to write a PowerShell provider for Git - creating a snap-in, registering the provider etc."
 ---
 
 I have been wanting to write a Powershell provider that will help me manage git repositories on my machine. Kind of like what "Github for Windows" does, but for the console. For a start, I want a `git:\` drive which will list all the projects I am tracking in my machine and can quickly help me navigate to them and perform appropriate actions on them. I am still thinking about how else I can put this to use

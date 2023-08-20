@@ -4,6 +4,7 @@ title: "Things you may not know about git - autocorrect your commands"
 date: 2015-11-01 02:30
 comments: true
 categories: [ansible, iaas, python, django, chef]
+excerpt: "Did you know git has a built-in autocorrect feature to fix common typos in git commands?"
 ---
 
 Did you ever fat finger a git command? Did git actually ask you if you meant the command which you intended to type anyway? Were you mildly irritated that git didn't go ahead and executed the command it deduced? Something like the interaction below:

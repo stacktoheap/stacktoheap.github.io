@@ -4,6 +4,7 @@ title: "Writing a Git provider for Windows Powershell - Part 3"
 date: 2012-12-07 23:59
 comments: true
 categories: [git, powershell, provider, pit]
+excerpt: "In this final part, we look at implementing some basic Git commands like status, add, commit etc using the provider interface."
 ---
 
 In [Part 2](http://stacktoheap.com/blog/2012/12/03/writing-a-git-provider-for-windows-powershell-part-2/), we saw how to create the provider with a default drive at `git:\` and stopped after being able to `cd` into the drive. The provider doesn't really do much, but it is now time to change that.

@@ -4,6 +4,7 @@ title: "Remembering Aaron Swartz in his writings"
 date: 2013-01-13 02:11
 comments: true
 categories: [aaron swartz, thoughtworks]
+excerpt: "A selection of writings by Aaron Swartz that capture his brilliance and passion for open information and civic participation"
 ---
 
 Internet activist, ThoughtWorker and my colleague, Aaron Swartz, committed suicide today. A sad day for us all. I knew that every ThoughtWorker stood behind him and would have done anything to help him. And we will carry forward his flag, and try to make this world a better place to live, much like how he wanted it to be.

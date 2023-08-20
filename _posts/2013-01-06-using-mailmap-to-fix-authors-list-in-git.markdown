@@ -4,6 +4,7 @@ title: "Using mailmap to fix authors list in git"
 date: 2013-01-06 22:21
 comments: true
 categories: [git, mailmap, shortlog]
+exceprt: "How to fix incorrect author names showing up in git shortlog by using .mailmap file"
 ---
 
 I love doing `git shortlog -sne` to get number of commits by each author in a git repo ( don't aske me why!)

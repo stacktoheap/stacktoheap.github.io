@@ -4,6 +4,7 @@ title: "Contract testing a JSON service in .NET"
 date: 2012-10-31 20:57
 comments: true
 categories: [.net, contract tests, json]
+excerpt: "In this post I discuss how to write contract tests for a JSON service."
 ---
 
 Recently, we started using a JSON service in our MVC 3 website. The API was complicated and was prone to changes. We needed a way to ensure that our application would not be broken without anyone noticing when the API changes. It is pretty clear that we wanted Consumer Driven Contracts tests against the service to ensure that the contract ( which would be a subset of the API) that we expect as a consumer of the service is not broken.

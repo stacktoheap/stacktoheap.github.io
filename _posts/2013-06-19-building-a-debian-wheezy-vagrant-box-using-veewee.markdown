@@ -4,6 +4,7 @@ title: "Building a Debian Wheezy vagrant box using veewee"
 date: 2013-06-19 18:24
 comments: true
 categories: [debian, wheezy, vagrant, veewee, python]
+excerpt: "A step-by-step guide to build a Debian Wheezy vagrant box using veewee"
 ---
 
 For a Django website that I am working, which will be hosted on Debian 7.1, I needed a vagrant box that I can use during development. Unfortunately, such a box was not available at [vagrantbox.es](http://www.vagrantbox.es/) or elsewhere that I could trust, so I decided to build the box myself.
