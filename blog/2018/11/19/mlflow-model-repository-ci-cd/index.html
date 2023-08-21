@@ -22,14 +22,14 @@
   <meta content="We recently started using MLFlow as a model repository and integrated it with GoCD" property="og:description">
 
 
-  <meta content="http://localhost:4000/blog/2018/11/19/mlflow-model-repository-ci-cd/" property="og:url">
+  <meta content="https://stacktoheap.com/blog/2018/11/19/mlflow-model-repository-ci-cd/" property="og:url">
 
 
   <meta content="2018-11-19T10:45:00+00:00" property="article:published_time">
-  <meta content="http://localhost:4000/about/" property="article:author">
+  <meta content="https://stacktoheap.com/about/" property="article:author">
 
 
-  <meta content="http://localhost:4000/images/mlflow-vsm.png" property="og:image">
+  <meta content="https://stacktoheap.com/images/mlflow-vsm.png" property="og:image">
 
 
   
@@ -52,7 +52,7 @@
 <meta name="twitter:creator" value="@manojlds">
 <meta name="twitter:card" value="summary_large_image">
 
-<meta name="twitter:image" content="http://localhost:4000/images/mlflow-vsm.png">
+<meta name="twitter:image" content="https://stacktoheap.com/images/mlflow-vsm.png">
 
 
   <meta name="twitter:label1" value="Reading time">
@@ -65,8 +65,8 @@
   <link rel="stylesheet" href="/assets/css/main.css">
   <link rel="preload" href="/assets/css/syntax.css" as="style" onload="this.rel='stylesheet'">
   <noscript><link rel="stylesheet" href="/assets/css/syntax.css"></noscript>
-  <link rel="canonical" href="http://localhost:4000/blog/2018/11/19/mlflow-model-repository-ci-cd/">
-  <link rel="alternate" type="application/rss+xml" title="StackToHeap" href="http://localhost:4000/feed.xml">
+  <link rel="canonical" href="https://stacktoheap.com/blog/2018/11/19/mlflow-model-repository-ci-cd/">
+  <link rel="alternate" type="application/rss+xml" title="StackToHeap" href="https://stacktoheap.com/feed.xml">
   <link rel="manifest" href="/manifest.json">
   
   <script type="text/javascript">
@@ -322,7 +322,7 @@
 
 <p>MLFlow is a complete end-to-end machine learning lifecycle platform. The missing piece in our internal ML Platform has been the model repository and MLFlow fit in pretty well. For this purpose we utilize the MLFlow Tracking API and the UI to track our <code class="language-plaintext highlighter-rouge">experiments</code> and the different <code class="language-plaintext highlighter-rouge">runs</code> within them as we iterate on the models.</p>
 
-<p><img src="http://localhost:4000/images/mlflow-ui.png" alt="mlflow-ui" /></p>
+<p><img src="https://stacktoheap.com/images/mlflow-ui.png" alt="mlflow-ui" /></p>
 
 <h2 id="mlflow-integration-with-gocd">MLFlow integration with GoCD</h2>
 
@@ -330,7 +330,7 @@
 
 <p>At every stage, it is essential that it is possible to track back to the model version being used and even the training data and hyperparams used to build the said model. MLFLow makes it easy to track all the inputs and outputs of each and every model building process. GoCD, the open source CI/CD tool from ThoughtWorks makes it trivial to track artifacts as they flow through various CD pipelines. It was a no-brainer that we ended up integrating MLFlow as a package repository in GoCD so that a model deployed in production can be traced back to its corresponding run all the way back to MLFlow.</p>
 
-<p><img src="http://localhost:4000/images/mlflow-vsm.png" alt="mlflow-vsm" /></p>
+<p><img src="https://stacktoheap.com/images/mlflow-vsm.png" alt="mlflow-vsm" /></p>
 
 <p>A run within an experiment that is deemed to be production ready is tagged with a “promote” tag and any time a model is promoted, a new build is triggered on GoCD just like how a new commit to Git triggers a new build.</p>
 
@@ -349,8 +349,8 @@
 <div id="disqus_thread"></div>
 <script>
     var disqus_config = function () {
-      this.page.url = 'http://localhost:4000/blog/2018/11/19/mlflow-model-repository-ci-cd/';
-      this.page.identifier = 'http://localhost:4000/blog/2018/11/19/mlflow-model-repository-ci-cd/';
+      this.page.url = 'https://stacktoheap.com/blog/2018/11/19/mlflow-model-repository-ci-cd/';
+      this.page.identifier = 'https://stacktoheap.com/blog/2018/11/19/mlflow-model-repository-ci-cd/';
     };
     
     (function() {
