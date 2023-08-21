@@ -18,7 +18,9 @@ pre {
 
 @media (prefers-color-scheme: dark) {
     #disqus_thread {
-        color: #ECEBD9;
-        background: #444;
+        color: rgba(166, 173, 186);
+        background: rgb(29, 35, 42);
+        color-scheme: light;
     }
+
 }
