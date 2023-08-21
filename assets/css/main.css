@@ -5,8 +5,8 @@
 @tailwind components;
 @tailwind utilities;
 
-.container img {
-    @apply object-scale-down;
+pre {
+    overflow-x: auto;
 }
 
 #disqus_thread {

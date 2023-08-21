@@ -21,18 +21,9 @@ module.exports = {
         typography: {
           DEFAULT: {
             css: {
-              pre: {
-                padding: "0",
-                color: "#1F2933",
-                backgroundColor: "#F3F3F3"
-              },
-              code: {
-                padding: "0.2em 0.4em",
-                backgroundColor: "#F3F3F3",
-                color: "#DD1144",
-                fontWeight: "400",
-                "border-radius": "0.25rem"
-              },
+              pre: false,
+              code: false,
+              "pre code": false,
               "code::before": false,
               "code::after": false,
               "blockquote p:first-of-type::before": false,
