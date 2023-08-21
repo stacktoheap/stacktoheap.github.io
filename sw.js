@@ -1,4 +1,4 @@
-var CACHE_NAME = 'stacktoheap-cache-v1';
+var CACHE_NAME = 'stacktoheap-cache-v2';
 var urlsToCache = [
   '/',
   '/about/'
