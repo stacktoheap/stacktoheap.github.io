@@ -4,10 +4,10 @@
     <title>StackToHeap</title>
     <description>StackToHeap: No Overflow
 </description>
-    <link>http://localhost:4000/</link>
-    <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 21 Aug 2023 17:31:03 +0100</pubDate>
-    <lastBuildDate>Mon, 21 Aug 2023 17:31:03 +0100</lastBuildDate>
+    <link>https://stacktoheap.com/</link>
+    <atom:link href="https://stacktoheap.com/feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Mon, 21 Aug 2023 17:33:20 +0100</pubDate>
+    <lastBuildDate>Mon, 21 Aug 2023 17:33:20 +0100</lastBuildDate>
     <generator>Jekyll v3.9.3</generator>
     
       <item>
@@ -22,7 +22,7 @@
 
 &lt;p&gt;MLFlow is a complete end-to-end machine learning lifecycle platform. The missing piece in our internal ML Platform has been the model repository and MLFlow fit in pretty well. For this purpose we utilize the MLFlow Tracking API and the UI to track our &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;experiments&lt;/code&gt; and the different &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;runs&lt;/code&gt; within them as we iterate on the models.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://localhost:4000/images/mlflow-ui.png&quot; alt=&quot;mlflow-ui&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://stacktoheap.com/images/mlflow-ui.png&quot; alt=&quot;mlflow-ui&quot; /&gt;&lt;/p&gt;
 
 &lt;h2 id=&quot;mlflow-integration-with-gocd&quot;&gt;MLFlow integration with GoCD&lt;/h2&gt;
 
@@ -30,7 +30,7 @@
 
 &lt;p&gt;At every stage, it is essential that it is possible to track back to the model version being used and even the training data and hyperparams used to build the said model. MLFLow makes it easy to track all the inputs and outputs of each and every model building process. GoCD, the open source CI/CD tool from ThoughtWorks makes it trivial to track artifacts as they flow through various CD pipelines. It was a no-brainer that we ended up integrating MLFlow as a package repository in GoCD so that a model deployed in production can be traced back to its corresponding run all the way back to MLFlow.&lt;/p&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://localhost:4000/images/mlflow-vsm.png&quot; alt=&quot;mlflow-vsm&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;https://stacktoheap.com/images/mlflow-vsm.png&quot; alt=&quot;mlflow-vsm&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;A run within an experiment that is deemed to be production ready is tagged with a “promote” tag and any time a model is promoted, a new build is triggered on GoCD just like how a new commit to Git triggers a new build.&lt;/p&gt;
 
@@ -42,8 +42,8 @@
 
 </description>
         <pubDate>Mon, 19 Nov 2018 10:45:00 +0000</pubDate>
-        <link>http://localhost:4000/blog/2018/11/19/mlflow-model-repository-ci-cd/</link>
-        <guid isPermaLink="true">http://localhost:4000/blog/2018/11/19/mlflow-model-repository-ci-cd/</guid>
+        <link>https://stacktoheap.com/blog/2018/11/19/mlflow-model-repository-ci-cd/</link>
+        <guid isPermaLink="true">https://stacktoheap.com/blog/2018/11/19/mlflow-model-repository-ci-cd/</guid>
         
         <category>ml</category>
         
@@ -92,8 +92,8 @@ git worktree add &lt;span class=&quot;nt&quot;&gt;-b&lt;/span&gt; bugfix-1234 ..
 &lt;p&gt;As of this writing, there are no helpers to remove worktrees, so you can just &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;rm -rf ../bugfix &amp;amp;&amp;amp; git worktree prune&lt;/code&gt; when you are done with your new worktree. The &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;git worktree prune&lt;/code&gt; is optional, and will remove metadata around your worktree from the repository immediately. If not used, the normal git garbage collection process will eventually clean it up.&lt;/p&gt;
 </description>
         <pubDate>Tue, 19 Jan 2016 12:07:00 +0000</pubDate>
-        <link>http://localhost:4000/blog/2016/01/19/using-multiple-worktrees-with-git/</link>
-        <guid isPermaLink="true">http://localhost:4000/blog/2016/01/19/using-multiple-worktrees-with-git/</guid>
+        <link>https://stacktoheap.com/blog/2016/01/19/using-multiple-worktrees-with-git/</link>
+        <guid isPermaLink="true">https://stacktoheap.com/blog/2016/01/19/using-multiple-worktrees-with-git/</guid>
         
         <category>git</category>
         
@@ -213,8 +213,8 @@ git worktree add &lt;span class=&quot;nt&quot;&gt;-b&lt;/span&gt; bugfix-1234 ..
 &lt;p&gt;Happy testing!&lt;/p&gt;
 </description>
         <pubDate>Mon, 04 Jan 2016 23:48:00 +0000</pubDate>
-        <link>http://localhost:4000/blog/2016/01/04/running-webdriverio-tests-using-docker-compose/</link>
-        <guid isPermaLink="true">http://localhost:4000/blog/2016/01/04/running-webdriverio-tests-using-docker-compose/</guid>
+        <link>https://stacktoheap.com/blog/2016/01/04/running-webdriverio-tests-using-docker-compose/</link>
+        <guid isPermaLink="true">https://stacktoheap.com/blog/2016/01/04/running-webdriverio-tests-using-docker-compose/</guid>
         
         <category>docker</category>
         
@@ -285,8 +285,8 @@ kubectl rolling-update &lt;span class=&quot;nv&quot;&gt;$OLD_CONTROLLER&lt;/span
 &lt;p&gt;Now, your application is ready for proper rolling deploys.&lt;/p&gt;
 </description>
         <pubDate>Sun, 03 Jan 2016 18:48:00 +0000</pubDate>
-        <link>http://localhost:4000/blog/2016/01/03/basics-of-rolling-update-with-kubernetes/</link>
-        <guid isPermaLink="true">http://localhost:4000/blog/2016/01/03/basics-of-rolling-update-with-kubernetes/</guid>
+        <link>https://stacktoheap.com/blog/2016/01/03/basics-of-rolling-update-with-kubernetes/</link>
+        <guid isPermaLink="true">https://stacktoheap.com/blog/2016/01/03/basics-of-rolling-update-with-kubernetes/</guid>
         
         <category>docker</category>
         
@@ -377,8 +377,8 @@ git status
 
 </description>
         <pubDate>Sat, 02 Jan 2016 21:42:00 +0000</pubDate>
-        <link>http://localhost:4000/blog/2016/01/02/git-add-only-files-already-staged/</link>
-        <guid isPermaLink="true">http://localhost:4000/blog/2016/01/02/git-add-only-files-already-staged/</guid>
+        <link>https://stacktoheap.com/blog/2016/01/02/git-add-only-files-already-staged/</link>
+        <guid isPermaLink="true">https://stacktoheap.com/blog/2016/01/02/git-add-only-files-already-staged/</guid>
         
         <category>restage</category>
         
@@ -484,8 +484,8 @@ git status
 &lt;p&gt;Improvements: Obviously, we are running an insecure registry at the moment. That’s something on our TODO list of things to fix. Currently, our CoreOS nodes, local workstations and CI boxes have Docker service running with the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;--insecure-registry&lt;/code&gt; flag.&lt;/p&gt;
 </description>
         <pubDate>Fri, 01 Jan 2016 23:20:00 +0000</pubDate>
-        <link>http://localhost:4000/blog/2016/01/01/s3-backed-docker-registry-on-kubernetes/</link>
-        <guid isPermaLink="true">http://localhost:4000/blog/2016/01/01/s3-backed-docker-registry-on-kubernetes/</guid>
+        <link>https://stacktoheap.com/blog/2016/01/01/s3-backed-docker-registry-on-kubernetes/</link>
+        <guid isPermaLink="true">https://stacktoheap.com/blog/2016/01/01/s3-backed-docker-registry-on-kubernetes/</guid>
         
         <category>docker</category>
         
@@ -559,8 +559,8 @@ docker &lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;docker-machine config dev
 &lt;p&gt;This simple setup makes pulling in images much faster, and also saves bandwidth. Hope it is useful in your work environment too.&lt;/p&gt;
 </description>
         <pubDate>Sun, 22 Nov 2015 23:30:00 +0000</pubDate>
-        <link>http://localhost:4000/blog/2015/11/22/sharing-docker-images-without-registry/</link>
-        <guid isPermaLink="true">http://localhost:4000/blog/2015/11/22/sharing-docker-images-without-registry/</guid>
+        <link>https://stacktoheap.com/blog/2015/11/22/sharing-docker-images-without-registry/</link>
+        <guid isPermaLink="true">https://stacktoheap.com/blog/2015/11/22/sharing-docker-images-without-registry/</guid>
         
         <category>docker</category>
         
@@ -611,8 +611,8 @@ Continuing under the assumption that you meant &lt;span class=&quot;s1&quot;&gt;
 &lt;p&gt;Related: While the above is only for git, you might want to look at &lt;a href=&quot;https://github.com/nvbn/thefuck&quot;&gt;thefuck&lt;/a&gt; if you want similar autocorrect for any command you type. The appropriately named utility goes beyond just correcting typos, however. It can also do suggested commands (like &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;git push&lt;/code&gt; when no upstream is set.)&lt;/p&gt;
 </description>
         <pubDate>Sun, 01 Nov 2015 02:30:00 +0000</pubDate>
-        <link>http://localhost:4000/blog/2015/11/01/git-autocorrect-feature/</link>
-        <guid isPermaLink="true">http://localhost:4000/blog/2015/11/01/git-autocorrect-feature/</guid>
+        <link>https://stacktoheap.com/blog/2015/11/01/git-autocorrect-feature/</link>
+        <guid isPermaLink="true">https://stacktoheap.com/blog/2015/11/01/git-autocorrect-feature/</guid>
         
         
         <category>ansible</category>
@@ -732,8 +732,8 @@ pip freeze &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; requirements.tx
 &lt;p&gt;I have setup a repo on Github - &lt;a href=&quot;https://github.com/manojlds/django-ansible&quot;&gt;django-ansible&lt;/a&gt;.&lt;/p&gt;
 </description>
         <pubDate>Sun, 20 Oct 2013 00:44:00 +0100</pubDate>
-        <link>http://localhost:4000/blog/2013/10/20/getting-started-with-ansbile-for-a-django-project/</link>
-        <guid isPermaLink="true">http://localhost:4000/blog/2013/10/20/getting-started-with-ansbile-for-a-django-project/</guid>
+        <link>https://stacktoheap.com/blog/2013/10/20/getting-started-with-ansbile-for-a-django-project/</link>
+        <guid isPermaLink="true">https://stacktoheap.com/blog/2013/10/20/getting-started-with-ansbile-for-a-django-project/</guid>
         
         
         <category>ansible</category>
@@ -765,8 +765,8 @@ pip freeze &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; requirements.tx
 &lt;p&gt;A simple solution, instead of having to get the port opened, etc. Just remember to unset this config once done.&lt;/p&gt;
 </description>
         <pubDate>Sat, 24 Aug 2013 15:29:00 +0100</pubDate>
-        <link>http://localhost:4000/blog/2013/08/24/using-git-at-a-hackathon-where-git-slash-slash-port-is-blocked/</link>
-        <guid isPermaLink="true">http://localhost:4000/blog/2013/08/24/using-git-at-a-hackathon-where-git-slash-slash-port-is-blocked/</guid>
+        <link>https://stacktoheap.com/blog/2013/08/24/using-git-at-a-hackathon-where-git-slash-slash-port-is-blocked/</link>
+        <guid isPermaLink="true">https://stacktoheap.com/blog/2013/08/24/using-git-at-a-hackathon-where-git-slash-slash-port-is-blocked/</guid>
         
         
         <category>git</category>

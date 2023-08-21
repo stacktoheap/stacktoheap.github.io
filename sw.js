@@ -1,8 +1,6 @@
 var CACHE_NAME = 'stacktoheap-cache-v1';
 var urlsToCache = [
   '/',
-  '/assets/css/main.css',
-  '/assets/css/syntax.css',
   '/about/'
 ];
 
