@@ -121,6 +121,10 @@
 <lastmod>2018-11-19T10:45:00+00:00</lastmod>
 </url>
 <url>
+<loc>https://stacktoheap.com/blog/2024/09/06/thoughts-on-fasthtml/</loc>
+<lastmod>2024-09-06T12:45:00+01:00</lastmod>
+</url>
+<url>
 <loc>https://stacktoheap.com/about/</loc>
 </url>
 <url>
@@ -200,6 +204,15 @@
 </url>
 <url>
 <loc>https://stacktoheap.com/tags/machine-learning/</loc>
+</url>
+<url>
+<loc>https://stacktoheap.com/tags/fasthtml/</loc>
+</url>
+<url>
+<loc>https://stacktoheap.com/tags/svelte/</loc>
+</url>
+<url>
+<loc>https://stacktoheap.com/tags/htmx/</loc>
 </url>
 <url>
 <loc>https://stacktoheap.com/categories/stackoverflow/</loc>
@@ -400,6 +413,9 @@
 <loc>https://stacktoheap.com/categories/ml/</loc>
 </url>
 <url>
+<loc>https://stacktoheap.com/categories/frontend/</loc>
+</url>
+<url>
 <loc>https://stacktoheap.com/archives/2012/</loc>
 </url>
 <url>
@@ -413,5 +429,8 @@
 </url>
 <url>
 <loc>https://stacktoheap.com/archives/2018/</loc>
+</url>
+<url>
+<loc>https://stacktoheap.com/archives/2024/</loc>
 </url>
 </urlset>

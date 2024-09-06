@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Thoughts on FastHTML</title>
+  <meta name="description" content="Why I Moved from FastHTML to Svelte for Building a Complex Chat Application">
+  
+  <meta name="keywords" content="ml, fasthtml, svelte, htmx"/>
+  
+  <meta content="StackToHeap" property="og:site_name">
+
+  <meta content="Thoughts on FastHTML" property="og:title">
+
+
+  <meta content="article" property="og:type">
+
+
+  <meta content="Why I Moved from FastHTML to Svelte for Building a Complex Chat Application" property="og:description">
+
+
+  <meta content="https://stacktoheap.com/blog/2024/09/06/thoughts-on-fasthtml/" property="og:url">
+
+
+  <meta content="2024-09-06T12:45:00+01:00" property="article:published_time">
+  <meta content="https://stacktoheap.com/about/" property="article:author">
+
+
+  <meta content="https://stacktoheap.com/images/fasthtml.jpg" property="og:image">
+
+
+  
+  <meta content="ml" property="article:section">
+  
+
+
+  
+  <meta content="ml" property="article:tag">
+  
+  <meta content="fasthtml" property="article:tag">
+  
+  <meta content="svelte" property="article:tag">
+  
+  <meta content="htmx" property="article:tag">
+  
+
+
+  <meta name="twitter:site" value="@manojlds">
+<meta name="twitter:creator" value="@manojlds">
+<meta name="twitter:card" value="summary_large_image">
+
+<meta name="twitter:image" content="https://stacktoheap.com/images/fasthtml.jpg">
+
+
+  <meta name="twitter:label1" value="Reading time">
+  <meta name="twitter:data1" value="4 mins 🕑">
+
+
+  <meta name="theme-color" content="#641AE6">
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="preload" href="/assets/css/syntax.css" as="style" onload="this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="/assets/css/syntax.css"></noscript>
+  <link rel="canonical" href="https://stacktoheap.com/blog/2024/09/06/thoughts-on-fasthtml/">
+  <link rel="alternate" type="application/rss+xml" title="StackToHeap" href="https://stacktoheap.com/feed.xml">
+  <link rel="manifest" href="/manifest.json">
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-35693303-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+
+  <body class="font-sans m-0">
+
+    <div class="navbar bg-primary text-primary-content">
+  <div class="flex-1">
+    <a class="btn btn-ghost normal-case text-xl" href="/" >
+      StackToHeap
+    </a>
+  </div>
+  <div class="flex-none">
+    <ul class="menu menu-horizontal px-1">
+      
+        
+        <li><a href="/about/">About</a></li>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+      <li><a href="/feed.xml">RSS</a></li>
+    </ul>
+  </div>
+</div>
+
+    <div class="container mt-12 p-4">
+        <article class="prose lg:prose-xl lg:leading-normal" itemscope itemtype="http://schema.org/BlogPosting">
+  <h1 itemprop="name headline">Thoughts on FastHTML</h1>
+  <p class="post-meta"><time datetime="2024-09-06T12:45:00+01:00" itemprop="datePublished">Sep 6, 2024</time></p>
+  <div class="post-content" itemprop="articleBody">
+    <p>I’ve been working on building a chat application that required complex visualizations and interactions. Initially, I decided to try out FastHTML for this project.</p>
+
+<p>FastHTML, combined with htmx, seemed like a promising stack, especially with its modern approach to handling dynamic web content. However, after spending considerable time with it, I found myself at a crossroads.</p>
+
+<h2 id="the-struggles-with-fasthtml">The Struggles with FastHTML</h2>
+
+<p>FastHTML is great for certain types of projects, but as I started building my chat application, I started hitting roadblocks.</p>
+
+<p>The complexity of the visualizations and interactions I wanted to implement wasn’t meshing well with FastHTML’s current capabilities. I wanted to provide clean flow visualizations that are possible with ReactFlow/SvelteFlow, but are very diffcult to integrate and work with in FastHTML.</p>
+
+<p>Htmx is also a neat tool that has its use, but  learning it took sometime as well and doing things like out of band swaps and other things was getting tiring.</p>
+
+<p>FastHTML, when I was trying it out, also had a lot of bugs. Websocket examples were broken when I was starting and had to dig a lot into the code to undeerstand what was happening. Bugs are expected in a new product, but it was just preventing me from being immediately productive for a short project.</p>
+
+<p>I would definitely use FastHTML for simpler applications (landing pages, CRUD) with less user interactions and when not having to rely on complex libraries that exist in the React and related ecosystems.</p>
+
+<h2 id="the-downside-of-writing-views-in-python">The Downside of Writing Views in Python</h2>
+
+<p>Another factor that contributed to my decision was the way views are written in FastHTML—using Python. Initially, I found this approach intriguing; it’s not every day you get to write your front-end code in Python without any Javascript or Typescript. But as the project grew, it became tedious. The novelty wore off, and I realized that separating concerns with a JavaScript-based front-end made more sense for the complexity I was dealing with.</p>
+
+<h2 id="transitioning-to-svelte">Transitioning to Svelte</h2>
+
+<p>After wrestling with FastHTML for a while, I decided it was time to pivot. Svelte had been on my radar for quite some time, and the features provided by SvelteFlow (a framework visualizing flows with drag and drop nodes) were exactly what I needed for my project.</p>
+
+<p>Transitioning to Svelte (Svelte + SvelteKit + Skeleton to be precise) was surprisingly smooth, despite not having worked with it before. My prior experience with React and Vue certainly helped, but Svelte’s simplicity and intuitive API made the learning curve almost non-existent.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+<p>In the end, while FastHTML and htmx are powerful tools for certain projects, they weren’t the right fit for my chat application. Svelte, with its ease of use and the added capabilities of SvelteFlow, provided a much smoother development experience.</p>
+
+<p>The frontend ecosystem of today does get some deserved criticisms, but they do make building frontend systems joyous at times, especially with the likes of Svelte.</p>
+
+  </div>
+  
+    <div class="divider">Comments</div>
+    <section>
+      <div id="disqus_thread" aria-live="polite">
+<div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+      this.page.url = 'https://stacktoheap.com/blog/2024/09/06/thoughts-on-fasthtml/';
+      this.page.identifier = 'https://stacktoheap.com/blog/2024/09/06/thoughts-on-fasthtml/';
+    };
+    
+    (function() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://stacktoheap.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+    </section>
+  
+</article>
+
+    </div>
+
+    <footer class="footer footer-center p-10 bg-base-200 text-base-content rounded">
+  <div class="grid grid-flow-col gap-4">
+  </div> 
+  <div>
+    <div class="grid grid-flow-col gap-4">
+      <a href="https://github.com/manojlds"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="fill-current"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"></path></svg></a> 
+      <a href="https://github.com/manojlds"><svg width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="inline-block h-5 w-5 fill-current md:h-6 md:w-6"><path d="M256,32C132.3,32,32,134.9,32,261.7c0,101.5,64.2,187.5,153.2,217.9a17.56,17.56,0,0,0,3.8.4c8.3,0,11.5-6.1,11.5-11.4,0-5.5-.2-19.9-.3-39.1a102.4,102.4,0,0,1-22.6,2.7c-43.1,0-52.9-33.5-52.9-33.5-10.2-26.5-24.9-33.6-24.9-33.6-19.5-13.7-.1-14.1,1.4-14.1h.1c22.5,2,34.3,23.8,34.3,23.8,11.2,19.6,26.2,25.1,39.6,25.1a63,63,0,0,0,25.6-6c2-14.8,7.8-24.9,14.2-30.7-49.7-5.8-102-25.5-102-113.5,0-25.1,8.7-45.6,23-61.6-2.3-5.8-10-29.2,2.2-60.8a18.64,18.64,0,0,1,5-.5c8.1,0,26.4,3.1,56.6,24.1a208.21,208.21,0,0,1,112.2,0c30.2-21,48.5-24.1,56.6-24.1a18.64,18.64,0,0,1,5,.5c12.2,31.6,4.5,55,2.2,60.8,14.3,16.1,23,36.6,23,61.6,0,88.2-52.4,107.6-102.3,113.3,8,7.1,15.2,21.1,15.2,42.5,0,30.7-.3,55.5-.3,63,0,5.4,3.1,11.5,11.4,11.5a19.35,19.35,0,0,0,4-.4C415.9,449.2,480,363.1,480,261.7,480,134.9,379.7,32,256,32Z"></path></svg></a> 
+    </div>
+  </div> 
+  <div>
+    <p>Copyright © 2023 - StackToHeap</p>
+  </div>
+</footer>
+
+    <script type="text/javascript">
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('/sw.js').then(function(registration) {
+      console.log('ServiceWorker registration successful with scope: ', registration.scope);
+    }, function(err) {
+      console.log('ServiceWorker registration failed: ', err);
+    });
+  });
+}
+</script>
+
+  </body>
+
+</html>
