@@ -10,7 +10,6 @@ twitter_username: manojlds
 github_username:  manojlds
 
 markdown: kramdown
-exclude: [Gemfile, Gemfile.lock, deploy.sh, build.sh, vendor]
 
 disqus_short_name: stacktoheap
 disqus_show_comment_count: true
@@ -21,20 +20,16 @@ plugins:
   - jekyll-archives
   - jekyll-sitemap
   - jekyll-postcss
-  - jekyll-pdf
   - jekyll-assets
-
-defaults:
-- scope:
-    path: ""
-    type: "posts"
-  values:
-    pdf: true
 
 postcss:
   cache: false
 
 exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor
   - package.json
   - package-lock.json
   - postcss.config.js
