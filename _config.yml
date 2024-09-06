@@ -21,6 +21,15 @@ plugins:
   - jekyll-archives
   - jekyll-sitemap
   - jekyll-postcss
+  - jekyll-pdf
+  - jekyll-assets
+
+defaults:
+- scope:
+    path: ""
+    type: "posts"
+  values:
+    pdf: true
 
 postcss:
   cache: false
