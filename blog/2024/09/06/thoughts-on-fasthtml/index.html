@@ -322,7 +322,9 @@
   <h1 itemprop="name headline">Thoughts on FastHTML</h1>
   <p class="post-meta"><time datetime="2024-09-06T12:45:00+01:00" itemprop="datePublished">Sep 6, 2024</time></p>
   <div class="post-content" itemprop="articleBody">
-    <p>I’ve been working on building a chat application that required complex visualizations and interactions. Initially, I decided to try out FastHTML for this project.</p>
+    <p><img src="https://stacktoheap.com/images/fasthtml.jpg" width="686px" height="386px" /></p>
+
+<p>I’ve been working on building a chat application that required complex visualizations and interactions. Initially, I decided to try out FastHTML for this project.</p>
 
 <p>FastHTML, combined with htmx, seemed like a promising stack, especially with its modern approach to handling dynamic web content. However, after spending considerable time with it, I found myself at a crossroads.</p>
 
@@ -341,6 +343,37 @@
 <h2 id="the-downside-of-writing-views-in-python">The Downside of Writing Views in Python</h2>
 
 <p>Another factor that contributed to my decision was the way views are written in FastHTML—using Python. Initially, I found this approach intriguing; it’s not every day you get to write your front-end code in Python without any Javascript or Typescript. But as the project grew, it became tedious. The novelty wore off, and I realized that separating concerns with a JavaScript-based front-end made more sense for the complexity I was dealing with.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">Body</span><span class="p">(</span>
+        
+        <span class="n">Div</span><span class="p">(</span>
+            <span class="n">Div</span><span class="p">(</span>
+                <span class="n">H1</span><span class="p">(</span><span class="s">'Chat Bot'</span><span class="p">),</span>
+                <span class="n">Div</span><span class="p">(</span><span class="o">*</span><span class="p">[</span><span class="n">ChatMessage</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span> <span class="k">for</span> <span class="n">msg</span> <span class="ow">in</span> <span class="n">messages</span><span class="p">],</span> <span class="nb">id</span><span class="o">=</span><span class="s">"chatlist"</span><span class="p">,</span> <span class="n">cls</span><span class="o">=</span><span class="s">"chat-box h-[85vh] overflow-y-auto"</span><span class="p">),</span>
+                <span class="n">Form</span><span class="p">(</span><span class="n">Group</span><span class="p">(</span><span class="n">ChatInput</span><span class="p">(),</span> <span class="n">Button</span><span class="p">(</span><span class="s">"Send"</span><span class="p">,</span> <span class="n">cls</span><span class="o">=</span><span class="s">"btn btn-primary"</span><span class="p">)),</span>
+                    <span class="n">hx_post</span><span class="o">=</span><span class="s">"/"</span><span class="p">,</span> <span class="n">hx_target</span><span class="o">=</span><span class="s">"#chatlist"</span><span class="p">,</span> <span class="n">hx_swap</span><span class="o">=</span><span class="s">"beforeend"</span><span class="p">,</span>
+                    <span class="n">cls</span><span class="o">=</span><span class="s">""</span><span class="p">,</span>
+                <span class="p">),</span>
+                <span class="n">cls</span> <span class="o">=</span> <span class="s">"pt-4 pl-4"</span>
+            <span class="p">),</span>
+            
+            <span class="n">Div</span><span class="p">(</span>
+                <span class="n">Div</span><span class="p">(</span>
+                    <span class="n">A</span><span class="p">(</span><span class="s">"Agent DAG"</span><span class="p">,</span> <span class="n">role</span><span class="o">=</span><span class="s">"tab"</span><span class="p">,</span> <span class="n">cls</span><span class="o">=</span><span class="s">"tab tab-active"</span><span class="p">),</span>
+                    <span class="n">A</span><span class="p">(</span><span class="s">"Agent Conversaion"</span><span class="p">,</span> <span class="n">role</span><span class="o">=</span><span class="s">"tab"</span><span class="p">,</span> <span class="n">cls</span><span class="o">=</span><span class="s">"tab"</span><span class="p">),</span>
+                    <span class="n">A</span><span class="p">(</span><span class="s">"LLM Traces"</span><span class="p">,</span> <span class="n">role</span><span class="o">=</span><span class="s">"tab"</span><span class="p">,</span> <span class="n">cls</span><span class="o">=</span><span class="s">"tab"</span><span class="p">),</span>
+                    <span class="n">role</span><span class="o">=</span><span class="s">"tablist"</span><span class="p">,</span> <span class="n">cls</span><span class="o">=</span><span class="s">"tabs tabs-boxed"</span>
+                <span class="p">),</span>
+                <span class="n">Div</span><span class="p">(</span>
+                    <span class="n">Div</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="s">"agentdag"</span><span class="p">),</span>
+                    <span class="n">cls</span> <span class="o">=</span> <span class="s">"p-4"</span>
+                <span class="p">),</span>
+                <span class="n">cls</span> <span class="o">=</span> <span class="s">"p-4"</span><span class="p">),</span>
+            <span class="n">cls</span> <span class="o">=</span> <span class="s">"grid grid-cols-2 divide-x divide-primary"</span>
+        <span class="p">),</span>
+        <span class="n">cls</span> <span class="o">=</span> <span class="s">""</span>
+    <span class="p">)</span>
+</code></pre></div></div>
 
 <h2 id="transitioning-to-svelte">Transitioning to Svelte</h2>
 
