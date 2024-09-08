@@ -10,6 +10,7 @@ tags: [ml, fasthtml, svelte, htmx]
 image: "fasthtml.jpg"
 ---
 
+<img src="{{ site.url }}/images/fasthtml.jpg" width="686px" height="386px" />
 
 I've been working on building a chat application that required complex visualizations and interactions. Initially, I decided to try out FastHTML for this project.
 
@@ -30,6 +31,39 @@ I would definitely use FastHTML for simpler applications (landing pages, CRUD) w
 ## The Downside of Writing Views in Python
 
 Another factor that contributed to my decision was the way views are written in FastHTML—using Python. Initially, I found this approach intriguing; it’s not every day you get to write your front-end code in Python without any Javascript or Typescript. But as the project grew, it became tedious. The novelty wore off, and I realized that separating concerns with a JavaScript-based front-end made more sense for the complexity I was dealing with.
+
+```python
+Body(
+        
+        Div(
+            Div(
+                H1('Chat Bot'),
+                Div(*[ChatMessage(msg) for msg in messages], id="chatlist", cls="chat-box h-[85vh] overflow-y-auto"),
+                Form(Group(ChatInput(), Button("Send", cls="btn btn-primary")),
+                    hx_post="/", hx_target="#chatlist", hx_swap="beforeend",
+                    cls="",
+                ),
+                cls = "pt-4 pl-4"
+            ),
+            
+            Div(
+                Div(
+                    A("Agent DAG", role="tab", cls="tab tab-active"),
+                    A("Agent Conversaion", role="tab", cls="tab"),
+                    A("LLM Traces", role="tab", cls="tab"),
+                    role="tablist", cls="tabs tabs-boxed"
+                ),
+                Div(
+                    Div(id="agentdag"),
+                    cls = "p-4"
+                ),
+                cls = "p-4"),
+            cls = "grid grid-cols-2 divide-x divide-primary"
+        ),
+        cls = ""
+    )
+```
+
 
 ## Transitioning to Svelte
 
