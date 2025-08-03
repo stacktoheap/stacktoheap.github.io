@@ -9,6 +9,34 @@ pre {
     overflow-x: auto;
 }
 
+/* Tone down the heading sizes for better readability */
+.prose h1 {
+    @apply text-3xl lg:text-4xl;
+}
+
+.prose h2 {
+    @apply text-2xl lg:text-3xl;
+}
+
+.prose h3 {
+    @apply text-xl lg:text-2xl;
+}
+
+.prose h4 {
+    @apply text-lg lg:text-xl;
+}
+
+/* Fix post card title visibility */
+.card-title a {
+    @apply text-base-content no-underline;
+}
+
+.card-title a:hover {
+    @apply text-primary;
+}
+
+
+
 @media (prefers-color-scheme: light) {
     #disqus_thread {
         color: rgba(31, 41, 55, 0);

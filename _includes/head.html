@@ -19,5 +19,48 @@
   <link rel="canonical" href="{{ page.url | replace:'index.html','' | prepend: site.baseurl | prepend: site.url }}">
   <link rel="alternate" type="application/rss+xml" title="{{ site.title }}" href="{{ "/feed.xml" | prepend: site.baseurl | prepend: site.url }}">
   <link rel="manifest" href="/manifest.json">
+  
+  <!-- Theme switching script -->
+  <script>
+    // Check for saved theme preference or use system preference
+    function getTheme() {
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme) {
+        return savedTheme;
+      }
+      
+      // Use system preference if no saved theme
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    
+    const currentTheme = getTheme();
+    document.documentElement.setAttribute('data-theme', currentTheme);
+    
+    // Set the theme controller checkbox state
+    document.addEventListener('DOMContentLoaded', function() {
+      const themeController = document.querySelector('.theme-controller');
+      if (themeController) {
+        themeController.checked = currentTheme === 'dark';
+        
+        themeController.addEventListener('change', function() {
+          const newTheme = this.checked ? 'dark' : 'light';
+          document.documentElement.setAttribute('data-theme', newTheme);
+          localStorage.setItem('theme', newTheme);
+        });
+      }
+      
+      // Listen for system theme changes (when user hasn't manually set a preference)
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+        if (!localStorage.getItem('theme')) {
+          const systemTheme = e.matches ? 'dark' : 'light';
+          document.documentElement.setAttribute('data-theme', systemTheme);
+          if (themeController) {
+            themeController.checked = systemTheme === 'dark';
+          }
+        }
+      });
+    });
+  </script>
+  
   {% include google_analytics.html %}
 </head>
