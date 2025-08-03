@@ -6,9 +6,361 @@
 </description>
     <link>https://stacktoheap.com/</link>
     <atom:link href="https://stacktoheap.com/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 06 Sep 2024 18:37:47 +0100</pubDate>
-    <lastBuildDate>Fri, 06 Sep 2024 18:37:47 +0100</lastBuildDate>
+    <pubDate>Sun, 03 Aug 2025 13:21:56 +0100</pubDate>
+    <lastBuildDate>Sun, 03 Aug 2025 13:21:56 +0100</lastBuildDate>
     <generator>Jekyll v3.9.5</generator>
+    
+      <item>
+        <title>Having Fun with Claude Code Hooks - Make Your AI Coding Assistant Talk!</title>
+        <description>&lt;p&gt;Ever found yourself staring at your terminal, waiting for Claude Code to finish some complex task, wondering if it crashed or if it’s just thinking really hard? Yeah, me too. That’s when I discovered Claude Code hooks and decided to make my AI coding buddy a bit more… chatty.&lt;/p&gt;
+
+&lt;h1 id=&quot;what-are-these-hooks-anyway&quot;&gt;What Are These “Hooks” Anyway?&lt;/h1&gt;
+
+&lt;p&gt;Think of hooks as little event listeners that let you run custom scripts when specific things happen in Claude Code. It’s like having a butler who announces “Sir Claude has finished reading your files” or “Master Claude is about to write some code.”&lt;/p&gt;
+
+&lt;p&gt;The beauty is that you can make Claude Code integrate with whatever weird workflow you’ve cobbled together over the years. Want to post to Slack when Claude finishes? Sure. Want to play a sound effect when it starts writing code? Why not. Want it to literally talk to you? That’s exactly what I did.&lt;/p&gt;
+
+&lt;h1 id=&quot;my-setup-making-claude-code-speak&quot;&gt;My Setup: Making Claude Code Speak&lt;/h1&gt;
+
+&lt;p&gt;I’ve configured two simple hooks that give me audio feedback during my Claude sessions using Python’s &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;pyttsx3&lt;/code&gt; library. Now my computer tells me when Claude is doing stuff, even when I’m grabbing coffee or pretending to pay attention in meetings.&lt;/p&gt;
+
+&lt;h2 id=&quot;why-pyttsx3&quot;&gt;Why pyttsx3?&lt;/h2&gt;
+
+&lt;p&gt;For this basic setup, I chose &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;pyttsx3&lt;/code&gt; because it’s:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;Completely offline&lt;/strong&gt;: No API calls or internet dependency&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Cross-platform&lt;/strong&gt;: Works on macOS, Windows, and Linux&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Zero configuration&lt;/strong&gt;: Just install and go&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Fast&lt;/strong&gt;: Immediate response, no network latency&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The downside? The voice sounds… well, like a robot from 1995. But hey, it gets the job done!&lt;/p&gt;
+
+&lt;p&gt;Here’s what my &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;~/.claude/settings.json&lt;/code&gt; looks like:&lt;/p&gt;
+
+&lt;div class=&quot;language-json highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;$schema&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;https://json.schemastore.org/claude-code-settings.json&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;hooks&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;Notification&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+      &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;matcher&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;hooks&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+          &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;type&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;command&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;command&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;uv run ~/.claude/hooks/notification.py&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+          &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+      &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;Stop&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+      &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;matcher&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;hooks&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+          &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;type&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;command&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+            &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;command&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;uv run ~/.claude/hooks/stop.py&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+          &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+      &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;Simple, right? Two hooks: one for notifications and one for when Claude stops working.&lt;/p&gt;
+
+&lt;h2 id=&quot;the-notification-script---claudes-voice&quot;&gt;The Notification Script - Claude’s Voice&lt;/h2&gt;
+
+&lt;p&gt;Here’s the script that handles general notifications (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;~/.claude/hooks/notification.py&lt;/code&gt;):&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = &quot;&amp;gt;=3.11&quot;
+# dependencies = [
+#     &quot;pyttsx3&quot;,
+# ]
+# ///
+&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;sys&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;json&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;pyttsx3&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;typing&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Dict&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Any&lt;/span&gt;
+
+
+&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;None&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;s&quot;&gt;&quot;&quot;&quot;Main function to handle Claude hook notifications.&quot;&quot;&quot;&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;try&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;input_data&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sys&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;stdin&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;read&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;().&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;strip&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;ow&quot;&gt;not&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;input_data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;No data received from stdin&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;file&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sys&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;stderr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+            &lt;span class=&quot;n&quot;&gt;sys&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;exit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        
+        &lt;span class=&quot;n&quot;&gt;hook_data&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;json&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;loads&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;input_data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;handle_notification&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hook_data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;except&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;json&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;JSONDecodeError&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;sa&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Error parsing hook data: &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;file&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sys&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;stderr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;sys&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;exit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;except&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;Exception&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;sa&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Error handling notification: &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;e&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;file&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sys&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;stderr&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+        &lt;span class=&quot;n&quot;&gt;sys&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;exit&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+
+&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;handle_notification&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Dict&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;str&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Any&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;None&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;s&quot;&gt;&quot;&quot;&quot;Handle the notification with text-to-speech.&quot;&quot;&quot;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;message&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;get&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;message&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Claude Code notification&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    
+    &lt;span class=&quot;c1&quot;&gt;# Initialize TTS engine
+&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;engine&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pyttsx3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;init&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+    
+    &lt;span class=&quot;c1&quot;&gt;# Make it speak a bit slower so I can understand
+&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;rate&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;engine&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getProperty&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'rate'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;engine&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;setProperty&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'rate'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rate&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;50&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    
+    &lt;span class=&quot;c1&quot;&gt;# Actually speak the message
+&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;engine&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;say&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;message&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;engine&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;runAndWait&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+    
+    &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;sa&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Notification: &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;message&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+
+&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;__name__&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;__main__&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;the-stop-script---im-done&quot;&gt;The Stop Script - “I’m Done!”&lt;/h2&gt;
+
+&lt;p&gt;And here’s the completion announcement (&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;~/.claude/hooks/stop.py&lt;/code&gt;):&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = &quot;&amp;gt;=3.11&quot;
+# dependencies = [
+#     &quot;pyttsx3&quot;,
+# ]
+# ///
+&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;pyttsx3&lt;/span&gt;
+
+
+&lt;span class=&quot;k&quot;&gt;def&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt; &lt;span class=&quot;bp&quot;&gt;None&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;s&quot;&gt;&quot;&quot;&quot;Tell me when Claude is done working.&quot;&quot;&quot;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;engine&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pyttsx3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;init&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+    
+    &lt;span class=&quot;c1&quot;&gt;# Slow it down so it's not jarring
+&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;rate&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;engine&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;getProperty&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'rate'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;engine&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;setProperty&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'rate'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;rate&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;50&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    
+    &lt;span class=&quot;c1&quot;&gt;# The magic words
+&lt;/span&gt;    &lt;span class=&quot;n&quot;&gt;message&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Claude Code is done&quot;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;engine&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;say&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;message&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;engine&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;runAndWait&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+    
+    &lt;span class=&quot;k&quot;&gt;print&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;sa&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Stop event: &lt;/span&gt;&lt;span class=&quot;si&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;message&lt;/span&gt;&lt;span class=&quot;si&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+
+
+&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;__name__&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;__main__&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h1 id=&quot;why-this-actually-rocks&quot;&gt;Why This Actually Rocks&lt;/h1&gt;
+
+&lt;h2 id=&quot;uv-makes-everything-easy&quot;&gt;UV Makes Everything Easy&lt;/h2&gt;
+
+&lt;p&gt;Notice I’m using UV’s inline script feature? That &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;#!/usr/bin/env -S uv run --script&lt;/code&gt; shebang with the dependency block is pure magic. No virtual environments to manage, no requirements.txt files to forget about. UV just handles it all.&lt;/p&gt;
+
+&lt;h2 id=&quot;multitasking-like-a-pro&quot;&gt;Multitasking Like a Pro&lt;/h2&gt;
+
+&lt;p&gt;Now I can ask Claude to refactor my entire codebase and go make a sandwich. When I hear “Claude Code is done,” I know it’s time to come back and see what chaos… I mean, beautiful code it created.&lt;/p&gt;
+
+&lt;h2 id=&quot;the-unexpected-benefits&quot;&gt;The Unexpected Benefits&lt;/h2&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;No more zombie terminals&lt;/strong&gt;: I know immediately if Claude is stuck or actually working&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Context switching&lt;/strong&gt;: Perfect for when you’re juggling multiple tasks&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Meeting survival&lt;/strong&gt;: Claude can work while you’re in “that meeting that could have been an email”&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Coffee break optimization&lt;/strong&gt;: Time your caffeine runs perfectly&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&quot;other-fun-ideas-for-hooks&quot;&gt;Other Fun Ideas for Hooks&lt;/h1&gt;
+
+&lt;p&gt;Once you get the basic audio working, the possibilities are endless:&lt;/p&gt;
+
+&lt;h2 id=&quot;git-paranoia-mode&quot;&gt;Git Paranoia Mode&lt;/h2&gt;
+&lt;p&gt;Auto-commit before any major file changes:&lt;/p&gt;
+
+&lt;div class=&quot;language-json highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;PreToolUse&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+      &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;matcher&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;Write|Edit|MultiEdit&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+      &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;hooks&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+          &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;type&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;command&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; 
+          &lt;/span&gt;&lt;span class=&quot;nl&quot;&gt;&quot;command&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;git add -A &amp;amp;&amp;amp; git commit -m 'Pre-Claude backup'&quot;&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+        &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+      &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+    &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+  &lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;slack-integration&quot;&gt;Slack Integration&lt;/h2&gt;
+&lt;p&gt;Tell your team when you’re being productive:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#!/bin/bash&lt;/span&gt;
+curl &lt;span class=&quot;nt&quot;&gt;-X&lt;/span&gt; POST &lt;span class=&quot;nt&quot;&gt;-H&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'Content-type: application/json'&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+  &lt;span class=&quot;nt&quot;&gt;--data&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'{&quot;text&quot;:&quot;Claude just finished helping me code 🤖&quot;}'&lt;/span&gt; &lt;span class=&quot;se&quot;&gt;\&lt;/span&gt;
+  YOUR_SLACK_WEBHOOK_URL
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;usage-analytics&quot;&gt;Usage Analytics&lt;/h2&gt;
+&lt;p&gt;Track how much you’re using Claude:&lt;/p&gt;
+
+&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;# Log to a CSV file
+&lt;/span&gt;&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;csv&lt;/span&gt;
+&lt;span class=&quot;kn&quot;&gt;from&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;datetime&lt;/span&gt; &lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;datetime&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;with&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;open&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'claude_usage.csv'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;'a'&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;writer&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;csv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;writer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;f&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;writer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;writerow&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;datetime&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;now&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;tool_name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;completed&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h1 id=&quot;hook-events-you-can-play-with&quot;&gt;Hook Events You Can Play With&lt;/h1&gt;
+
+&lt;p&gt;Claude Code gives you these events to hook into:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;PreToolUse&lt;/code&gt;&lt;/strong&gt;: Before Claude uses any tool (great for validation)&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;PostToolUse&lt;/code&gt;&lt;/strong&gt;: After a tool completes successfully&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;UserPromptSubmit&lt;/code&gt;&lt;/strong&gt;: When you hit enter on a prompt&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Notification&lt;/code&gt;&lt;/strong&gt;: System notifications (what I’m using)&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Stop&lt;/code&gt;&lt;/strong&gt;: When Claude finishes responding (my completion hook)&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SessionStart&lt;/code&gt;&lt;/strong&gt;: When you start a new Claude session&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&quot;level-up-better-voice-options&quot;&gt;Level Up: Better Voice Options&lt;/h1&gt;
+
+&lt;p&gt;While &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;pyttsx3&lt;/code&gt; is perfect for getting started, you might eventually want something that sounds less like a 1990s computer. Once you’re hooked on audio notifications (pun intended), consider upgrading to:&lt;/p&gt;
+
+&lt;h2 id=&quot;elevenlabs-tts&quot;&gt;ElevenLabs TTS&lt;/h2&gt;
+&lt;p&gt;The Rolls Royce of text-to-speech. Want Claude’s notifications to sound like Morgan Freeman? ElevenLabs can make that happen. The voice quality is absolutely stunning, but it’ll cost you per character.&lt;/p&gt;
+
+&lt;h2 id=&quot;openai-tts&quot;&gt;OpenAI TTS&lt;/h2&gt;
+&lt;p&gt;The sweet spot between quality and cost. OpenAI’s voices sound natural and human-like without breaking the bank. Six different voices to choose from, and way more affordable than ElevenLabs for regular use.&lt;/p&gt;
+
+&lt;p&gt;Both options require API keys and internet connectivity, unlike our trusty &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;pyttsx3&lt;/code&gt; setup. But the voice quality upgrade is genuinely impressive - it’s like going from dial-up to fiber internet for your ears.&lt;/p&gt;
+
+&lt;h1 id=&quot;getting-started&quot;&gt;Getting Started&lt;/h1&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Create the hooks directory: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;mkdir -p ~/.claude/hooks&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;Copy my scripts or write your own&lt;/li&gt;
+  &lt;li&gt;Update your &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;~/.claude/settings.json&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;Make your scripts executable: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;chmod +x ~/.claude/hooks/*.py&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;Test it out, then maybe upgrade to fancy voices later!&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h1 id=&quot;a-word-of-caution&quot;&gt;A Word of Caution&lt;/h1&gt;
+
+&lt;p&gt;Hooks run shell commands, so don’t go copy-pasting random scripts from the internet (except mine, obviously 😉). Always review what you’re running, especially if it has network access or file system permissions.&lt;/p&gt;
+
+&lt;h1 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h1&gt;
+
+&lt;p&gt;Claude Code hooks turned my AI coding sessions from silent, mysterious processes into interactive, fun experiences. Now my computer talks to me, I never miss when Claude finishes a task, and I feel like I’m living in the future.&lt;/p&gt;
+
+&lt;p&gt;The best part? This is just scratching the surface. You could integrate with Discord, trigger CI/CD pipelines, update project management tools, or even make your smart lights change color when Claude is working.&lt;/p&gt;
+
+&lt;p&gt;So go ahead, make your Claude Code setup more fun. Your productivity will thank you, and you’ll finally have a good reason to explain to your coworkers why your computer is talking to you.&lt;/p&gt;
+
+&lt;p&gt;Now if you’ll excuse me, I need to go ask Claude to refactor something so I can hear my computer tell me it’s done. It never gets old.&lt;/p&gt;
+</description>
+        <pubDate>Sun, 03 Aug 2025 12:00:00 +0100</pubDate>
+        <link>https://stacktoheap.com/blog/2025/08/03/having-fun-with-claude-code-hooks/</link>
+        <guid isPermaLink="true">https://stacktoheap.com/blog/2025/08/03/having-fun-with-claude-code-hooks/</guid>
+        
+        <category>claude-code</category>
+        
+        <category>hooks</category>
+        
+        <category>automation</category>
+        
+        <category>productivity</category>
+        
+        <category>ai-tools</category>
+        
+        <category>fun</category>
+        
+        
+        <category>ai</category>
+        
+        <category>claude</category>
+        
+        <category>productivity</category>
+        
+        <category>automation</category>
+        
+      </item>
+    
+      <item>
+        <title>Agents vs LLM Calls vs LLM Workflows</title>
+        <description>&lt;p&gt;The rise of agents and agentic systems – AI systems that can operate with a degree of autonomy – represents a shift in how we leverage large language models (LLMs). Traditional LLM usage often consists of stateless API calls: a user provides a prompt, the LLM produces a response, and the interaction ends. In contrast, an agentic system wraps an LLM in a loop of reasoning, memory, and action, enabling it to pursue goals with minimal human intervention. Such agents can reason, plan, use tools, and maintain state, going beyond a one-off LLM query.&lt;/p&gt;
+
+&lt;p&gt;Also, Agentic systems are different from workflows that make use of one or more LLM calls. Understanding the differences between simple LLM calls vs workflows that involve LLMs vs Agentic systems is key to ensure that we use the appropriate solution for the problem without having to look at every nail with an Agentic hammer.&lt;/p&gt;
+
+&lt;h1 id=&quot;agentic-systems-vs-simple-llm-calls-key-differences&quot;&gt;Agentic Systems vs. Simple LLM Calls: Key Differences&lt;/h1&gt;
+
+&lt;h2 id=&quot;autonomy-and-goal-driven-behavior&quot;&gt;Autonomy and Goal-Driven Behavior&lt;/h2&gt;
+
+&lt;p&gt;A fundamental difference is the level of autonomy. A simple LLM call is reactive – it generates an output only when prompted, and it stops there. The LLM itself has no persistent goals or initiative. An agentic system, on the other hand, is goal-oriented and can operate independently towards an objective​.&lt;/p&gt;
+
+&lt;p&gt;Agents can set sub-goals, decide on actions, and continue working without step-by-step human instructions. In practical terms, a basic LLM (like a stateless chatbot) answers the question asked and waits for the next prompt, whereas an autonomous agent can be tasked with “achieve X” and then break down the task and act until X is achieved (or deemed unachievable)​. This means agents are better suited for complex, long-running tasks or open-ended objectives, whereas simple LLM calls handle one query at a time.&lt;/p&gt;
+
+&lt;h2 id=&quot;decision-making-and-planning&quot;&gt;Decision-Making and Planning&lt;/h2&gt;
+
+&lt;p&gt;In a simple LLM call, any semblance of planning or reasoning is confined to what the model can do in one prompt-response cycle – essentially predicting the next tokens. There is no external decision loop. Agentic systems introduce an explicit decision-making loop: the LLM’s outputs (often in the form of “thoughts” or an action plan) are read by the system itself to decide what to do next. The agent “thinks out loud” and determines a sequence of steps rather than just producing a single answer​.&lt;/p&gt;
+
+&lt;p&gt;Advanced prompting techniques like ReAct, Chain-of-Thought, or Planner-Executor patterns are used so the agent can reason about a problem, choose an action (e.g. call a tool or search the web), then reconsider and continue the cycle​. This planning ability allows agents to handle multi-step problems that a single LLM call cannot. In short, an agent dynamically controls the flow of the application with the LLM as the brain, whereas a simple LLM call follows a fixed prompt → completion sequence​.&lt;/p&gt;
+
+&lt;h2 id=&quot;memory-and-state-persistence&quot;&gt;Memory and State Persistence&lt;/h2&gt;
+
+&lt;p&gt;LLM APIs are fundamentally stateless – each interaction starts anew with no memory of previous calls beyond what you explicitly include in the prompt​. This means a simple LLM call cannot learn from past queries or retain information (except within a conversation if the developer manually threads context). Agentic systems incorporate memory to become stateful. They retain a history of actions, observations, or conversations and feed relevant parts back into the LLM on subsequent steps​.&lt;/p&gt;
+
+&lt;p&gt;By storing and retrieving context, agents maintain continuity over time, enabling more coherent long-horizon behavior. For example, an agent can remember intermediate results or user preferences from earlier steps and use them later – something a stateless LLM won’t do unless that history is carried in the prompt​. Memory can be short-term (ephemeral context for the current task) and long-term (persistent knowledge store). This state persistence is a critical differentiator between a truly agentic system and a mere LLM wrapper​.&lt;/p&gt;
+
+&lt;h2 id=&quot;adaptability-and-learning&quot;&gt;Adaptability and Learning&lt;/h2&gt;
+
+&lt;p&gt;Because agentic systems can incorporate feedback and have a decision loop, they tend to be more adaptive. A simple LLM call’s behavior is entirely determined by its prompt and training. It cannot change its approach based on outcome except via another prompt from a user. An autonomous agent, however, can reflect on the success or failure of an action and adjust its strategy in the next iteration (e.g. if a web search didn’t find useful info, the agent can try a different query or switch tools). In essence, agents “learn from experience” during deployment by updating their state or plan, whereas basic LLM calls have no concept of experience​.&lt;/p&gt;
+
+&lt;p&gt;This adaptability also means agents can handle unexpected situations more robustly: if new information comes in, an agent can incorporate it into future decisions. Additionally, some stateful agents even improve over multiple sessions, performing a rudimentary form of online learning by accumulating knowledge in their memory. None of this is possible with stateless LLM calls that forget everything once a response is delivered.&lt;/p&gt;
+
+&lt;h2 id=&quot;environmental-interaction-and-tool-use&quot;&gt;Environmental Interaction and Tool Use&lt;/h2&gt;
+
+&lt;p&gt;Perhaps the most visible difference is how each interacts with external systems. A plain LLM API call usually just produces text. It can’t execute actions in the world on its own beyond returning a response. Agentic systems are typically equipped with the ability to use tools or APIs – e.g. call a calculator, query a database, run code, or control a web browser​. The agent perceives its environment (which could be a virtual environment, the internet, files, etc.), and takes actions that change the environment or retrieve new information, then continues the cycle. This is critical for tasks that require more than just language generation. For example, an agent in a customer support scenario might not only draft a response, but also check the user’s account via an API and then formulate the answer. Standard LLM calls cannot do that unless a developer manually orchestrates those API calls around the LLM. In summary, an agent can act (read/write files, fetch URLs, call services) while an ordinary LLM call only speaks. This ability to affect and query the outside world makes agentic systems far more powerful for real-world applications​.&lt;/p&gt;
+
+&lt;h1 id=&quot;agentic-systems-vs-workflows-that-use-llms&quot;&gt;Agentic Systems vs Workflows that use LLMs&lt;/h1&gt;
+
+</description>
+        <pubDate>Sun, 09 Mar 2025 11:28:00 +0000</pubDate>
+        <link>https://stacktoheap.com/blog/2025/03/09/agentic-systems/</link>
+        <guid isPermaLink="true">https://stacktoheap.com/blog/2025/03/09/agentic-systems/</guid>
+        
+        <category>ml</category>
+        
+        <category>llms</category>
+        
+        <category>agents</category>
+        
+        <category>ai</category>
+        
+        
+        <category>ml</category>
+        
+        <category>llms</category>
+        
+        <category>agents</category>
+        
+        <category>ai</category>
+        
+      </item>
     
       <item>
         <title>Thoughts on FastHTML</title>
@@ -661,175 +1013,6 @@ docker &lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;docker-machine config dev
         
         
         <category>docker</category>
-        
-      </item>
-    
-      <item>
-        <title>Things you may not know about git - autocorrect your commands</title>
-        <description>&lt;p&gt;Did you ever fat finger a git command? Did git actually ask you if you meant the command which you intended to type anyway? Were you mildly irritated that git didn’t go ahead and executed the command it deduced? Something like the interaction below:&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;git psuh
-git: &lt;span class=&quot;s1&quot;&gt;'psuh'&lt;/span&gt; is not a git command. See &lt;span class=&quot;s1&quot;&gt;'git --help'&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt;
-
-Did you mean this?
-  push&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;Well, you can turn your irritation into admiration for git. git has a autocorrect feature that you can enable if needed.&lt;/p&gt;
-
-&lt;p&gt;The feature can be enabled by setting the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;help.autocorrect&lt;/code&gt; config appropriately. Here’s what the man pages have to say about the setting:&lt;/p&gt;
-
-&lt;blockquote&gt;&lt;p&gt;Automatically correct and execute mistyped commands after waiting for the given number of deciseconds (0.1 sec). If more than one command can be deduced from the entered text, nothing will be executed. If the value of this option is negative, the corrected command will be executed immediately. If the value is 0 - the command will be just shown but not executed. This is the default.&lt;/p&gt;&lt;/blockquote&gt;
-
-&lt;p&gt;By default, the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;help.autocorrect&lt;/code&gt; value is 0, which means that you get the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Did you mean this?&lt;/code&gt; question, but no correction happens. Setting it to a positive value will make git correct to deduced command after that much time (in deciseconds - so setting a value of 10 will make git autocorrect in a second.) Setting a negative value will make git autocorrect immediately, and this is probably something you don’t want.&lt;/p&gt;
-
-&lt;p&gt;So go ahead and set &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;help.autocorrect&lt;/code&gt; to a sane value, and stop worrying about your typos:&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;git config &lt;span class=&quot;nt&quot;&gt;--global&lt;/span&gt; help.autocorrect 10&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;Now, you interaction with git can be irritation-free:&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;git psuh
-WARNING: You called a Git &lt;span class=&quot;nb&quot;&gt;command &lt;/span&gt;named &lt;span class=&quot;s1&quot;&gt;'psuh'&lt;/span&gt;, which does not exist.
-Continuing under the assumption that you meant &lt;span class=&quot;s1&quot;&gt;'push'&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;in &lt;/span&gt;1.0 seconds automatically...&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;Related: While the above is only for git, you might want to look at &lt;a href=&quot;https://github.com/nvbn/thefuck&quot;&gt;thefuck&lt;/a&gt; if you want similar autocorrect for any command you type. The appropriately named utility goes beyond just correcting typos, however. It can also do suggested commands (like &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;git push&lt;/code&gt; when no upstream is set.)&lt;/p&gt;
-</description>
-        <pubDate>Sun, 01 Nov 2015 02:30:00 +0000</pubDate>
-        <link>https://stacktoheap.com/blog/2015/11/01/git-autocorrect-feature/</link>
-        <guid isPermaLink="true">https://stacktoheap.com/blog/2015/11/01/git-autocorrect-feature/</guid>
-        
-        
-        <category>ansible</category>
-        
-        <category>iaas</category>
-        
-        <category>python</category>
-        
-        <category>django</category>
-        
-        <category>chef</category>
-        
-      </item>
-    
-      <item>
-        <title>Getting started with Ansbile for a Django project</title>
-        <description>&lt;p&gt;On a Django project, I have been using Chef for configuration management. I am totally happy with Chef. It gets the job done. The community cookbooks are great.&lt;/p&gt;
-
-&lt;p&gt;But there’s a new (relatively) kid in the block, by the name of Ansible, and I wanted to try it out for three main reasons:&lt;/p&gt;
-
-&lt;p&gt;1) It’s way simpler than existing solutions like Chef and Puppet. From reading the docs, and seeing its yaml based playbooks, it does seem simple to write. My experience with it, enough to write this blog post, does show that it simple, flexible and well thought out.&lt;/p&gt;
-
-&lt;p&gt;2) It is written in Python and can be &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;pip&lt;/code&gt; installed. That means no more dependency on Ruby when you are working on a Python project. Also, it provides some Python / Django stack specific modules like the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;django_manage&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;supervisorctl&lt;/code&gt; modules already.&lt;/p&gt;
-
-&lt;p&gt;3) It doesn’t need any client software on the machines we intend to bootstrap. All that it would require is Python 2.4 or later ( not Python 3). It gets its job done through ssh. That is great news! Since many distributions have, and need, a relatively recent version of Python 2.X, this means that you don’t need to install ANYTHING on the box being configured to use Ansible.&lt;/p&gt;
-
-&lt;h3 id=&quot;installing-ansible&quot;&gt;Installing Ansible&lt;/h3&gt;
-
-&lt;p&gt;I decided to install it through &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;pip&lt;/code&gt; on Mac OS X. &lt;a href=&quot;http://www.ansibleworks.com/docs/intro_installation.html&quot;&gt;Other installation methods&lt;/a&gt; include using the package manager of your OS, or running from source.&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;pythonbrew venv create test-ansible
-pythonbrew venv use test-ansbile
-pip &lt;span class=&quot;nb&quot;&gt;install &lt;/span&gt;ansible
-pip freeze &lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt; requirements.txt&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;I use pythonbrew for managing my pythons and my virtualenvs, as mentioned in one of my previous blog posts - &lt;a href=&quot;/blog/2013/03/11/why-use-virtualenv-when-there-is-pythonbrew/&quot;&gt;Why use virtualenv when there is pythonbrew&lt;/a&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;vagrant&quot;&gt;Vagrant&lt;/h3&gt;
-
-&lt;p&gt;Of course, the next step is to get your Vagrant box up, and test your Ansible provisioning on it. The amazing authors of Vagrant have also provided a provisioner for Ansible, so using Ansible with Vagrant is simpler than it already is.&lt;/p&gt;
-
-&lt;p&gt;Do a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;vagrant init&lt;/code&gt; and configure it to provision with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ansible&lt;/code&gt;. Your &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Vagrantfile&lt;/code&gt; may look something like below:&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;no&quot;&gt;Vagrant&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;configure&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;2&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;config&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
-  &lt;span class=&quot;n&quot;&gt;config&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;vm&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;box&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;debian-7.1.0&quot;&lt;/span&gt;
-
-  &lt;span class=&quot;n&quot;&gt;config&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;vm&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;network&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;:private_network&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;ss&quot;&gt;ip: &lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;192.168.33.10&quot;&lt;/span&gt;
-
-  &lt;span class=&quot;n&quot;&gt;config&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;vm&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;provision&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;ansible&quot;&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;do&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ansible&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;|&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;ansible&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;playbook&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;site.yml&quot;&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;ansible&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;inventory_path&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;hosts&quot;&lt;/span&gt;
-    &lt;span class=&quot;n&quot;&gt;ansible&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;verbose&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;v&quot;&lt;/span&gt;
-  &lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;end&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;If you have done Chef/Puppet provisioning with Vagrant before, this should be familiar. All that the above does is to enable ansible provisioning and specifies the main playbook - &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;site.yml&lt;/code&gt;. While Vagrant can automatically handle your inventory, I like to explicitly specify the hosts. For now, the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;hosts&lt;/code&gt; file would look like:&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-ruby&quot; data-lang=&quot;ruby&quot;&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;webservers&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-&lt;span class=&quot;mf&quot;&gt;192.168&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;33.10&lt;/span&gt;
-
-&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dbservers&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-&lt;span class=&quot;mf&quot;&gt;192.168&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;mf&quot;&gt;33.10&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;where &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;webserver&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;dbservers&lt;/code&gt; are host groups.&lt;/p&gt;
-
-&lt;h3 id=&quot;directory-layout&quot;&gt;Directory Layout&lt;/h3&gt;
-
-&lt;p&gt;I decided to follow the directory layout and structure as prescribed in the &lt;a href=&quot;http://www.ansibleworks.com/docs/playbooks_best_practices.html&quot;&gt;Ansible best practises&lt;/a&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;ansible-playbooks&quot;&gt;Ansible Playbooks&lt;/h3&gt;
-
-&lt;p&gt;I have setup a top level playbook &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;site.yml&lt;/code&gt;, as mentioned in the VagrantFile, which just includes playbooks for different server roles. It looks something like:&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-yaml&quot; data-lang=&quot;yaml&quot;&gt;&lt;span class=&quot;nn&quot;&gt;---&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;# file: site.yml&lt;/span&gt;
-&lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;include&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;webservers.yml&lt;/span&gt;
-&lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;include&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;dbservers.yml&lt;/span&gt; &lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;The &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;webservers.yml&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;dbservers.yml&lt;/code&gt; look similar to what’s described in the best practises link above.&lt;/p&gt;
-
-&lt;h3 id=&quot;common-tasks&quot;&gt;Common tasks&lt;/h3&gt;
-
-&lt;p&gt;Common tasks like updating the apt cache, installing &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;build-essentials&lt;/code&gt; and installing packages like git can be placed in the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;common&lt;/code&gt; role’s tasks. The playbook for this would look something like:&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-yaml&quot; data-lang=&quot;yaml&quot;&gt;&lt;span class=&quot;nn&quot;&gt;---&lt;/span&gt;
-&lt;span class=&quot;c1&quot;&gt;# file: roles/common/tasks/main.yml&lt;/span&gt;
-
-&lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;update apt cache&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;apt&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;update_cache=yes cache_valid_time=3600&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;tags&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;apt&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;sudo&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;yes&lt;/span&gt;
-
-&lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;install build essentials&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;apt&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;name=$item state=installed&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;with_items&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt;
-    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;autoconf&lt;/span&gt;
-    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;binutils-doc&lt;/span&gt;
-    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;bison&lt;/span&gt;
-    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;build-essential&lt;/span&gt;
-    &lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;flex&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;sudo&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;yes&lt;/span&gt;
-
-&lt;span class=&quot;pi&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;install git&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;apt&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;name=git state=latest&lt;/span&gt;
-  &lt;span class=&quot;na&quot;&gt;sudo&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;yes&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;h3 id=&quot;vagrant-provision&quot;&gt;Vagrant provision&lt;/h3&gt;
-
-&lt;p&gt;We are now ready to provision:&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;vagrant provision   &lt;span class=&quot;c&quot;&gt;# vagrant up&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;Change ansbile verbosity by setting the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ansible.verbose&lt;/code&gt; property appropriately in your VagrantFile.&lt;/p&gt;
-
-&lt;p&gt;That’s all for this blog post. I will add more posts as I continue to configure the entire stack with Ansible. I am loving Ansible already. It takes the best of Puppet / Chef and comes with a very simplified way of doing configuration management. As I proceed, there will be some roadblocks, but I am looking forward to them as well.&lt;/p&gt;
-
-&lt;p&gt;I have setup a repo on Github - &lt;a href=&quot;https://github.com/manojlds/django-ansible&quot;&gt;django-ansible&lt;/a&gt;.&lt;/p&gt;
-</description>
-        <pubDate>Sun, 20 Oct 2013 00:44:00 +0100</pubDate>
-        <link>https://stacktoheap.com/blog/2013/10/20/getting-started-with-ansbile-for-a-django-project/</link>
-        <guid isPermaLink="true">https://stacktoheap.com/blog/2013/10/20/getting-started-with-ansbile-for-a-django-project/</guid>
-        
-        
-        <category>ansible</category>
-        
-        <category>iaas</category>
-        
-        <category>python</category>
-        
-        <category>django</category>
-        
-        <category>chef</category>
         
       </item>
     
