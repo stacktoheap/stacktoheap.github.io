@@ -6,8 +6,8 @@
 </description>
     <link>https://stacktoheap.com/</link>
     <atom:link href="https://stacktoheap.com/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 03 Aug 2025 13:21:56 +0100</pubDate>
-    <lastBuildDate>Sun, 03 Aug 2025 13:21:56 +0100</lastBuildDate>
+    <pubDate>Sun, 03 Aug 2025 13:23:18 +0100</pubDate>
+    <lastBuildDate>Sun, 03 Aug 2025 13:23:18 +0100</lastBuildDate>
     <generator>Jekyll v3.9.5</generator>
     
       <item>
@@ -297,68 +297,6 @@ curl &lt;span class=&quot;nt&quot;&gt;-X&lt;/span&gt; POST &lt;span class=&quot;
         <category>productivity</category>
         
         <category>automation</category>
-        
-      </item>
-    
-      <item>
-        <title>Agents vs LLM Calls vs LLM Workflows</title>
-        <description>&lt;p&gt;The rise of agents and agentic systems – AI systems that can operate with a degree of autonomy – represents a shift in how we leverage large language models (LLMs). Traditional LLM usage often consists of stateless API calls: a user provides a prompt, the LLM produces a response, and the interaction ends. In contrast, an agentic system wraps an LLM in a loop of reasoning, memory, and action, enabling it to pursue goals with minimal human intervention. Such agents can reason, plan, use tools, and maintain state, going beyond a one-off LLM query.&lt;/p&gt;
-
-&lt;p&gt;Also, Agentic systems are different from workflows that make use of one or more LLM calls. Understanding the differences between simple LLM calls vs workflows that involve LLMs vs Agentic systems is key to ensure that we use the appropriate solution for the problem without having to look at every nail with an Agentic hammer.&lt;/p&gt;
-
-&lt;h1 id=&quot;agentic-systems-vs-simple-llm-calls-key-differences&quot;&gt;Agentic Systems vs. Simple LLM Calls: Key Differences&lt;/h1&gt;
-
-&lt;h2 id=&quot;autonomy-and-goal-driven-behavior&quot;&gt;Autonomy and Goal-Driven Behavior&lt;/h2&gt;
-
-&lt;p&gt;A fundamental difference is the level of autonomy. A simple LLM call is reactive – it generates an output only when prompted, and it stops there. The LLM itself has no persistent goals or initiative. An agentic system, on the other hand, is goal-oriented and can operate independently towards an objective​.&lt;/p&gt;
-
-&lt;p&gt;Agents can set sub-goals, decide on actions, and continue working without step-by-step human instructions. In practical terms, a basic LLM (like a stateless chatbot) answers the question asked and waits for the next prompt, whereas an autonomous agent can be tasked with “achieve X” and then break down the task and act until X is achieved (or deemed unachievable)​. This means agents are better suited for complex, long-running tasks or open-ended objectives, whereas simple LLM calls handle one query at a time.&lt;/p&gt;
-
-&lt;h2 id=&quot;decision-making-and-planning&quot;&gt;Decision-Making and Planning&lt;/h2&gt;
-
-&lt;p&gt;In a simple LLM call, any semblance of planning or reasoning is confined to what the model can do in one prompt-response cycle – essentially predicting the next tokens. There is no external decision loop. Agentic systems introduce an explicit decision-making loop: the LLM’s outputs (often in the form of “thoughts” or an action plan) are read by the system itself to decide what to do next. The agent “thinks out loud” and determines a sequence of steps rather than just producing a single answer​.&lt;/p&gt;
-
-&lt;p&gt;Advanced prompting techniques like ReAct, Chain-of-Thought, or Planner-Executor patterns are used so the agent can reason about a problem, choose an action (e.g. call a tool or search the web), then reconsider and continue the cycle​. This planning ability allows agents to handle multi-step problems that a single LLM call cannot. In short, an agent dynamically controls the flow of the application with the LLM as the brain, whereas a simple LLM call follows a fixed prompt → completion sequence​.&lt;/p&gt;
-
-&lt;h2 id=&quot;memory-and-state-persistence&quot;&gt;Memory and State Persistence&lt;/h2&gt;
-
-&lt;p&gt;LLM APIs are fundamentally stateless – each interaction starts anew with no memory of previous calls beyond what you explicitly include in the prompt​. This means a simple LLM call cannot learn from past queries or retain information (except within a conversation if the developer manually threads context). Agentic systems incorporate memory to become stateful. They retain a history of actions, observations, or conversations and feed relevant parts back into the LLM on subsequent steps​.&lt;/p&gt;
-
-&lt;p&gt;By storing and retrieving context, agents maintain continuity over time, enabling more coherent long-horizon behavior. For example, an agent can remember intermediate results or user preferences from earlier steps and use them later – something a stateless LLM won’t do unless that history is carried in the prompt​. Memory can be short-term (ephemeral context for the current task) and long-term (persistent knowledge store). This state persistence is a critical differentiator between a truly agentic system and a mere LLM wrapper​.&lt;/p&gt;
-
-&lt;h2 id=&quot;adaptability-and-learning&quot;&gt;Adaptability and Learning&lt;/h2&gt;
-
-&lt;p&gt;Because agentic systems can incorporate feedback and have a decision loop, they tend to be more adaptive. A simple LLM call’s behavior is entirely determined by its prompt and training. It cannot change its approach based on outcome except via another prompt from a user. An autonomous agent, however, can reflect on the success or failure of an action and adjust its strategy in the next iteration (e.g. if a web search didn’t find useful info, the agent can try a different query or switch tools). In essence, agents “learn from experience” during deployment by updating their state or plan, whereas basic LLM calls have no concept of experience​.&lt;/p&gt;
-
-&lt;p&gt;This adaptability also means agents can handle unexpected situations more robustly: if new information comes in, an agent can incorporate it into future decisions. Additionally, some stateful agents even improve over multiple sessions, performing a rudimentary form of online learning by accumulating knowledge in their memory. None of this is possible with stateless LLM calls that forget everything once a response is delivered.&lt;/p&gt;
-
-&lt;h2 id=&quot;environmental-interaction-and-tool-use&quot;&gt;Environmental Interaction and Tool Use&lt;/h2&gt;
-
-&lt;p&gt;Perhaps the most visible difference is how each interacts with external systems. A plain LLM API call usually just produces text. It can’t execute actions in the world on its own beyond returning a response. Agentic systems are typically equipped with the ability to use tools or APIs – e.g. call a calculator, query a database, run code, or control a web browser​. The agent perceives its environment (which could be a virtual environment, the internet, files, etc.), and takes actions that change the environment or retrieve new information, then continues the cycle. This is critical for tasks that require more than just language generation. For example, an agent in a customer support scenario might not only draft a response, but also check the user’s account via an API and then formulate the answer. Standard LLM calls cannot do that unless a developer manually orchestrates those API calls around the LLM. In summary, an agent can act (read/write files, fetch URLs, call services) while an ordinary LLM call only speaks. This ability to affect and query the outside world makes agentic systems far more powerful for real-world applications​.&lt;/p&gt;
-
-&lt;h1 id=&quot;agentic-systems-vs-workflows-that-use-llms&quot;&gt;Agentic Systems vs Workflows that use LLMs&lt;/h1&gt;
-
-</description>
-        <pubDate>Sun, 09 Mar 2025 11:28:00 +0000</pubDate>
-        <link>https://stacktoheap.com/blog/2025/03/09/agentic-systems/</link>
-        <guid isPermaLink="true">https://stacktoheap.com/blog/2025/03/09/agentic-systems/</guid>
-        
-        <category>ml</category>
-        
-        <category>llms</category>
-        
-        <category>agents</category>
-        
-        <category>ai</category>
-        
-        
-        <category>ml</category>
-        
-        <category>llms</category>
-        
-        <category>agents</category>
-        
-        <category>ai</category>
         
       </item>
     
@@ -1013,6 +951,54 @@ docker &lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;docker-machine config dev
         
         
         <category>docker</category>
+        
+      </item>
+    
+      <item>
+        <title>Things you may not know about git - autocorrect your commands</title>
+        <description>&lt;p&gt;Did you ever fat finger a git command? Did git actually ask you if you meant the command which you intended to type anyway? Were you mildly irritated that git didn’t go ahead and executed the command it deduced? Something like the interaction below:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;git psuh
+git: &lt;span class=&quot;s1&quot;&gt;'psuh'&lt;/span&gt; is not a git command. See &lt;span class=&quot;s1&quot;&gt;'git --help'&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt;
+
+Did you mean this?
+  push&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Well, you can turn your irritation into admiration for git. git has a autocorrect feature that you can enable if needed.&lt;/p&gt;
+
+&lt;p&gt;The feature can be enabled by setting the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;help.autocorrect&lt;/code&gt; config appropriately. Here’s what the man pages have to say about the setting:&lt;/p&gt;
+
+&lt;blockquote&gt;&lt;p&gt;Automatically correct and execute mistyped commands after waiting for the given number of deciseconds (0.1 sec). If more than one command can be deduced from the entered text, nothing will be executed. If the value of this option is negative, the corrected command will be executed immediately. If the value is 0 - the command will be just shown but not executed. This is the default.&lt;/p&gt;&lt;/blockquote&gt;
+
+&lt;p&gt;By default, the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;help.autocorrect&lt;/code&gt; value is 0, which means that you get the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Did you mean this?&lt;/code&gt; question, but no correction happens. Setting it to a positive value will make git correct to deduced command after that much time (in deciseconds - so setting a value of 10 will make git autocorrect in a second.) Setting a negative value will make git autocorrect immediately, and this is probably something you don’t want.&lt;/p&gt;
+
+&lt;p&gt;So go ahead and set &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;help.autocorrect&lt;/code&gt; to a sane value, and stop worrying about your typos:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;git config &lt;span class=&quot;nt&quot;&gt;--global&lt;/span&gt; help.autocorrect 10&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Now, you interaction with git can be irritation-free:&lt;/p&gt;
+
+&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;git psuh
+WARNING: You called a Git &lt;span class=&quot;nb&quot;&gt;command &lt;/span&gt;named &lt;span class=&quot;s1&quot;&gt;'psuh'&lt;/span&gt;, which does not exist.
+Continuing under the assumption that you meant &lt;span class=&quot;s1&quot;&gt;'push'&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;in &lt;/span&gt;1.0 seconds automatically...&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
+
+&lt;p&gt;Related: While the above is only for git, you might want to look at &lt;a href=&quot;https://github.com/nvbn/thefuck&quot;&gt;thefuck&lt;/a&gt; if you want similar autocorrect for any command you type. The appropriately named utility goes beyond just correcting typos, however. It can also do suggested commands (like &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;git push&lt;/code&gt; when no upstream is set.)&lt;/p&gt;
+</description>
+        <pubDate>Sun, 01 Nov 2015 02:30:00 +0000</pubDate>
+        <link>https://stacktoheap.com/blog/2015/11/01/git-autocorrect-feature/</link>
+        <guid isPermaLink="true">https://stacktoheap.com/blog/2015/11/01/git-autocorrect-feature/</guid>
+        
+        
+        <category>ansible</category>
+        
+        <category>iaas</category>
+        
+        <category>python</category>
+        
+        <category>django</category>
+        
+        <category>chef</category>
         
       </item>
     
