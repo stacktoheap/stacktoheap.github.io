@@ -129,6 +129,10 @@
 <lastmod>2025-08-03T12:00:00+01:00</lastmod>
 </url>
 <url>
+<loc>https://stacktoheap.com/blog/2025/08/10/code-reviews-that-dont-suck-claude-code-subagents/</loc>
+<lastmod>2025-08-10T12:00:00+01:00</lastmod>
+</url>
+<url>
 <loc>https://stacktoheap.com/about/</loc>
 </url>
 <url>
@@ -232,6 +236,12 @@
 </url>
 <url>
 <loc>https://stacktoheap.com/tags/fun/</loc>
+</url>
+<url>
+<loc>https://stacktoheap.com/tags/agents/</loc>
+</url>
+<url>
+<loc>https://stacktoheap.com/tags/subagents/</loc>
 </url>
 <url>
 <loc>https://stacktoheap.com/categories/stackoverflow/</loc>

@@ -6,9 +6,230 @@
 </description>
     <link>https://stacktoheap.com/</link>
     <atom:link href="https://stacktoheap.com/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 03 Aug 2025 13:39:30 +0100</pubDate>
-    <lastBuildDate>Sun, 03 Aug 2025 13:39:30 +0100</lastBuildDate>
+    <pubDate>Sun, 10 Aug 2025 17:40:31 +0100</pubDate>
+    <lastBuildDate>Sun, 10 Aug 2025 17:40:31 +0100</lastBuildDate>
     <generator>Jekyll v3.9.5</generator>
+    
+      <item>
+        <title>Supercharged Code Reviews: How AI Subagents Make Human Reviewers Superhuman</title>
+        <description>&lt;p&gt;&lt;img src=&quot;https://stacktoheap.com/images/claude-subagents.png&quot; width=&quot;686px&quot; height=&quot;386px&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Code reviews take a lot of time and context switching for senior engineers. They’re constantly pulled between reviewing PRs, mentoring junior developers, and their own feature work. Junior engineers want to help with reviews but often lack the experience to spot subtle security issues, performance bottlenecks, or architectural concerns that could bite the team later.&lt;/p&gt;
+
+&lt;p&gt;This is where I think AI-based code review systems can augment human reviewers and supercharge your code review workflow. I wanted to set up my own agentic code reviewer that can assist me while I’m reviewing code - catching the stuff I might miss, providing consistent security analysis, and helping junior engineers learn what to look for. The subagents feature in Claude Code felt like a perfect fit - I can run it in my local workflow, and potentially use the Claude Code CLI or SDK to even run it automatically on merge requests.&lt;/p&gt;
+
+&lt;p&gt;The goal isn’t to replace human reviewers - it’s to make them more effective, faster, and more consistent. Think of it as having an expert assistant that does the tedious first-pass analysis, so human reviewers can focus on the architecture, business logic, and mentoring that actually need human judgment.&lt;/p&gt;
+
+&lt;h1 id=&quot;the-bottlenecks-in-team-code-reviews&quot;&gt;The Bottlenecks in Team Code Reviews&lt;/h1&gt;
+
+&lt;p&gt;Let’s be honest about the challenges we all face:&lt;/p&gt;
+
+&lt;h2 id=&quot;human-reviewers-are-amazing-but&quot;&gt;Human Reviewers Are Amazing But…&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;Time constraints&lt;/strong&gt;: Senior devs are swamped, junior devs lack context&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Attention fatigue&lt;/strong&gt;: By the 5th PR of the day, details get missed&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Expertise distribution&lt;/strong&gt;: Not every reviewer is a security or performance expert&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Context switching cost&lt;/strong&gt;: Understanding a complex PR takes significant mental overhead&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Different focus areas&lt;/strong&gt;: One reviewer catches architecture issues, another spots security flaws, rarely both&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;traditional-tools-miss-the-mark&quot;&gt;Traditional Tools Miss the Mark&lt;/h2&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;Static analysis tools&lt;/strong&gt;: Great at syntax, terrible at understanding business logic&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Rule-based linters&lt;/strong&gt;: Rigid rules that don’t understand project context&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;No collaboration&lt;/strong&gt;: Tools run in isolation, humans review separately&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Noise vs signal&lt;/strong&gt;: Too many false positives drowning out real issues&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The insight? We don’t need to replace human reviewers - we need to make them more effective.&lt;/p&gt;
+
+&lt;h1 id=&quot;enter-ai-powered-code-review-assistants&quot;&gt;Enter AI-Powered Code Review Assistants&lt;/h1&gt;
+
+&lt;p&gt;Think of AI Code Reviewers as your team’s new junior reviewer who never gets tired, has infinite patience, and happens to be an (reasonable) expert in security, performance, and architecture all at once. But here’s the key - it’s not replacing your human reviewers, it’s making them superhuman.&lt;/p&gt;
+
+&lt;p&gt;First, let’s talk about Claude Code’s subagents feature.&lt;/p&gt;
+
+&lt;p&gt;Subagents are specialized AI assistants within Claude Code with:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;Separate context windows&lt;/strong&gt;: Focused expertise without distraction.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Specialized knowledge&lt;/strong&gt;: The subagents are prompted with specific needs and knowledge and everyone on the team can share and apply them consistently.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Custom tool access&lt;/strong&gt;: Can examine code, run analysis, understand project context.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Consistent application&lt;/strong&gt;: Same thorough analysis every single time.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The magic of code review with subagents happens when you use subagents as a &lt;em&gt;first pass&lt;/em&gt; before human review - catching the obvious stuff, highlighting the subtle issues, and preparing a summary that helps human reviewers focus on what really matters.&lt;/p&gt;
+
+&lt;h1 id=&quot;building-your-ai-code-review-assistant&quot;&gt;Building Your AI Code Review Assistant&lt;/h1&gt;
+
+&lt;p&gt;Let me show you how I built a code reviewer subagent that works as the perfect first-pass reviewer, catching issues before they reach human eyes and preparing detailed summaries that speed up human review.&lt;/p&gt;
+
+&lt;h2 id=&quot;step-1-create-the-subagent&quot;&gt;Step 1: Create the Subagent&lt;/h2&gt;
+
+&lt;p&gt;First, run &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/agents&lt;/code&gt; in Claude Code to open the subagent interface. Choose whether you want this at the project level or user level. For a code reviewer, I prefer project-level so that you can share it with your team (and company) and make it available in your merge requests.&lt;/p&gt;
+
+&lt;p&gt;I find it best to let Claude Code get your requirements and design the first cut of the subagent for you. Again, let the AI do what it’s good at it before you take over!&lt;/p&gt;
+
+&lt;h2 id=&quot;step-2-configuration&quot;&gt;Step 2: Configuration&lt;/h2&gt;
+
+&lt;p&gt;Here’s my code-reviewer subagent configuration. The point of this post is not about the specifics of this, as you may want to keep tweaking it for your project and team.&lt;/p&gt;
+
+&lt;div class=&quot;language-markdown highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nn&quot;&gt;---&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;code-reviewer&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;description&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Expert code review specialist for comprehensive code quality analysis. Reviews code changes for maintainability, readability, best practices, and potential issues.&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;tools&lt;/span&gt;&lt;span class=&quot;pi&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Read, Grep, Glob, Bash&lt;/span&gt;
+&lt;span class=&quot;nn&quot;&gt;---&lt;/span&gt;
+
+You are a senior code reviewer conducting a comprehensive code quality review.
+
+&lt;span class=&quot;gs&quot;&gt;**CONTEXT DETECTION:**&lt;/span&gt;
+
+The review context and git commands will be provided to you in the prompt. Execute only the git commands that are specified in the &quot;Git Commands to Execute&quot; section of the prompt.
+
+These commands are context-aware and will be different depending on whether you're reviewing:
+&lt;span class=&quot;p&quot;&gt;-&lt;/span&gt; Local development changes (staged, unstaged, untracked files)
+&lt;span class=&quot;p&quot;&gt;-&lt;/span&gt; Merge request changes in local environment (using glab)
+&lt;span class=&quot;p&quot;&gt;-&lt;/span&gt; Merge request changes in GitLab CI environment (proper branch diff)
+
+Do NOT run any other git commands beyond what is specified.
+
+&lt;span class=&quot;gs&quot;&gt;**ANALYSIS METHODOLOGY:**&lt;/span&gt;
+
+&lt;span class=&quot;gs&quot;&gt;**Phase 1 - Repository Context Research:**&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;-&lt;/span&gt; Identify coding standards and patterns used in the codebase
+&lt;span class=&quot;p&quot;&gt;-&lt;/span&gt; Look for existing frameworks, libraries, and architectural patterns
+&lt;span class=&quot;p&quot;&gt;-&lt;/span&gt; Examine project structure and naming conventions
+&lt;span class=&quot;p&quot;&gt;-&lt;/span&gt; Understand the project's domain and purpose
+
+&lt;span class=&quot;gs&quot;&gt;**Phase 2 - Change Analysis:**&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;-&lt;/span&gt; Review each modified file for code quality issues
+&lt;span class=&quot;p&quot;&gt;-&lt;/span&gt; Compare new code against established patterns in the codebase
+&lt;span class=&quot;p&quot;&gt;-&lt;/span&gt; Identify deviations from project conventions
+&lt;span class=&quot;p&quot;&gt;-&lt;/span&gt; Look for potential bugs, performance issues, and maintainability concerns
+
+&lt;span class=&quot;gs&quot;&gt;**Phase 3 - Comprehensive Review:**&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;-&lt;/span&gt; Code readability and clarity
+&lt;span class=&quot;p&quot;&gt;-&lt;/span&gt; Function and variable naming conventions
+&lt;span class=&quot;p&quot;&gt;-&lt;/span&gt; Code duplication and reusability
+&lt;span class=&quot;p&quot;&gt;-&lt;/span&gt; Error handling and edge cases
+&lt;span class=&quot;p&quot;&gt;-&lt;/span&gt; Performance considerations
+&lt;span class=&quot;p&quot;&gt;-&lt;/span&gt; Test coverage and testability
+&lt;span class=&quot;p&quot;&gt;-&lt;/span&gt; Documentation and comments
+&lt;span class=&quot;p&quot;&gt;-&lt;/span&gt; Security considerations (secrets, input validation)
+
+&lt;span class=&quot;gs&quot;&gt;**REVIEW CATEGORIES:**&lt;/span&gt;
+
+&lt;span class=&quot;gs&quot;&gt;**Code Quality Issues:**&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;-&lt;/span&gt; Poor naming conventions (functions, variables, classes)
+&lt;span class=&quot;p&quot;&gt;-&lt;/span&gt; Code duplication and lack of reusability
+&lt;span class=&quot;p&quot;&gt;-&lt;/span&gt; Complex or unclear logic that could be simplified
+&lt;span class=&quot;p&quot;&gt;-&lt;/span&gt; Missing or inadequate error handling
+&lt;span class=&quot;p&quot;&gt;-&lt;/span&gt; Inconsistent code formatting or style
+
+&lt;span class=&quot;gs&quot;&gt;**Maintainability Concerns:**&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;-&lt;/span&gt; Functions or classes that are too large or complex
+&lt;span class=&quot;p&quot;&gt;-&lt;/span&gt; Tight coupling between components
+&lt;span class=&quot;p&quot;&gt;-&lt;/span&gt; Lack of proper separation of concerns
+&lt;span class=&quot;p&quot;&gt;-&lt;/span&gt; Hard-coded values that should be configurable
+&lt;span class=&quot;p&quot;&gt;-&lt;/span&gt; Missing documentation for complex logic
+
+&lt;span class=&quot;gs&quot;&gt;**Potential Bugs:**&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;-&lt;/span&gt; Null pointer or undefined value access
+&lt;span class=&quot;p&quot;&gt;-&lt;/span&gt; Off-by-one errors in loops or array access
+&lt;span class=&quot;p&quot;&gt;-&lt;/span&gt; Race conditions or concurrency issues
+&lt;span class=&quot;p&quot;&gt;-&lt;/span&gt; Memory leaks or resource management problems
+&lt;span class=&quot;p&quot;&gt;-&lt;/span&gt; Logic errors in conditional statements
+
+&lt;span class=&quot;gs&quot;&gt;**Performance Issues:**&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;-&lt;/span&gt; Inefficient algorithms or data structures
+&lt;span class=&quot;p&quot;&gt;-&lt;/span&gt; Unnecessary database queries or API calls
+&lt;span class=&quot;p&quot;&gt;-&lt;/span&gt; Missing caching where appropriate
+&lt;span class=&quot;p&quot;&gt;-&lt;/span&gt; Resource-intensive operations in tight loops
+
+Begin analysis by examining the git context and then proceed with comprehensive code review.
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;I gave my subagent access to these tools:&lt;/p&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;Read&lt;/strong&gt;: For examining specific files and understanding context&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Grep&lt;/strong&gt;: For searching patterns across the codebase&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Glob&lt;/strong&gt;: For finding files by patterns&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Bash&lt;/strong&gt;: For running git commands and other analysis tools&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;step-3---triggering-the-subagent&quot;&gt;Step 3 - Triggering the subagent&lt;/h2&gt;
+
+&lt;p&gt;The subagent can be triggered by mentioning it - &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;@code-reviewer&lt;/code&gt; or by asking Claude Code (the main agent) to review the code&lt;/p&gt;
+
+&lt;p&gt;We can extend this to work directly from the CLI or make use of the Claude Code SDK with something like this:&lt;/p&gt;
+
+&lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;claude &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;@code-reviewer review the changes&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;I am working on a tool that will allow me to run these reviews in a Gitlab Merge Request.&lt;/p&gt;
+
+&lt;h1 id=&quot;why-ai-assisted-reviews-are-a-game-changer&quot;&gt;Why AI-Assisted Reviews Are a Game Changer&lt;/h1&gt;
+
+&lt;h2 id=&quot;supercharged-human-reviewers&quot;&gt;Supercharged Human Reviewers&lt;/h2&gt;
+&lt;p&gt;Instead of spending time catching basic issues, human reviewers focus on architecture, business logic, and complex design decisions.&lt;/p&gt;
+
+&lt;h2 id=&quot;faster-review-cycles&quot;&gt;Faster Review Cycles&lt;/h2&gt;
+&lt;p&gt;The AI first-pass analysis means human reviewers can jump straight to the issues that actually need their expertise.&lt;/p&gt;
+
+&lt;h2 id=&quot;consistent-safety-net&quot;&gt;Consistent Safety Net&lt;/h2&gt;
+&lt;p&gt;Every PR gets the same thorough analysis for security, performance, and maintainability - no more “oops, didn’t notice that” moments.&lt;/p&gt;
+
+&lt;h2 id=&quot;knowledge-amplification&quot;&gt;Knowledge Amplification&lt;/h2&gt;
+&lt;p&gt;Junior reviewers get AI-powered insights that help them learn while reviewing. Senior reviewers get time back to focus on mentoring and architecture.&lt;/p&gt;
+
+&lt;h2 id=&quot;comprehensive-coverage&quot;&gt;Comprehensive Coverage&lt;/h2&gt;
+&lt;p&gt;AI catches the tedious stuff humans might miss after a long day, while humans provide the strategic thinking AI can’t replicate.&lt;/p&gt;
+
+&lt;h1 id=&quot;a-word-of-caution&quot;&gt;A Word of Caution&lt;/h1&gt;
+
+&lt;p&gt;AI-assisted reviews are powerful, but remember the human element:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;AI prepares, humans decide&lt;/strong&gt;: Use AI analysis to inform human judgment, not replace it&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Context matters&lt;/strong&gt;: AI provides technical analysis, humans understand business context and user impact&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Team dynamics&lt;/strong&gt;: The best reviews come from AI-human collaboration, not AI-only analysis&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Continuous calibration&lt;/strong&gt;: Regularly review AI recommendations with your team to keep them aligned with your standards&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&quot;conclusion&quot;&gt;Conclusion&lt;/h1&gt;
+
+&lt;p&gt;Adding AI-powered code review assistance can transform the way a team handles code quality. Instead of human reviewers spending time on tedious pattern matching or catching basic security issues, they can focus on the complex architectural decisions and business logic that actually need human insight.&lt;/p&gt;
+
+&lt;p&gt;The magic isn’t in replacing human reviewers - it’s in making them superhuman. AI handles the first-pass analysis, catches the obvious stuff, and prepares focused summaries that let human reviewers dive straight into the interesting problems.&lt;/p&gt;
+
+&lt;p&gt;So go ahead, build your own AI code review assistant. Your team’s code quality will thank you, and your reviewers will actually enjoy the process again.&lt;/p&gt;
+</description>
+        <pubDate>Sun, 10 Aug 2025 12:00:00 +0100</pubDate>
+        <link>https://stacktoheap.com/blog/2025/08/10/code-reviews-that-dont-suck-claude-code-subagents/</link>
+        <guid isPermaLink="true">https://stacktoheap.com/blog/2025/08/10/code-reviews-that-dont-suck-claude-code-subagents/</guid>
+        
+        <category>claude-code</category>
+        
+        <category>agents</category>
+        
+        <category>subagents</category>
+        
+        <category>automation</category>
+        
+        <category>productivity</category>
+        
+        <category>ai-tools</category>
+        
+        
+        <category>ai</category>
+        
+        <category>claude</category>
+        
+        <category>productivity</category>
+        
+        <category>automation</category>
+        
+      </item>
     
       <item>
         <title>Having Fun with Claude Code Hooks - Make Your AI Coding Assistant Talk!</title>
@@ -951,54 +1172,6 @@ docker &lt;span class=&quot;si&quot;&gt;$(&lt;/span&gt;docker-machine config dev
         
         
         <category>docker</category>
-        
-      </item>
-    
-      <item>
-        <title>Things you may not know about git - autocorrect your commands</title>
-        <description>&lt;p&gt;Did you ever fat finger a git command? Did git actually ask you if you meant the command which you intended to type anyway? Were you mildly irritated that git didn’t go ahead and executed the command it deduced? Something like the interaction below:&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;git psuh
-git: &lt;span class=&quot;s1&quot;&gt;'psuh'&lt;/span&gt; is not a git command. See &lt;span class=&quot;s1&quot;&gt;'git --help'&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;.&lt;/span&gt;
-
-Did you mean this?
-  push&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;Well, you can turn your irritation into admiration for git. git has a autocorrect feature that you can enable if needed.&lt;/p&gt;
-
-&lt;p&gt;The feature can be enabled by setting the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;help.autocorrect&lt;/code&gt; config appropriately. Here’s what the man pages have to say about the setting:&lt;/p&gt;
-
-&lt;blockquote&gt;&lt;p&gt;Automatically correct and execute mistyped commands after waiting for the given number of deciseconds (0.1 sec). If more than one command can be deduced from the entered text, nothing will be executed. If the value of this option is negative, the corrected command will be executed immediately. If the value is 0 - the command will be just shown but not executed. This is the default.&lt;/p&gt;&lt;/blockquote&gt;
-
-&lt;p&gt;By default, the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;help.autocorrect&lt;/code&gt; value is 0, which means that you get the &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Did you mean this?&lt;/code&gt; question, but no correction happens. Setting it to a positive value will make git correct to deduced command after that much time (in deciseconds - so setting a value of 10 will make git autocorrect in a second.) Setting a negative value will make git autocorrect immediately, and this is probably something you don’t want.&lt;/p&gt;
-
-&lt;p&gt;So go ahead and set &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;help.autocorrect&lt;/code&gt; to a sane value, and stop worrying about your typos:&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;git config &lt;span class=&quot;nt&quot;&gt;--global&lt;/span&gt; help.autocorrect 10&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;Now, you interaction with git can be irritation-free:&lt;/p&gt;
-
-&lt;figure class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;git psuh
-WARNING: You called a Git &lt;span class=&quot;nb&quot;&gt;command &lt;/span&gt;named &lt;span class=&quot;s1&quot;&gt;'psuh'&lt;/span&gt;, which does not exist.
-Continuing under the assumption that you meant &lt;span class=&quot;s1&quot;&gt;'push'&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;in &lt;/span&gt;1.0 seconds automatically...&lt;/code&gt;&lt;/pre&gt;&lt;/figure&gt;
-
-&lt;p&gt;Related: While the above is only for git, you might want to look at &lt;a href=&quot;https://github.com/nvbn/thefuck&quot;&gt;thefuck&lt;/a&gt; if you want similar autocorrect for any command you type. The appropriately named utility goes beyond just correcting typos, however. It can also do suggested commands (like &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;git push&lt;/code&gt; when no upstream is set.)&lt;/p&gt;
-</description>
-        <pubDate>Sun, 01 Nov 2015 02:30:00 +0000</pubDate>
-        <link>https://stacktoheap.com/blog/2015/11/01/git-autocorrect-feature/</link>
-        <guid isPermaLink="true">https://stacktoheap.com/blog/2015/11/01/git-autocorrect-feature/</guid>
-        
-        
-        <category>ansible</category>
-        
-        <category>iaas</category>
-        
-        <category>python</category>
-        
-        <category>django</category>
-        
-        <category>chef</category>
         
       </item>
     

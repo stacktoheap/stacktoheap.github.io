@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Supercharged Code Reviews: How AI Subagents Make Human Reviewers Superhuman</title>
+  <meta name="description" content="Speed up your team's code reviews with AI-powered analysis that catches what humans miss and prepares focused insights, making reviewers more effective witho...">
+  
+  <meta name="keywords" content="claude-code, agents, subagents, automation, productivity, ai-tools"/>
+  
+  <meta content="StackToHeap" property="og:site_name">
+
+  <meta content="Supercharged Code Reviews: How AI Subagents Make Human Reviewers Superhuman" property="og:title">
+
+
+  <meta content="article" property="og:type">
+
+
+  <meta content="Speed up your team's code reviews with AI-powered analysis that catches what humans miss and prepares focused insights, making reviewers more effective without replacing their expertise." property="og:description">
+
+
+  <meta content="https://stacktoheap.com/blog/2025/08/10/code-reviews-that-dont-suck-claude-code-subagents/" property="og:url">
+
+
+  <meta content="2025-08-10T12:00:00+01:00" property="article:published_time">
+  <meta content="https://stacktoheap.com/about/" property="article:author">
+
+
+  <meta content="https://stacktoheap.com/images/claude-subagents.png" property="og:image">
+
+
+  
+  <meta content="ai" property="article:section">
+  
+
+
+  
+  <meta content="claude-code" property="article:tag">
+  
+  <meta content="agents" property="article:tag">
+  
+  <meta content="subagents" property="article:tag">
+  
+  <meta content="automation" property="article:tag">
+  
+  <meta content="productivity" property="article:tag">
+  
+  <meta content="ai-tools" property="article:tag">
+  
+
+
+  <meta name="twitter:site" value="@manojlds">
+<meta name="twitter:creator" value="@manojlds">
+<meta name="twitter:card" value="summary_large_image">
+
+<meta name="twitter:image" content="https://stacktoheap.com/images/claude-subagents.png">
+
+
+  <meta name="twitter:label1" value="Reading time">
+  <meta name="twitter:data1" value="6 mins 🕑">
+
+
+  <meta name="theme-color" content="#641AE6">
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="preload" href="/assets/css/syntax.css" as="style" onload="this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="/assets/css/syntax.css"></noscript>
+  <link rel="canonical" href="https://stacktoheap.com/blog/2025/08/10/code-reviews-that-dont-suck-claude-code-subagents/">
+  <link rel="alternate" type="application/rss+xml" title="StackToHeap" href="https://stacktoheap.com/feed.xml">
+  <link rel="manifest" href="/manifest.json">
+  
+  <!-- Theme switching script -->
+  <script>
+    // Check for saved theme preference or use system preference
+    function getTheme() {
+      const savedTheme = localStorage.getItem('theme');
+      if (savedTheme) {
+        return savedTheme;
+      }
+      
+      // Use system preference if no saved theme
+      return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    
+    const currentTheme = getTheme();
+    document.documentElement.setAttribute('data-theme', currentTheme);
+    
+    // Set the theme controller checkbox state
+    document.addEventListener('DOMContentLoaded', function() {
+      const themeController = document.querySelector('.theme-controller');
+      if (themeController) {
+        themeController.checked = currentTheme === 'dark';
+        
+        themeController.addEventListener('change', function() {
+          const newTheme = this.checked ? 'dark' : 'light';
+          document.documentElement.setAttribute('data-theme', newTheme);
+          localStorage.setItem('theme', newTheme);
+        });
+      }
+      
+      // Listen for system theme changes (when user hasn't manually set a preference)
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+        if (!localStorage.getItem('theme')) {
+          const systemTheme = e.matches ? 'dark' : 'light';
+          document.documentElement.setAttribute('data-theme', systemTheme);
+          if (themeController) {
+            themeController.checked = systemTheme === 'dark';
+          }
+        }
+      });
+    });
+  </script>
+  
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-35693303-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+
+  <body class="font-sans m-0">
+
+    <div class="navbar bg-primary text-primary-content">
+  <div class="flex-1">
+    <a class="btn btn-ghost normal-case text-xl" href="/" >
+      StackToHeap
+    </a>
+  </div>
+  <div class="flex-none">
+    <ul class="menu menu-horizontal px-1">
+      
+        
+        <li><a href="/about/">About</a></li>
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+      <li><a href="/feed.xml">RSS</a></li>
+      <li>
+        <label class="swap swap-rotate btn btn-ghost btn-sm">
+          <input type="checkbox" class="theme-controller" value="dark" />
+          <!-- sun icon -->
+          <svg class="swap-off fill-current w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M5.64,17l-.71.71a1,1,0,0,0,0,1.41,1,1,0,0,0,1.41,0l.71-.71A1,1,0,0,0,5.64,17ZM5,12a1,1,0,0,0-1-1H3a1,1,0,0,0,0,2H4A1,1,0,0,0,5,12Zm7-7a1,1,0,0,0,1-1V3a1,1,0,0,0-2,0V4A1,1,0,0,0,12,5ZM5.64,7.05a1,1,0,0,0,.7.29,1,1,0,0,0,.71-.29,1,1,0,0,0,0-1.41l-.71-.71A1,1,0,0,0,4.93,6.34Zm12,.29a1,1,0,0,0,.7-.29l.71-.71a1,1,0,1,0-1.41-1.41L17,5.64a1,1,0,0,0,0,1.41A1,1,0,0,0,17.66,7.34ZM21,11H20a1,1,0,0,0,0,2h1a1,1,0,0,0,0-2Zm-9,8a1,1,0,0,0-1,1v1a1,1,0,0,0,2,0V20A1,1,0,0,0,12,19ZM18.36,17A1,1,0,0,0,17,18.36l.71.71a1,1,0,0,0,1.41,0,1,1,0,0,0,0-1.41ZM12,6.5A5.5,5.5,0,1,0,17.5,12,5.51,5.51,0,0,0,12,6.5Zm0,9A3.5,3.5,0,1,1,15.5,12,3.5,3.5,0,0,1,12,15.5Z"/>
+          </svg>
+          <!-- moon icon -->
+          <svg class="swap-on fill-current w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M21.64,13a1,1,0,0,0-1.05-.14,8.05,8.05,0,0,1-3.37.73A8.15,8.15,0,0,1,9.08,5.49a8.59,8.59,0,0,1,.25-2A1,1,0,0,0,8,2.36,10.14,10.14,0,1,0,22,14.05,1,1,0,0,0,21.64,13Zm-9.5,6.69A8.14,8.14,0,0,1,7.08,5.22v.27A10.15,10.15,0,0,0,17.22,15.63a9.79,9.79,0,0,0,2.1-.22A8.11,8.11,0,0,1,12.14,19.73Z"/>
+          </svg>
+        </label>
+      </li>
+    </ul>
+  </div>
+</div>
+
+    <div class="container mt-12 p-4">
+        <article class="prose lg:prose-xl lg:leading-normal" itemscope itemtype="http://schema.org/BlogPosting">
+  <h1 itemprop="name headline">Supercharged Code Reviews: How AI Subagents Make Human Reviewers Superhuman</h1>
+  <p class="post-meta"><time datetime="2025-08-10T12:00:00+01:00" itemprop="datePublished">Aug 10, 2025</time></p>
+  <div class="post-content" itemprop="articleBody">
+    <p><img src="https://stacktoheap.com/images/claude-subagents.png" width="686px" height="386px" /></p>
+
+<p>Code reviews take a lot of time and context switching for senior engineers. They’re constantly pulled between reviewing PRs, mentoring junior developers, and their own feature work. Junior engineers want to help with reviews but often lack the experience to spot subtle security issues, performance bottlenecks, or architectural concerns that could bite the team later.</p>
+
+<p>This is where I think AI-based code review systems can augment human reviewers and supercharge your code review workflow. I wanted to set up my own agentic code reviewer that can assist me while I’m reviewing code - catching the stuff I might miss, providing consistent security analysis, and helping junior engineers learn what to look for. The subagents feature in Claude Code felt like a perfect fit - I can run it in my local workflow, and potentially use the Claude Code CLI or SDK to even run it automatically on merge requests.</p>
+
+<p>The goal isn’t to replace human reviewers - it’s to make them more effective, faster, and more consistent. Think of it as having an expert assistant that does the tedious first-pass analysis, so human reviewers can focus on the architecture, business logic, and mentoring that actually need human judgment.</p>
+
+<h1 id="the-bottlenecks-in-team-code-reviews">The Bottlenecks in Team Code Reviews</h1>
+
+<p>Let’s be honest about the challenges we all face:</p>
+
+<h2 id="human-reviewers-are-amazing-but">Human Reviewers Are Amazing But…</h2>
+<ul>
+  <li><strong>Time constraints</strong>: Senior devs are swamped, junior devs lack context</li>
+  <li><strong>Attention fatigue</strong>: By the 5th PR of the day, details get missed</li>
+  <li><strong>Expertise distribution</strong>: Not every reviewer is a security or performance expert</li>
+  <li><strong>Context switching cost</strong>: Understanding a complex PR takes significant mental overhead</li>
+  <li><strong>Different focus areas</strong>: One reviewer catches architecture issues, another spots security flaws, rarely both</li>
+</ul>
+
+<h2 id="traditional-tools-miss-the-mark">Traditional Tools Miss the Mark</h2>
+<ul>
+  <li><strong>Static analysis tools</strong>: Great at syntax, terrible at understanding business logic</li>
+  <li><strong>Rule-based linters</strong>: Rigid rules that don’t understand project context</li>
+  <li><strong>No collaboration</strong>: Tools run in isolation, humans review separately</li>
+  <li><strong>Noise vs signal</strong>: Too many false positives drowning out real issues</li>
+</ul>
+
+<p>The insight? We don’t need to replace human reviewers - we need to make them more effective.</p>
+
+<h1 id="enter-ai-powered-code-review-assistants">Enter AI-Powered Code Review Assistants</h1>
+
+<p>Think of AI Code Reviewers as your team’s new junior reviewer who never gets tired, has infinite patience, and happens to be an (reasonable) expert in security, performance, and architecture all at once. But here’s the key - it’s not replacing your human reviewers, it’s making them superhuman.</p>
+
+<p>First, let’s talk about Claude Code’s subagents feature.</p>
+
+<p>Subagents are specialized AI assistants within Claude Code with:</p>
+
+<ul>
+  <li><strong>Separate context windows</strong>: Focused expertise without distraction.</li>
+  <li><strong>Specialized knowledge</strong>: The subagents are prompted with specific needs and knowledge and everyone on the team can share and apply them consistently.</li>
+  <li><strong>Custom tool access</strong>: Can examine code, run analysis, understand project context.</li>
+  <li><strong>Consistent application</strong>: Same thorough analysis every single time.</li>
+</ul>
+
+<p>The magic of code review with subagents happens when you use subagents as a <em>first pass</em> before human review - catching the obvious stuff, highlighting the subtle issues, and preparing a summary that helps human reviewers focus on what really matters.</p>
+
+<h1 id="building-your-ai-code-review-assistant">Building Your AI Code Review Assistant</h1>
+
+<p>Let me show you how I built a code reviewer subagent that works as the perfect first-pass reviewer, catching issues before they reach human eyes and preparing detailed summaries that speed up human review.</p>
+
+<h2 id="step-1-create-the-subagent">Step 1: Create the Subagent</h2>
+
+<p>First, run <code class="language-plaintext highlighter-rouge">/agents</code> in Claude Code to open the subagent interface. Choose whether you want this at the project level or user level. For a code reviewer, I prefer project-level so that you can share it with your team (and company) and make it available in your merge requests.</p>
+
+<p>I find it best to let Claude Code get your requirements and design the first cut of the subagent for you. Again, let the AI do what it’s good at it before you take over!</p>
+
+<h2 id="step-2-configuration">Step 2: Configuration</h2>
+
+<p>Here’s my code-reviewer subagent configuration. The point of this post is not about the specifics of this, as you may want to keep tweaking it for your project and team.</p>
+
+<div class="language-markdown highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nn">---</span>
+<span class="na">name</span><span class="pi">:</span> <span class="s">code-reviewer</span>
+<span class="na">description</span><span class="pi">:</span> <span class="s">Expert code review specialist for comprehensive code quality analysis. Reviews code changes for maintainability, readability, best practices, and potential issues.</span>
+<span class="na">tools</span><span class="pi">:</span> <span class="s">Read, Grep, Glob, Bash</span>
+<span class="nn">---</span>
+
+You are a senior code reviewer conducting a comprehensive code quality review.
+
+<span class="gs">**CONTEXT DETECTION:**</span>
+
+The review context and git commands will be provided to you in the prompt. Execute only the git commands that are specified in the "Git Commands to Execute" section of the prompt.
+
+These commands are context-aware and will be different depending on whether you're reviewing:
+<span class="p">-</span> Local development changes (staged, unstaged, untracked files)
+<span class="p">-</span> Merge request changes in local environment (using glab)
+<span class="p">-</span> Merge request changes in GitLab CI environment (proper branch diff)
+
+Do NOT run any other git commands beyond what is specified.
+
+<span class="gs">**ANALYSIS METHODOLOGY:**</span>
+
+<span class="gs">**Phase 1 - Repository Context Research:**</span>
+<span class="p">-</span> Identify coding standards and patterns used in the codebase
+<span class="p">-</span> Look for existing frameworks, libraries, and architectural patterns
+<span class="p">-</span> Examine project structure and naming conventions
+<span class="p">-</span> Understand the project's domain and purpose
+
+<span class="gs">**Phase 2 - Change Analysis:**</span>
+<span class="p">-</span> Review each modified file for code quality issues
+<span class="p">-</span> Compare new code against established patterns in the codebase
+<span class="p">-</span> Identify deviations from project conventions
+<span class="p">-</span> Look for potential bugs, performance issues, and maintainability concerns
+
+<span class="gs">**Phase 3 - Comprehensive Review:**</span>
+<span class="p">-</span> Code readability and clarity
+<span class="p">-</span> Function and variable naming conventions
+<span class="p">-</span> Code duplication and reusability
+<span class="p">-</span> Error handling and edge cases
+<span class="p">-</span> Performance considerations
+<span class="p">-</span> Test coverage and testability
+<span class="p">-</span> Documentation and comments
+<span class="p">-</span> Security considerations (secrets, input validation)
+
+<span class="gs">**REVIEW CATEGORIES:**</span>
+
+<span class="gs">**Code Quality Issues:**</span>
+<span class="p">-</span> Poor naming conventions (functions, variables, classes)
+<span class="p">-</span> Code duplication and lack of reusability
+<span class="p">-</span> Complex or unclear logic that could be simplified
+<span class="p">-</span> Missing or inadequate error handling
+<span class="p">-</span> Inconsistent code formatting or style
+
+<span class="gs">**Maintainability Concerns:**</span>
+<span class="p">-</span> Functions or classes that are too large or complex
+<span class="p">-</span> Tight coupling between components
+<span class="p">-</span> Lack of proper separation of concerns
+<span class="p">-</span> Hard-coded values that should be configurable
+<span class="p">-</span> Missing documentation for complex logic
+
+<span class="gs">**Potential Bugs:**</span>
+<span class="p">-</span> Null pointer or undefined value access
+<span class="p">-</span> Off-by-one errors in loops or array access
+<span class="p">-</span> Race conditions or concurrency issues
+<span class="p">-</span> Memory leaks or resource management problems
+<span class="p">-</span> Logic errors in conditional statements
+
+<span class="gs">**Performance Issues:**</span>
+<span class="p">-</span> Inefficient algorithms or data structures
+<span class="p">-</span> Unnecessary database queries or API calls
+<span class="p">-</span> Missing caching where appropriate
+<span class="p">-</span> Resource-intensive operations in tight loops
+
+Begin analysis by examining the git context and then proceed with comprehensive code review.
+</code></pre></div></div>
+
+<p>I gave my subagent access to these tools:</p>
+<ul>
+  <li><strong>Read</strong>: For examining specific files and understanding context</li>
+  <li><strong>Grep</strong>: For searching patterns across the codebase</li>
+  <li><strong>Glob</strong>: For finding files by patterns</li>
+  <li><strong>Bash</strong>: For running git commands and other analysis tools</li>
+</ul>
+
+<h2 id="step-3---triggering-the-subagent">Step 3 - Triggering the subagent</h2>
+
+<p>The subagent can be triggered by mentioning it - <code class="language-plaintext highlighter-rouge">@code-reviewer</code> or by asking Claude Code (the main agent) to review the code</p>
+
+<p>We can extend this to work directly from the CLI or make use of the Claude Code SDK with something like this:</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>claude <span class="nt">-p</span> <span class="s2">"@code-reviewer review the changes"</span>
+</code></pre></div></div>
+
+<p>I am working on a tool that will allow me to run these reviews in a Gitlab Merge Request.</p>
+
+<h1 id="why-ai-assisted-reviews-are-a-game-changer">Why AI-Assisted Reviews Are a Game Changer</h1>
+
+<h2 id="supercharged-human-reviewers">Supercharged Human Reviewers</h2>
+<p>Instead of spending time catching basic issues, human reviewers focus on architecture, business logic, and complex design decisions.</p>
+
+<h2 id="faster-review-cycles">Faster Review Cycles</h2>
+<p>The AI first-pass analysis means human reviewers can jump straight to the issues that actually need their expertise.</p>
+
+<h2 id="consistent-safety-net">Consistent Safety Net</h2>
+<p>Every PR gets the same thorough analysis for security, performance, and maintainability - no more “oops, didn’t notice that” moments.</p>
+
+<h2 id="knowledge-amplification">Knowledge Amplification</h2>
+<p>Junior reviewers get AI-powered insights that help them learn while reviewing. Senior reviewers get time back to focus on mentoring and architecture.</p>
+
+<h2 id="comprehensive-coverage">Comprehensive Coverage</h2>
+<p>AI catches the tedious stuff humans might miss after a long day, while humans provide the strategic thinking AI can’t replicate.</p>
+
+<h1 id="a-word-of-caution">A Word of Caution</h1>
+
+<p>AI-assisted reviews are powerful, but remember the human element:</p>
+
+<ul>
+  <li><strong>AI prepares, humans decide</strong>: Use AI analysis to inform human judgment, not replace it</li>
+  <li><strong>Context matters</strong>: AI provides technical analysis, humans understand business context and user impact</li>
+  <li><strong>Team dynamics</strong>: The best reviews come from AI-human collaboration, not AI-only analysis</li>
+  <li><strong>Continuous calibration</strong>: Regularly review AI recommendations with your team to keep them aligned with your standards</li>
+</ul>
+
+<h1 id="conclusion">Conclusion</h1>
+
+<p>Adding AI-powered code review assistance can transform the way a team handles code quality. Instead of human reviewers spending time on tedious pattern matching or catching basic security issues, they can focus on the complex architectural decisions and business logic that actually need human insight.</p>
+
+<p>The magic isn’t in replacing human reviewers - it’s in making them superhuman. AI handles the first-pass analysis, catches the obvious stuff, and prepares focused summaries that let human reviewers dive straight into the interesting problems.</p>
+
+<p>So go ahead, build your own AI code review assistant. Your team’s code quality will thank you, and your reviewers will actually enjoy the process again.</p>
+
+  </div>
+  
+    <div class="divider">Comments</div>
+    <section>
+      <div id="disqus_thread" aria-live="polite">
+<div id="disqus_thread"></div>
+<script>
+    var disqus_config = function () {
+      this.page.url = 'https://stacktoheap.com/blog/2025/08/10/code-reviews-that-dont-suck-claude-code-subagents/';
+      this.page.identifier = 'https://stacktoheap.com/blog/2025/08/10/code-reviews-that-dont-suck-claude-code-subagents/';
+    };
+    
+    (function() {
+    var d = document, s = d.createElement('script');
+    s.src = 'https://stacktoheap.disqus.com/embed.js';
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+    </section>
+  
+</article>
+
+    </div>
+
+    <footer class="footer footer-center p-10 bg-base-200 text-base-content rounded">
+  <div class="grid grid-flow-col gap-4">
+  </div> 
+  <div>
+    <div class="grid grid-flow-col gap-4">
+      <a href="https://github.com/manojlds"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" class="fill-current"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"></path></svg></a> 
+      <a href="https://github.com/manojlds"><svg width="20" height="20" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="inline-block h-5 w-5 fill-current md:h-6 md:w-6"><path d="M256,32C132.3,32,32,134.9,32,261.7c0,101.5,64.2,187.5,153.2,217.9a17.56,17.56,0,0,0,3.8.4c8.3,0,11.5-6.1,11.5-11.4,0-5.5-.2-19.9-.3-39.1a102.4,102.4,0,0,1-22.6,2.7c-43.1,0-52.9-33.5-52.9-33.5-10.2-26.5-24.9-33.6-24.9-33.6-19.5-13.7-.1-14.1,1.4-14.1h.1c22.5,2,34.3,23.8,34.3,23.8,11.2,19.6,26.2,25.1,39.6,25.1a63,63,0,0,0,25.6-6c2-14.8,7.8-24.9,14.2-30.7-49.7-5.8-102-25.5-102-113.5,0-25.1,8.7-45.6,23-61.6-2.3-5.8-10-29.2,2.2-60.8a18.64,18.64,0,0,1,5-.5c8.1,0,26.4,3.1,56.6,24.1a208.21,208.21,0,0,1,112.2,0c30.2-21,48.5-24.1,56.6-24.1a18.64,18.64,0,0,1,5,.5c12.2,31.6,4.5,55,2.2,60.8,14.3,16.1,23,36.6,23,61.6,0,88.2-52.4,107.6-102.3,113.3,8,7.1,15.2,21.1,15.2,42.5,0,30.7-.3,55.5-.3,63,0,5.4,3.1,11.5,11.4,11.5a19.35,19.35,0,0,0,4-.4C415.9,449.2,480,363.1,480,261.7,480,134.9,379.7,32,256,32Z"></path></svg></a> 
+    </div>
+  </div> 
+  <div>
+    <p>Copyright © 2023 - StackToHeap</p>
+  </div>
+</footer>
+
+    <script type="text/javascript">
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function() {
+    navigator.serviceWorker.register('/sw.js').then(function(registration) {
+      console.log('ServiceWorker registration successful with scope: ', registration.scope);
+    }, function(err) {
+      console.log('ServiceWorker registration failed: ', err);
+    });
+  });
+}
+</script>
+
+  </body>
+
+</html>
