@@ -6,8 +6,8 @@
 </description>
     <link>https://stacktoheap.com/</link>
     <atom:link href="https://stacktoheap.com/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 10 Aug 2025 17:40:31 +0100</pubDate>
-    <lastBuildDate>Sun, 10 Aug 2025 17:40:31 +0100</lastBuildDate>
+    <pubDate>Sun, 10 Aug 2025 18:06:35 +0100</pubDate>
+    <lastBuildDate>Sun, 10 Aug 2025 18:06:35 +0100</lastBuildDate>
     <generator>Jekyll v3.9.5</generator>
     
       <item>
@@ -166,7 +166,9 @@ Begin analysis by examining the git context and then proceed with comprehensive 
 &lt;div class=&quot;language-bash highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nv&quot;&gt;$ &lt;/span&gt;claude &lt;span class=&quot;nt&quot;&gt;-p&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;@code-reviewer review the changes&quot;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
 
-&lt;p&gt;I am working on a tool that will allow me to run these reviews in a Gitlab Merge Request.&lt;/p&gt;
+&lt;h1 id=&quot;future-work&quot;&gt;Future work&lt;/h1&gt;
+
+&lt;p&gt;Claude Code, with the ability to run it from the CLI in non-interactive mode or via the Claude Code SDK, is very exciting for a lot of AI based integrations. I am working on a tool that will allow me to run these reviews in a developer’s local workstation or in a merge request / pull request flow.&lt;/p&gt;
 
 &lt;h1 id=&quot;why-ai-assisted-reviews-are-a-game-changer&quot;&gt;Why AI-Assisted Reviews Are a Game Changer&lt;/h1&gt;
 
